@@ -1,0 +1,17 @@
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.exe
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.deps.json
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.runtimeconfig.json
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.dll
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.pdb
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.Form1.resources
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.csproj.GenerateResource.cache
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.GeneratedMSBuildEditorConfig.editorconfig
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.AssemblyInfoInputs.cache
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.AssemblyInfo.cs
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.csproj.CoreCompileInputs.cache
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.sourcelink.json
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.dll
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\refint\UI.dll
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.pdb
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.genruntimeconfig.cache
+D:\Facultad\TP - Trabajo de diploma\StockHelper\UI\obj\Debug\net8.0-windows\ref\UI.dll
