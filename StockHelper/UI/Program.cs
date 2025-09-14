@@ -1,5 +1,13 @@
+using System;
 namespace UI
 {
+    internal static class NativeMethods
+    {
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        internal static extern bool AllocConsole();
+
+        internal static bool testEnvironment = true;
+    }
     internal static class Program
     {
         /// <summary>
@@ -8,10 +16,15 @@ namespace UI
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            if (NativeMethods.testEnvironment)
+            {
+                NativeMethods.AllocConsole(); // Opens the console
+                Console.WriteLine("Test environment");
+            }
+            Console.WriteLine("StockHelper initialized!");
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new frmLogIn());
+            
         }
     }
 }

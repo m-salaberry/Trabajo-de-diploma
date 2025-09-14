@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Facultad\\TP - Trabajo de diploma\\StockHelper\\BLL\\BLL.csproj",
+      "projectUniqueName": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj",
       "projectName": "BLL",
-      "projectPath": "D:\\Facultad\\TP - Trabajo de diploma\\StockHelper\\BLL\\BLL.csproj",
+      "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj",
       "packagesPath": "C:\\Users\\salab\\.nuget\\packages\\",
-      "outputPath": "D:\\Facultad\\TP - Trabajo de diploma\\StockHelper\\BLL\\obj\\",
+      "outputPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Configuration;
+
 namespace Services.Contracts.Logs
 {
     public class FileAppender : ILogAppender
     {
         private readonly string _filePath;
-        private readonly LogLevels _minimunLevel;
+        private readonly LogLevels _minimunLevel = LogLevels.Info;
         private readonly object _lock = new object(); //For synchronization with file access
 
         public FileAppender(string filePath)
@@ -18,14 +20,9 @@ namespace Services.Contracts.Logs
             var logDir = ConfigurationManager.AppSettings["logFileDirectory"];
             if (string.IsNullOrWhiteSpace(logDir))
             {
-                logDir = "Log\\";
+                logDir = "Logs\\";
             }
-            _filePath = Path.Combine(logDir, "app.log");
-            var minLevelStr = ConfigurationManager.AppSettings["fileAppenderMinLevel"];
-            if (!Enum.TryParse<LogLevels>(minLevelStr, true, out _minimunLevel))
-            {
-                _minimunLevel = LogLevels.Info;
-            }
+            _filePath = Path.Combine(logDir, "system.log");
             string directory = Path.GetDirectoryName(_filePath)!;
             if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
             {
