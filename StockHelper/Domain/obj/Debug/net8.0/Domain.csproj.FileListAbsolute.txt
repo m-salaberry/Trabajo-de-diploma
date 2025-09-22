@@ -1,0 +1,12 @@
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\bin\Debug\net8.0\Domain.deps.json
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\bin\Debug\net8.0\Domain.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\bin\Debug\net8.0\Domain.pdb
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\Domain.AssemblyInfoInputs.cache
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\Domain.AssemblyInfo.cs
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\Domain.csproj.CoreCompileInputs.cache
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\Domain.sourcelink.json
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\Domain.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\refint\Domain.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\Domain.pdb
+D:\Facultad\Trabajo-de-diploma\StockHelper\Domain\obj\Debug\net8.0\ref\Domain.dll

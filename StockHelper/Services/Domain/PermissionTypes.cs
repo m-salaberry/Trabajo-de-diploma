@@ -8,8 +8,8 @@ namespace Services.Domain
 {
     public enum PermissionTypes
     {
-        Bussiness,
-        Technical,
+        Employee,
+        Manager,
         Admin
     }
 }

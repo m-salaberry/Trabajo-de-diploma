@@ -1,0 +1,13 @@
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\bin\Debug\net8.0\Services.deps.json
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\bin\Debug\net8.0\Services.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\bin\Debug\net8.0\Services.pdb
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.csproj.AssemblyReference.cache
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.GeneratedMSBuildEditorConfig.editorconfig
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.AssemblyInfoInputs.cache
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.AssemblyInfo.cs
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.csproj.CoreCompileInputs.cache
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.sourcelink.json
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\refint\Services.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\Services.pdb
+D:\Facultad\Trabajo-de-diploma\StockHelper\Services\obj\Debug\net8.0\ref\Services.dll

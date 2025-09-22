@@ -673,6 +673,29 @@
         "build": {
           "buildTransitive/net6.0/System.Text.Json.targets": {}
         }
+      },
+      "Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Domain.dll": {}
+        }
+      },
+      "Services/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "System.Configuration.ConfigurationManager": "9.0.9"
+        },
+        "compile": {
+          "bin/placeholder/Services.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Services.dll": {}
+        }
       }
     }
   },
@@ -1741,11 +1764,23 @@
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Domain/1.0.0": {
+      "type": "project",
+      "path": "../Domain/Domain.csproj",
+      "msbuildProject": "../Domain/Domain.csproj"
+    },
+    "Services/1.0.0": {
+      "type": "project",
+      "path": "../Services/Services.csproj",
+      "msbuildProject": "../Services/Services.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Domain >= 1.0.0",
       "Microsoft.Data.SqlClient >= 6.1.1",
+      "Services >= 1.0.0",
       "System.Configuration.ConfigurationManager >= 9.0.9",
       "System.Data.SqlClient >= 4.9.0"
     ]
@@ -1782,7 +1817,14 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
+              "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj"
+            },
+            "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
+              "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

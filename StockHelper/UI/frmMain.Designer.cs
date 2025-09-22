@@ -28,12 +28,65 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "frmMain";
+            menuStrip = new MenuStrip();
+            tsmUserAndPerms = new ToolStripMenuItem();
+            tsmUsers = new ToolStripMenuItem();
+            tsmPerms = new ToolStripMenuItem();
+            menuStrip.SuspendLayout();
+            SuspendLayout();
+            // 
+            // menuStrip
+            // 
+            menuStrip.Items.AddRange(new ToolStripItem[] { tsmUserAndPerms });
+            menuStrip.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.RenderMode = ToolStripRenderMode.Professional;
+            menuStrip.Size = new Size(838, 24);
+            menuStrip.TabIndex = 1;
+            menuStrip.Text = "menuStrip1";
+            // 
+            // tsmUserAndPerms
+            // 
+            tsmUserAndPerms.DropDownItems.AddRange(new ToolStripItem[] { tsmUsers, tsmPerms });
+            tsmUserAndPerms.Name = "tsmUserAndPerms";
+            tsmUserAndPerms.Size = new Size(136, 20);
+            tsmUserAndPerms.Text = "Users and Permissions";
+            // 
+            // tsmUsers
+            // 
+            tsmUsers.Name = "tsmUsers";
+            tsmUsers.Size = new Size(205, 22);
+            tsmUsers.Text = "Users Managment";
+            // 
+            // tsmPerms
+            // 
+            tsmPerms.Name = "tsmPerms";
+            tsmPerms.Size = new Size(205, 22);
+            tsmPerms.Text = "Permissions Managment";
+            // 
+            // frmMain
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(838, 441);
+            Controls.Add(menuStrip);
+            IsMdiContainer = true;
+            MainMenuStrip = menuStrip;
+            Name = "frmMain";
+            Text = "frmMain";
+            Load += frmMain_Load;
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem tsmUserAndPerms;
+        private ToolStripMenuItem tsmUsers;
+        private ToolStripMenuItem tsmPerms;
     }
 }
