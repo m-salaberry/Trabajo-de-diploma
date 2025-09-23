@@ -20,7 +20,8 @@ namespace BLL.Implementations
 
         public void Delete(Guid id)
         {
-            throw new NotImplementedException();
+            User userToDelete = _userRepository.GetById<User>(id);
+            _userRepository.Delete(userToDelete);
         }
 
         public bool Exists(Guid id)
@@ -34,12 +35,12 @@ namespace BLL.Implementations
 
         public List<User> GetAll()
         {
-            throw new NotImplementedException();
+            return _userRepository.GetAll<User>().ToList();
         }
 
         public User GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return _userRepository.GetById<User>(id);
         }
 
         public User GetByName(string name)
@@ -49,12 +50,12 @@ namespace BLL.Implementations
 
         public void Insert(User entity)
         {
-            throw new NotImplementedException();
+            _userRepository.Create(entity);
         }
 
         public void Update(User entity)
         {
-            throw new NotImplementedException();
+            _userRepository.Update(entity);
         }
     }
 }

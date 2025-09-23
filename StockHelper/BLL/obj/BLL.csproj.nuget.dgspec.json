@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj": {}
+    "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj": {}
   },
   "projects": {
-    "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj": {
+    "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj",
         "projectName": "BLL",
-        "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj",
-        "packagesPath": "C:\\Users\\salab\\.nuget\\packages\\",
-        "outputPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\salab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,21 +26,20 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj": {
-                "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj"
+              "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj"
               },
-              "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj"
+              "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj"
               },
-              "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
-                "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj"
+              "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj"
               }
             }
           }
@@ -55,7 +54,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -76,24 +75,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj": {
+    "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj",
-        "packagesPath": "C:\\Users\\salab\\.nuget\\packages\\",
-        "outputPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\DAL.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\salab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -102,18 +101,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj"
+              "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj"
               },
-              "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
-                "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj"
+              "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj"
               }
             }
           }
@@ -128,7 +126,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -163,24 +161,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
+    "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\salab\\.nuget\\packages\\",
-        "outputPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\salab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -189,7 +187,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -208,7 +205,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -229,24 +226,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
+    "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj",
         "projectName": "Services",
-        "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj",
-        "packagesPath": "C:\\Users\\salab\\.nuget\\packages\\",
-        "outputPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\salab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -255,7 +252,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -274,7 +270,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -301,7 +297,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

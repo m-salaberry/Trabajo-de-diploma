@@ -22,14 +22,16 @@ namespace Services.Contracts.CustomsException
             switch (layerOrigin)
             {
                 case "UI":
+                    new UIExceptionHandler(this.Message).Handler();
                     break;
                 case "BLL":
                     new BLLExceptionHandler(this.Message).Handler();
                     break;
                 case "DAL":
+                    new DALExceptionHandler(this.Message).Handler();
                     break;
                 default:
-                    break;
+                    throw new Exception(this.Message);
             }
         }
 

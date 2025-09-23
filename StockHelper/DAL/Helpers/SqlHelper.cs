@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Data.SqlClient;
+using Services.Contracts.CustomsException;
 
 namespace DAL.Helpers
 {
@@ -23,20 +24,28 @@ namespace DAL.Helpers
         public static Int32 ExecuteNonQuery(String commandText,
             CommandType commandType, params SqlParameter[] parameters)
         {
-            CheckNullables(parameters);
-
-            using (SqlConnection conn = new SqlConnection(conString))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(commandText, conn))
-                {
-                    // There're three command types: StoredProcedure, Text, TableDirect. The TableDirect 
-                    // type is only for OLE DB.  
-                    cmd.CommandType = commandType;
-                    cmd.Parameters.AddRange(parameters);
+                CheckNullables(parameters);
 
-                    conn.Open();
-                    return cmd.ExecuteNonQuery();
+                using (SqlConnection conn = new SqlConnection(conString))
+                {
+                    using (SqlCommand cmd = new SqlCommand(commandText, conn))
+                    {
+                        // There're three command types: StoredProcedure, Text, TableDirect. The TableDirect 
+                        // type is only for OLE DB.  
+                        cmd.CommandType = commandType;
+                        cmd.Parameters.AddRange(parameters);
+
+                        conn.Open();
+                        return cmd.ExecuteNonQuery();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                new DALExceptionHandler(ex.Message).Handler();
+                return -1;
             }
         }
 
@@ -57,17 +66,26 @@ namespace DAL.Helpers
         public static Object ExecuteScalar(String commandText,
             CommandType commandType, params SqlParameter[] parameters)
         {
-            using (SqlConnection conn = new SqlConnection(conString))
+            try
             {
-                using (SqlCommand cmd = new SqlCommand(commandText, conn))
+                using (SqlConnection conn = new SqlConnection(conString))
                 {
-                    cmd.CommandType = commandType;
-                    cmd.Parameters.AddRange(parameters);
+                    using (SqlCommand cmd = new SqlCommand(commandText, conn))
+                    {
+                        cmd.CommandType = commandType;
+                        cmd.Parameters.AddRange(parameters);
 
-                    conn.Open();
-                    return cmd.ExecuteScalar();
+                        conn.Open();
+                        return cmd.ExecuteScalar();
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                new DALExceptionHandler(ex.Message).Handler();
+                return null;
+            }
+
         }
 
         /// <summary>
@@ -76,20 +94,29 @@ namespace DAL.Helpers
         public static SqlDataReader ExecuteReader(String commandText,
             CommandType commandType, params SqlParameter[] parameters)
         {
-            SqlConnection conn = new SqlConnection(conString);
-
-            using (SqlCommand cmd = new SqlCommand(commandText, conn))
+            try
             {
-                cmd.CommandType = commandType;
-                cmd.Parameters.AddRange(parameters);
+                SqlConnection conn = new SqlConnection(conString);
 
-                conn.Open();
-                // When using CommandBehavior.CloseConnection, the connection will be closed when the 
-                // IDataReader is closed.
-                SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                using (SqlCommand cmd = new SqlCommand(commandText, conn))
+                {
+                    cmd.CommandType = commandType;
+                    cmd.Parameters.AddRange(parameters);
 
-                return reader;
+                    conn.Open();
+                    // When using CommandBehavior.CloseConnection, the connection will be closed when the 
+                    // IDataReader is closed.
+                    SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                    return reader;
+                }
             }
+            catch (Exception ex)
+            {
+                new DALExceptionHandler(ex.Message).Handler();
+                return null;
+            }
+
         }
     }
 }

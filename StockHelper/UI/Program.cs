@@ -1,5 +1,6 @@
 using Services.Domain;
 using System;
+using Services.Contracts.Logs;
 namespace UI
 {
     internal static class NativeMethods
@@ -8,6 +9,7 @@ namespace UI
         internal static extern bool AllocConsole();
 
         internal static bool testEnvironment = true;
+        internal static bool productionEnvironment = false;
     }
     internal static class Program
     {
@@ -20,7 +22,16 @@ namespace UI
             if (NativeMethods.testEnvironment)
             {
                 NativeMethods.AllocConsole(); // Opens the console
-                Console.WriteLine("Test environment");
+                Logger _loger = Logger.Current;
+                ConsoleAppender _appender = new ConsoleAppender();
+                _loger.AddAppender(_appender);
+                Console.WriteLine("Test environment - Console appender available for debugging");
+            }
+            if(NativeMethods.productionEnvironment)
+            {
+                Logger _loger = Logger.Current;
+                FileAppender _appender = new FileAppender("log.txt");
+                _loger.AddAppender(_appender);
             }
             Console.WriteLine("StockHelper initialized!");
             ApplicationConfiguration.Initialize();

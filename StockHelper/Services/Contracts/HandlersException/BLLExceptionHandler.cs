@@ -18,9 +18,7 @@ namespace Services.Contracts.CustomsException
         ///</summary>
         public void Handler()
         {
-            Logger.Current.Info(prefix + this.Message);
-            // Notify the user or administrator about the error
-            // Perform any necessary cleanup or recovery actions
+            Logger.Current.Error(prefix + this.Message);
         }
     }
 }
