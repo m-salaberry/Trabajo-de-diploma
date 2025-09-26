@@ -7,8 +7,11 @@
     <Compile Update="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="secondaryForms\frmUsers.cs">
-      <SubType>Form</SubType>
+    <Compile Update="secondaryForms\ctrlPermsissions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\ctrlUsers.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
 </Project>

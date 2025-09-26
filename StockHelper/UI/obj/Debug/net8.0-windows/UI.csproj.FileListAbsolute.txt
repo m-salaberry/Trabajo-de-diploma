@@ -99,7 +99,6 @@ D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\DAL.dll
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\DAL.pdb
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.dll.config
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.Properties.Resources.resources
-D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.frmUsers.resources
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.exe
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.dll.config
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\UI.deps.json
@@ -185,3 +184,5 @@ C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.pdb
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.genruntimeconfig.cache
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\ref\UI.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlUsers.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlPermsissions.resources

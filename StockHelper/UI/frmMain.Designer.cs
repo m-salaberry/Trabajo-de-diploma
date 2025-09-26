@@ -32,6 +32,7 @@
             tsmUserAndPerms = new ToolStripMenuItem();
             tsmUsers = new ToolStripMenuItem();
             tsmPerms = new ToolStripMenuItem();
+            panelContainerMain = new TableLayoutPanel();
             menuStrip.SuspendLayout();
             SuspendLayout();
             // 
@@ -58,21 +59,42 @@
             tsmUsers.Name = "tsmUsers";
             tsmUsers.Size = new Size(205, 22);
             tsmUsers.Text = "Users Managment";
+            tsmUsers.Click += tsmUsers_Click;
             // 
             // tsmPerms
             // 
             tsmPerms.Name = "tsmPerms";
             tsmPerms.Size = new Size(205, 22);
             tsmPerms.Text = "Permissions Managment";
+            tsmPerms.Click += tsmPerms_Click;
+            // 
+            // panelContainerMain
+            // 
+            panelContainerMain.AutoSize = true;
+            panelContainerMain.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelContainerMain.BackColor = SystemColors.ControlDark;
+            panelContainerMain.ColumnCount = 1;
+            panelContainerMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            panelContainerMain.Dock = DockStyle.Fill;
+            panelContainerMain.Location = new Point(0, 24);
+            panelContainerMain.Name = "panelContainerMain";
+            panelContainerMain.RowCount = 1;
+            panelContainerMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            panelContainerMain.Size = new Size(838, 417);
+            panelContainerMain.TabIndex = 2;
             // 
             // frmMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(838, 441);
+            Controls.Add(panelContainerMain);
             Controls.Add(menuStrip);
-            IsMdiContainer = true;
             MainMenuStrip = menuStrip;
+            MinimizeBox = false;
+            MinimumSize = new Size(640, 480);
             Name = "frmMain";
             Text = "frmMain";
             Load += frmMain_Load;
@@ -88,5 +110,6 @@
         private ToolStripMenuItem tsmUserAndPerms;
         private ToolStripMenuItem tsmUsers;
         private ToolStripMenuItem tsmPerms;
+        private TableLayoutPanel panelContainerMain;
     }
 }

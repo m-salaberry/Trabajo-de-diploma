@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "wIJ08Wcv1HM=",
+  "dgSpecHash": "M3cqPvRWrNg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj",
+  "projectFilePath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\user\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.9\\system.configuration.configurationmanager.9.0.9.nupkg.sha512",
-    "C:\\Users\\user\\.nuget\\packages\\system.diagnostics.eventlog\\9.0.9\\system.diagnostics.eventlog.9.0.9.nupkg.sha512",
-    "C:\\Users\\user\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.9\\system.security.cryptography.protecteddata.9.0.9.nupkg.sha512"
+    "C:\\Users\\salab\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.9\\system.configuration.configurationmanager.9.0.9.nupkg.sha512",
+    "C:\\Users\\salab\\.nuget\\packages\\system.diagnostics.eventlog\\9.0.9\\system.diagnostics.eventlog.9.0.9.nupkg.sha512",
+    "C:\\Users\\salab\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.9\\system.security.cryptography.protecteddata.9.0.9.nupkg.sha512"
   ],
   "logs": []
 }

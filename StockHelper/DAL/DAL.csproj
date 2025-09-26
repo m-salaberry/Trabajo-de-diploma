@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Scripts\" />
-    <Folder Include="Tools\" />
+    <Compile Remove="Scripts\**" />
+    <Compile Remove="Tools\**" />
+    <EmbeddedResource Remove="Scripts\**" />
+    <EmbeddedResource Remove="Tools\**" />
+    <None Remove="Scripts\**" />
+    <None Remove="Tools\**" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,21 +9,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Services.Domain;
 using BLL.Implementations;
+using UI.secondaryForms;
 
 namespace UI
 {
     public partial class frmMain : Form
     {
+        
         PermissionService _permissionService = new PermissionService();
         User currentUser;
         public frmMain(User logedUser)
         {
             InitializeComponent();
+            this.CenterToScreen();
             currentUser = logedUser;
             getPatents();
         }
 
-        private Dictionary<Guid,string> patentsDict = new Dictionary<Guid, string> {};
+        private Dictionary<Guid, string> patentsDict = new Dictionary<Guid, string> { };
 
         private void frmMain_Load(object sender, EventArgs e)
         {
@@ -37,14 +40,16 @@ namespace UI
                     foreach (Services.Domain.Component child in c.Children)
                     {
                         patents.Add(child);
+                        Console.WriteLine(child.Name);
                     }
                 }
                 else
                 {
                     patents.Add(c);
+                    Console.WriteLine(c.Name);
                 }
             }
-            
+
         }
 
         private void getPatents()
@@ -54,9 +59,29 @@ namespace UI
             {
                 if (!(c is Family))
                 {
-                    patentsDict.Add(c.Id , c.Name);
+                    patentsDict.Add(c.Id, c.Name);
                 }
             }
+        }
+
+        private void showContent(UserControl newContent)
+        {
+            panelContainerMain.Controls.Clear();
+            newContent.Dock = DockStyle.Fill;
+            panelContainerMain.Controls.Add(newContent);
+            newContent.BringToFront();
+        }
+
+        private void tsmUsers_Click(object sender, EventArgs e)
+        {
+            ctrlUsers userManagement = new ctrlUsers();
+            showContent(userManagement);
+        }
+
+        private void tsmPerms_Click(object sender, EventArgs e)
+        {
+            ctrlPermsissions permissionManagement = new ctrlPermsissions();
+            showContent(permissionManagement);
         }
     }
 }
