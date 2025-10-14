@@ -1,13 +1,13 @@
-﻿using BLL.Contracts;
+﻿using Services.Contracts;
 using Services.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DAL.Implementations.Repositories;
+using Services.DAL.Implementations.Repositories;
 
-namespace BLL.Implementations
+namespace Services.Implementations
 {
     public class UserService : IUserService
     {

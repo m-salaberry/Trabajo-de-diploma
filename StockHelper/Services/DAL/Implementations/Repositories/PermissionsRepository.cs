@@ -1,4 +1,4 @@
-﻿using DAL.Contracts;
+﻿using Services.DAL.Contracts;
 using Services.Domain;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using DAL.Helpers;
 using System.Data;
 
-namespace DAL.Implementations.Repositories
+namespace Services.DAL.Implementations.Repositories
 {
     public class PermissionsRepository : IRepository
     {

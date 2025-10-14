@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services.Contracts.Logs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
@@ -31,7 +32,8 @@ namespace Services.Contracts.CustomsException
                     new DALExceptionHandler(this.Message).Handler();
                     break;
                 default:
-                    throw new Exception(this.Message);
+                    Logger.Current.Warning("System Exception: " + this.Message);
+                    break;
             }
         }
 

@@ -68,7 +68,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.Data.SqlClient/6.1.1": {
+      "Microsoft.Data.SqlClient/6.1.2": {
         "type": "package",
         "dependencies": {
           "Azure.Core": "1.47.1",
@@ -694,7 +694,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Domain": "1.0.0",
-          "Microsoft.Data.SqlClient": "6.1.1",
+          "Microsoft.Data.SqlClient": "6.1.2",
           "Services": "1.0.0",
           "System.Configuration.ConfigurationManager": "9.0.9",
           "System.Data.SqlClient": "4.9.0"
@@ -720,6 +720,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Microsoft.Data.SqlClient": "6.1.2",
           "System.Configuration.ConfigurationManager": "9.0.9"
         },
         "compile": {
@@ -822,10 +823,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Data.SqlClient/6.1.1": {
-      "sha512": "syGQmIUPAYYHAHyTD8FCkTNThpQWvoA7crnIQRMfp8dyB5A2cWU3fQexlRTFkVmV7S0TjVmthi0LJEFVjHo8AQ==",
+    "Microsoft.Data.SqlClient/6.1.2": {
+      "sha512": "q0GxRC0fgwfZgU14pU34ro0MW7Gs8S6NDmKCcEqymvZljT8UQa633BbEmk/Rb5upNF9NHZ3/jVm7zLiWbM8uTA==",
       "type": "package",
-      "path": "microsoft.data.sqlclient/6.1.1",
+      "path": "microsoft.data.sqlclient/6.1.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -878,7 +879,7 @@
         "lib/net9.0/zh-Hant/Microsoft.Data.SqlClient.resources.dll",
         "lib/netstandard2.0/Microsoft.Data.SqlClient.dll",
         "lib/netstandard2.0/Microsoft.Data.SqlClient.xml",
-        "microsoft.data.sqlclient.6.1.1.nupkg.sha512",
+        "microsoft.data.sqlclient.6.1.2.nupkg.sha512",
         "microsoft.data.sqlclient.nuspec",
         "ref/net462/Microsoft.Data.SqlClient.dll",
         "ref/net462/Microsoft.Data.SqlClient.xml",
@@ -1826,23 +1827,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\salab\\.nuget\\packages\\": {},
+    "C:\\Users\\user\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\UI.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\UI.csproj",
       "projectName": "UI",
-      "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\UI.csproj",
-      "packagesPath": "C:\\Users\\salab\\.nuget\\packages\\",
-      "outputPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\obj\\",
+      "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\UI.csproj",
+      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\salab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1851,21 +1852,20 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "projectReferences": {
-            "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj": {
-              "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj"
+            "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj": {
+              "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\BLL.csproj"
             },
-            "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
-              "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj"
+            "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Domain.csproj"
             },
-            "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
-              "projectPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj"
+            "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj": {
+              "projectPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Services.csproj"
             }
           }
         }
@@ -1880,7 +1880,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -1904,7 +1904,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

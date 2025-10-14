@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Services.Domain;
 
-namespace BLL.Contracts
+namespace Services.Contracts
 {
     public interface IUserService: IGenericService<User>
     {

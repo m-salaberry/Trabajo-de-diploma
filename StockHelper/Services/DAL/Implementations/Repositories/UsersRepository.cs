@@ -1,4 +1,4 @@
-﻿using DAL.Contracts;
+﻿using Services.DAL.Contracts;
 using DAL.Helpers;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Services.Domain;
 
-namespace DAL.Implementations.Repositories
+namespace Services.DAL.Implementations.Repositories
 {
     public class UsersRepository : IRepository
     {

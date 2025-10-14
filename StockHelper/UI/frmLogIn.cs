@@ -1,6 +1,7 @@
-using BLL.Implementations;
+using Services.Implementations;
 using Microsoft.Identity.Client;
 using Services.Domain;
+using Services.Contracts.Logs;
 
 namespace UI
 {
@@ -49,6 +50,7 @@ namespace UI
                 if(_loginService.Authenticate(loginUser.Name, loginUser.Password))
                 {
                     User currentUser = _userService.GetByName(loginUser.Name);
+                    Logger.Current.Info($"User {currentUser.Name} has logged in successfully.");
                     this.Hide();
                     frmMain mainForm = new frmMain(currentUser);
                     mainForm.ShowDialog();

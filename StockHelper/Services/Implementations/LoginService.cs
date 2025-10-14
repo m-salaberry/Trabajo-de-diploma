@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Services.Contracts.CustomException;
+using Services.Contracts.CustomsException;
+using Services.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
-using Services.Domain;
-using BLL.BusinessExceptions;
-using Services.Contracts.CustomsException;
-
-namespace BLL.Implementations
+namespace Services.Implementations
 {
     public class LoginService
     {
@@ -33,7 +33,7 @@ namespace BLL.Implementations
             }
             catch (Exception ex)
             {
-                new MySystemException(ex.Message, "BLL").Handler();
+                new MySystemException(ex.Message, "Services").Handler();
                 return false;
             }
 

@@ -171,7 +171,6 @@ C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.frmLogIn.resources
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.frmMain.resources
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.Properties.Resources.resources
-C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.frmUsers.resources
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.csproj.GenerateResource.cache
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.AssemblyInfoInputs.cache
@@ -186,3 +185,5 @@ C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\ref\UI.dll
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlUsers.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlPermsissions.resources
+C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlPermsissions.resources
+C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlUsers.resources
