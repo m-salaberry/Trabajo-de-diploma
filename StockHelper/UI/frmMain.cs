@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,12 +19,25 @@ namespace UI
         
         PermissionService _permissionService = new PermissionService();
         User currentUser;
-        public frmMain(User logedUser)
+        private frmMain(User logedUser)
         {
             InitializeComponent();
+            ResetMainPanelSize();
             this.CenterToScreen();
             currentUser = logedUser;
             getPatents();
+            this.Text = $"StockHelper - Logged in as: {currentUser.Name}";
+        }
+
+        private static frmMain _instance;
+
+        public static frmMain GetInstance(User logedUser = null!)
+        {
+            if (_instance == null || _instance.IsDisposed)
+            {
+                _instance = new frmMain(logedUser);
+            }
+            return _instance;
         }
 
         private Dictionary<Guid, string> patentsDict = new Dictionary<Guid, string> { };
@@ -64,10 +78,16 @@ namespace UI
             }
         }
 
+        public void ResetMainPanelSize()
+        {
+            this.MinimumSize = new Size(800, 600);
+        }
+
         private void showContent(UserControl newContent)
         {
+            this.MinimumSize = new Size(0, 0);
             panelContainerMain.Controls.Clear();
-            newContent.Dock = DockStyle.Fill;
+            newContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelContainerMain.Controls.Add(newContent);
             newContent.BringToFront();
         }

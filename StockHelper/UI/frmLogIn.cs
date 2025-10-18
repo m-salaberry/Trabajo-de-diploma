@@ -52,7 +52,7 @@ namespace UI
                     User currentUser = _userService.GetByName(loginUser.Name);
                     Logger.Current.Info($"User {currentUser.Name} has logged in successfully.");
                     this.Hide();
-                    frmMain mainForm = new frmMain(currentUser);
+                    frmMain mainForm = frmMain.GetInstance(currentUser);
                     mainForm.ShowDialog();
                     this.Close();
                 }

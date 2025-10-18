@@ -13,5 +13,8 @@
     <Compile Update="secondaryForms\ctrlUsers.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="secondaryForms\newUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

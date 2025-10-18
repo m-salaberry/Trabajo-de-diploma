@@ -3,16 +3,36 @@
   "WorkspaceRootPath": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\frmlogin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\secondaryforms\\newuserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\newuserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\secondaryforms\\newuserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\newuserform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\secondaryforms\\ctrlusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\ctrlusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\secondaryforms\\ctrlusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\ctrlusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\services\\implementations\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|solutionrelative:services\\implementations\\loginservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\services\\contracts\\logs\\logger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,28 +43,12 @@
       "RelativeMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|solutionrelative:services\\implementations\\permissionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\services\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|solutionrelative:services\\implementations\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\services\\dal\\implementations\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|solutionrelative:services\\dal\\implementations\\repositories\\usersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\ui\\secondaryforms\\ctrlusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\ctrlusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\services\\dal\\implementations\\repositories\\permissionsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|solutionrelative:services\\dal\\implementations\\repositories\\permissionsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{D6D09ACD-2970-4D3B-9E19-659D994E401D}|Services\\Services.csproj|c:\\users\\user\\desktop\\facultad\\trabajo-de-diploma\\stockhelper\\services\\contracts\\logs\\loglevels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -62,7 +66,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
@@ -72,7 +76,7 @@
               "RelativeDocumentMoniker": "UI\\Program.cs",
               "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\Program.cs",
               "RelativeToolTip": "UI\\Program.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAgwBsAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAQwBsAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-13T22:21:01.61Z",
               "IsPinned": true,
@@ -80,27 +84,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "frmLogIn.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmLogIn.cs",
-              "RelativeDocumentMoniker": "UI\\frmLogIn.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmLogIn.cs",
-              "RelativeToolTip": "UI\\frmLogIn.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAIwDQAAABgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-13T22:16:35.571Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "frmMain.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs",
               "RelativeDocumentMoniker": "UI\\frmMain.cs",
               "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs",
               "RelativeToolTip": "UI\\frmMain.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAoAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAABEAAAAAAAAAAAAQwBwAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-22T03:21:44.614Z",
               "IsPinned": true,
@@ -108,7 +98,71 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
+              "Title": "ctrlUsers.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlUsers.cs",
+              "RelativeDocumentMoniker": "UI\\secondaryForms\\ctrlUsers.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlUsers.cs [Dise\u00F1o]",
+              "RelativeToolTip": "UI\\secondaryForms\\ctrlUsers.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-26T03:57:23.655Z",
+              "IsPinned": true,
+              "EditorCaption": " [Dise\u00F1o]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "newUserForm.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newUserForm.cs",
+              "RelativeDocumentMoniker": "UI\\secondaryForms\\newUserForm.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newUserForm.cs [Dise\u00F1o]",
+              "RelativeToolTip": "UI\\secondaryForms\\newUserForm.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T00:09:33.702Z",
+              "IsPinned": true,
+              "EditorCaption": " [Dise\u00F1o]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "newUserForm.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newUserForm.cs",
+              "RelativeDocumentMoniker": "UI\\secondaryForms\\newUserForm.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newUserForm.cs",
+              "RelativeToolTip": "UI\\secondaryForms\\newUserForm.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAIwCAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T00:48:52.765Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "frmMain.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs",
+              "RelativeDocumentMoniker": "UI\\frmMain.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs [Dise\u00F1o]",
+              "RelativeToolTip": "UI\\frmMain.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T02:47:24.046Z",
+              "EditorCaption": " [Dise\u00F1o]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ctrlUsers.cs",
+              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlUsers.cs",
+              "RelativeDocumentMoniker": "UI\\secondaryForms\\ctrlUsers.cs",
+              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlUsers.cs",
+              "RelativeToolTip": "UI\\secondaryForms\\ctrlUsers.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAhwCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-17T23:14:26.056Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "LoginService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Implementations\\LoginService.cs",
               "RelativeDocumentMoniker": "Services\\Implementations\\LoginService.cs",
@@ -121,7 +175,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 9,
               "Title": "PermissionService.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Implementations\\PermissionService.cs",
               "RelativeDocumentMoniker": "Services\\Implementations\\PermissionService.cs",
@@ -129,25 +183,11 @@
               "RelativeToolTip": "Services\\Implementations\\PermissionService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T01:40:25.985Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T01:40:25.985Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Implementations\\UserService.cs",
-              "RelativeDocumentMoniker": "Services\\Implementations\\UserService.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Implementations\\UserService.cs",
-              "RelativeToolTip": "Services\\Implementations\\UserService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T01:40:19.201Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "UsersRepository.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\DAL\\Implementations\\Repositories\\UsersRepository.cs",
               "RelativeDocumentMoniker": "Services\\DAL\\Implementations\\Repositories\\UsersRepository.cs",
@@ -155,12 +195,11 @@
               "RelativeToolTip": "Services\\DAL\\Implementations\\Repositories\\UsersRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T00:21:53.347Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T00:21:53.347Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "PermissionsRepository.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\DAL\\Implementations\\Repositories\\PermissionsRepository.cs",
               "RelativeDocumentMoniker": "Services\\DAL\\Implementations\\Repositories\\PermissionsRepository.cs",
@@ -168,12 +207,11 @@
               "RelativeToolTip": "Services\\DAL\\Implementations\\Repositories\\PermissionsRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-14T00:19:21.407Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-14T00:19:21.407Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "LogLevels.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Contracts\\Logs\\LogLevels.cs",
               "RelativeDocumentMoniker": "Services\\Contracts\\Logs\\LogLevels.cs",
@@ -181,12 +219,11 @@
               "RelativeToolTip": "Services\\Contracts\\Logs\\LogLevels.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-26T23:22:50.881Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-26T23:22:50.881Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 8,
               "Title": "Logger.cs",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\Services\\Contracts\\Logs\\Logger.cs",
               "RelativeDocumentMoniker": "Services\\Contracts\\Logs\\Logger.cs",
@@ -194,65 +231,18 @@
               "RelativeToolTip": "Services\\Contracts\\Logs\\Logger.cs",
               "ViewState": "AgIAACAAAAAAAAAAAAAwwDEAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-26T23:22:50.315Z",
-              "EditorCaption": ""
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Orientation": 0,
-      "VerticalTabListWidth": 256,
-      "FloatingWindowState": {
-        "Id": "7c3f4334-3c1e-4c60-b897-ccd8a9a3e38a",
-        "Display": 0,
-        "X": 191,
-        "Y": 111,
-        "Width": 1235,
-        "Height": 762,
-        "WindowState": 0
-      },
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 1,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "frmMain.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs",
-              "RelativeDocumentMoniker": "UI\\frmMain.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs [Dise\u00F1o]",
-              "RelativeToolTip": "UI\\frmMain.cs [Dise\u00F1o]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-22T02:47:24.046Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2025-09-26T23:22:50.315Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ctrlUsers.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlUsers.cs",
-              "RelativeDocumentMoniker": "UI\\secondaryForms\\ctrlUsers.cs",
-              "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlUsers.cs [Dise\u00F1o]",
-              "RelativeToolTip": "UI\\secondaryForms\\ctrlUsers.cs [Dise\u00F1o]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-26T03:57:23.655Z",
-              "EditorCaption": " [Dise\u00F1o]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "ctrlPermsissions.cs [Dise\u00F1o]",
               "DocumentMoniker": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlPermsissions.cs",
               "RelativeDocumentMoniker": "UI\\secondaryForms\\ctrlPermsissions.cs",
               "ToolTip": "C:\\Users\\user\\Desktop\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\ctrlPermsissions.cs [Dise\u00F1o]",
               "RelativeToolTip": "UI\\secondaryForms\\ctrlPermsissions.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-26T19:13:52.909Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2025-09-26T19:13:52.909Z"
             }
           ]
         }

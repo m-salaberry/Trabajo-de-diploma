@@ -75,18 +75,16 @@
             panelContainerMain.BackColor = SystemColors.ControlDark;
             panelContainerMain.ColumnCount = 1;
             panelContainerMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            panelContainerMain.Dock = DockStyle.Fill;
             panelContainerMain.Location = new Point(0, 24);
             panelContainerMain.Name = "panelContainerMain";
             panelContainerMain.RowCount = 1;
             panelContainerMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            panelContainerMain.Size = new Size(838, 417);
+            panelContainerMain.Size = new Size(0, 0);
             panelContainerMain.TabIndex = 2;
             // 
             // frmMain
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClientSize = new Size(838, 441);
@@ -94,9 +92,7 @@
             Controls.Add(menuStrip);
             MainMenuStrip = menuStrip;
             MinimizeBox = false;
-            MinimumSize = new Size(640, 480);
             Name = "frmMain";
-            Text = "frmMain";
             Load += frmMain_Load;
             menuStrip.ResumeLayout(false);
             menuStrip.PerformLayout();

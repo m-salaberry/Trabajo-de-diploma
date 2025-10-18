@@ -29,68 +29,97 @@
         private void InitializeComponent()
         {
             btnClose = new Button();
-            button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
-            textBox1 = new TextBox();
+            btnAddNewUser = new Button();
+            dataGridView1 = new DataGridView();
+            btnModUser = new Button();
+            dataGridView2 = new DataGridView();
+            lbDisablesUser = new Label();
+            lbActiveUsers = new Label();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
             // 
             // btnClose
             // 
-            btnClose.Location = new Point(575, 476);
+            btnClose.Location = new Point(518, 4);
             btnClose.Name = "btnClose";
-            btnClose.Size = new Size(75, 23);
+            btnClose.Size = new Size(37, 24);
             btnClose.TabIndex = 0;
-            btnClose.Text = "Close";
+            btnClose.Text = "X";
             btnClose.UseVisualStyleBackColor = true;
             btnClose.Click += btnClose_Click;
             // 
-            // button1
+            // btnAddNewUser
             // 
-            button1.Location = new Point(52, 75);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 1;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
+            btnAddNewUser.Location = new Point(89, 379);
+            btnAddNewUser.Name = "btnAddNewUser";
+            btnAddNewUser.Size = new Size(113, 40);
+            btnAddNewUser.TabIndex = 1;
+            btnAddNewUser.Text = "Add User";
+            btnAddNewUser.UseVisualStyleBackColor = true;
+            btnAddNewUser.Click += btnAddNewUser_Click;
             // 
-            // button2
+            // dataGridView1
             // 
-            button2.Location = new Point(52, 149);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 2;
-            button2.Text = "button2";
-            button2.UseVisualStyleBackColor = true;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(15, 51);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(261, 314);
+            dataGridView1.TabIndex = 5;
             // 
-            // button3
+            // btnModUser
             // 
-            button3.Location = new Point(52, 218);
-            button3.Name = "button3";
-            button3.Size = new Size(75, 23);
-            button3.TabIndex = 3;
-            button3.Text = "button3";
-            button3.UseVisualStyleBackColor = true;
+            btnModUser.Location = new Point(356, 379);
+            btnModUser.Name = "btnModUser";
+            btnModUser.Size = new Size(113, 40);
+            btnModUser.TabIndex = 7;
+            btnModUser.Text = "Modify User";
+            btnModUser.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // dataGridView2
             // 
-            textBox1.Location = new Point(146, 76);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 4;
+            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView2.Location = new Point(282, 51);
+            dataGridView2.Name = "dataGridView2";
+            dataGridView2.Size = new Size(261, 314);
+            dataGridView2.TabIndex = 8;
+            // 
+            // lbDisablesUser
+            // 
+            lbDisablesUser.AutoSize = true;
+            lbDisablesUser.Font = new Font("Segoe UI Semibold", 13.75F, FontStyle.Bold);
+            lbDisablesUser.Location = new Point(285, 22);
+            lbDisablesUser.Name = "lbDisablesUser";
+            lbDisablesUser.Size = new Size(142, 25);
+            lbDisablesUser.TabIndex = 10;
+            lbDisablesUser.Text = "Disabled Users:";
+            // 
+            // lbActiveUsers
+            // 
+            lbActiveUsers.AutoSize = true;
+            lbActiveUsers.Font = new Font("Segoe UI Semibold", 13.75F, FontStyle.Bold);
+            lbActiveUsers.Location = new Point(18, 23);
+            lbActiveUsers.Name = "lbActiveUsers";
+            lbActiveUsers.Size = new Size(122, 25);
+            lbActiveUsers.TabIndex = 11;
+            lbActiveUsers.Text = "Active Users:";
             // 
             // ctrlUsers
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            Controls.Add(textBox1);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(lbActiveUsers);
+            Controls.Add(lbDisablesUser);
+            Controls.Add(dataGridView2);
+            Controls.Add(btnModUser);
+            Controls.Add(dataGridView1);
+            Controls.Add(btnAddNewUser);
             Controls.Add(btnClose);
             Name = "ctrlUsers";
-            Size = new Size(653, 502);
+            Size = new Size(558, 436);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -98,9 +127,11 @@
         #endregion
 
         private Button btnClose;
-        private Button button1;
-        private Button button2;
-        private Button button3;
-        private TextBox textBox1;
+        private Button btnAddNewUser;
+        private DataGridView dataGridView1;
+        private Button btnModUser;
+        private DataGridView dataGridView2;
+        private Label lbDisablesUser;
+        private Label lbActiveUsers;
     }
 }
