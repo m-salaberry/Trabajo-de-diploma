@@ -46,33 +46,29 @@ namespace UI
             Component p1 = new Patent
             {
                 Name = "A001",
-                Id = Guid.NewGuid(),
-                Perm = PermissionTypes.Employee,
+                Id = Guid.NewGuid()
             };
-            Console.WriteLine($"Patent 1:\n{p1.Name}\n {p1.Perm}");
+            Console.WriteLine($"Patent 1:\n{p1.Name}");
             Component p2 = new Patent
             {
                 Name = "A002",
-                Id = Guid.NewGuid(),
-                Perm = PermissionTypes.Employee,
+                Id = Guid.NewGuid()
             };
-            Console.WriteLine($"Patent 2:\n{p2.Name}\n {p2.Perm}");
+            Console.WriteLine($"Patent 2:\n{p2.Name}");
             Component p3 = new Patent
             {
                 Name = "A003",
                 Id = Guid.NewGuid(),
-                Perm = PermissionTypes.Employee,
             };
             Component f1 = new Family
             {
                 Name = "Administrator",
                 Id = Guid.NewGuid(),
-                Perm = PermissionTypes.Manager,
             };
             f1.AddChild(p1);
             f1.AddChild(p2);
             f1.AddChild(p3);
-            Console.WriteLine($"Family 1:\n{f1.Name}\n {f1.Perm}\n Patents:");
+            Console.WriteLine($"Family 1:\n{f1.Name}\n Patents:");
             foreach (var child in f1.Children)
             {
                 Console.WriteLine($" - {child.Name}");

@@ -12,6 +12,8 @@ namespace Services.Domain
         private string name;
         private string password;
         private List<Component> _permissions;
+        private string role;
+        private bool isActive;
 
         public User()
         {
@@ -32,6 +34,8 @@ namespace Services.Domain
         public Guid Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string Password { get => password; set => password = value; }
+        public string Role { get => role; set => role = value; }
+        public bool IsActive { get => isActive; set => isActive = value; }
 
         public override string ToString()
         {

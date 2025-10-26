@@ -26,7 +26,8 @@ namespace Services.DAL.Implementations.Repositories
             var parameters = new[]
             {
                 new SqlParameter("@Username", typeof(T).GetProperty("Username")?.GetValue(entity)),
-                new SqlParameter("@Password", typeof(T).GetProperty("Password")?.GetValue(entity))
+                new SqlParameter("@Password", typeof(T).GetProperty("Password")?.GetValue(entity)),
+                new SqlParameter("@IsActive", typeof(T).GetProperty("IsActive")?.GetValue(entity))
             };
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
@@ -49,6 +50,11 @@ namespace Services.DAL.Implementations.Repositories
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Public method to get all users from the database.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>A List of Users</returns>
         public IEnumerable<T> GetAll<T>() where T : class
         {
             var list = new List<T>();
@@ -61,13 +67,19 @@ namespace Services.DAL.Implementations.Repositories
                     typeof(T).GetProperty("Id").SetValue(user, (reader["Id"]));
                     typeof(T).GetProperty("Name").SetValue(user, (reader["Name"]));
                     typeof(T).GetProperty("Password").SetValue(user, (reader["Password"]));
-                    typeof(T).GetProperty("Role").SetValue(user, (reader["Role"]));
+                    typeof(T).GetProperty("IsActive").SetValue(user, (reader["IsActive"]));
                     list.Add((T)user);
                 }
             }
             return list;
         }
 
+        /// <summary>
+        /// Public method to get a user by Id.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns>A specific User based in the id sent by param</returns>
         public T GetById<T>(Guid id) where T : class
         {
             string command = "SELECT * FROM USERS WHERE Id = @Id";
@@ -128,6 +140,40 @@ namespace Services.DAL.Implementations.Repositories
                     return null;
                 }
             }
+        }
+
+        /// <summary>
+        /// Public method to get all active users from the database.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public List<User> GetAllActive<T>() where T : class
+        {
+            string command = "SELECT * FROM USERS WHERE IsActive = 1";
+            var list = new List<User>();
+            using (var reader = SqlHelper.ExecuteReader(command, CommandType.Text))
+            {
+                while (reader.Read())
+                {
+                    var user = new User
+                    {
+                        Id = (Guid)reader["Id"],
+                        Name = (string)reader["Name"],
+                        Password = (string)reader["Password"],
+                        IsActive = (bool)reader["IsActive"]
+                    };
+                    // Fill user's families
+                    repoPermissions.FillUserFamily(user);
+                    // Fill patents for each family
+                    foreach (var family in user.Permissions.OfType<Family>())
+                    {
+                        repoPermissions.FillUserPatents(user, family);
+                    }
+                    list.Add(user);
+                }
+            }
+            return list;
         }
 
         /// <summary>

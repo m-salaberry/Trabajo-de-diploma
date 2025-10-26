@@ -30,18 +30,25 @@
         {
             btnClose = new Button();
             btnAddNewUser = new Button();
-            dataGridView1 = new DataGridView();
+            dgvActiveUsers = new DataGridView();
             btnModUser = new Button();
-            dataGridView2 = new DataGridView();
+            dgvDisabledUsers = new DataGridView();
             lbDisablesUser = new Label();
             lbActiveUsers = new Label();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            btnDisable = new Button();
+            Name = new DataGridViewTextBoxColumn();
+            Password = new DataGridViewTextBoxColumn();
+            Role = new DataGridViewTextBoxColumn();
+            DisableUserName = new DataGridViewTextBoxColumn();
+            DisableUserPassword = new DataGridViewTextBoxColumn();
+            DisableUserRole = new DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)dgvActiveUsers).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDisabledUsers).BeginInit();
             SuspendLayout();
             // 
             // btnClose
             // 
-            btnClose.Location = new Point(518, 4);
+            btnClose.Location = new Point(683, 3);
             btnClose.Name = "btnClose";
             btnClose.Size = new Size(37, 24);
             btnClose.TabIndex = 0;
@@ -51,7 +58,7 @@
             // 
             // btnAddNewUser
             // 
-            btnAddNewUser.Location = new Point(89, 379);
+            btnAddNewUser.Location = new Point(114, 379);
             btnAddNewUser.Name = "btnAddNewUser";
             btnAddNewUser.Size = new Size(113, 40);
             btnAddNewUser.TabIndex = 1;
@@ -59,36 +66,44 @@
             btnAddNewUser.UseVisualStyleBackColor = true;
             btnAddNewUser.Click += btnAddNewUser_Click;
             // 
-            // dataGridView1
+            // dgvActiveUsers
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(15, 51);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(261, 314);
-            dataGridView1.TabIndex = 5;
+            dgvActiveUsers.AllowUserToAddRows = false;
+            dgvActiveUsers.AllowUserToDeleteRows = false;
+            dgvActiveUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvActiveUsers.Columns.AddRange(new DataGridViewColumn[] { Name, Password, Role });
+            dgvActiveUsers.Location = new Point(15, 51);
+            dgvActiveUsers.Name = "dgvActiveUsers";
+            dgvActiveUsers.ReadOnly = true;
+            dgvActiveUsers.Size = new Size(343, 314);
+            dgvActiveUsers.TabIndex = 5;
             // 
             // btnModUser
             // 
-            btnModUser.Location = new Point(356, 379);
+            btnModUser.Location = new Point(496, 379);
             btnModUser.Name = "btnModUser";
             btnModUser.Size = new Size(113, 40);
             btnModUser.TabIndex = 7;
             btnModUser.Text = "Modify User";
             btnModUser.UseVisualStyleBackColor = true;
             // 
-            // dataGridView2
+            // dgvDisabledUsers
             // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Location = new Point(282, 51);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.Size = new Size(261, 314);
-            dataGridView2.TabIndex = 8;
+            dgvDisabledUsers.AllowUserToAddRows = false;
+            dgvDisabledUsers.AllowUserToDeleteRows = false;
+            dgvDisabledUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDisabledUsers.Columns.AddRange(new DataGridViewColumn[] { DisableUserName, DisableUserPassword, DisableUserRole });
+            dgvDisabledUsers.Location = new Point(364, 50);
+            dgvDisabledUsers.Name = "dgvDisabledUsers";
+            dgvDisabledUsers.ReadOnly = true;
+            dgvDisabledUsers.Size = new Size(343, 314);
+            dgvDisabledUsers.TabIndex = 8;
             // 
             // lbDisablesUser
             // 
             lbDisablesUser.AutoSize = true;
             lbDisablesUser.Font = new Font("Segoe UI Semibold", 13.75F, FontStyle.Bold);
-            lbDisablesUser.Location = new Point(285, 22);
+            lbDisablesUser.Location = new Point(367, 22);
             lbDisablesUser.Name = "lbDisablesUser";
             lbDisablesUser.Size = new Size(142, 25);
             lbDisablesUser.TabIndex = 10;
@@ -104,22 +119,67 @@
             lbActiveUsers.TabIndex = 11;
             lbActiveUsers.Text = "Active Users:";
             // 
+            // btnDisable
+            // 
+            btnDisable.Location = new Point(305, 379);
+            btnDisable.Name = "btnDisable";
+            btnDisable.Size = new Size(113, 40);
+            btnDisable.TabIndex = 12;
+            btnDisable.Text = "Disable User";
+            btnDisable.UseVisualStyleBackColor = true;
+            // 
+            // Name
+            // 
+            Name.HeaderText = "Name";
+            Name.Name = "Name";
+            Name.ReadOnly = true;
+            // 
+            // Password
+            // 
+            Password.HeaderText = "Password";
+            Password.Name = "Password";
+            Password.ReadOnly = true;
+            // 
+            // Role
+            // 
+            Role.HeaderText = "Role";
+            Role.Name = "Role";
+            Role.ReadOnly = true;
+            // 
+            // DisableUserName
+            // 
+            DisableUserName.HeaderText = "Name";
+            DisableUserName.Name = "DisableUserName";
+            DisableUserName.ReadOnly = true;
+            // 
+            // DisableUserPassword
+            // 
+            DisableUserPassword.HeaderText = "Password";
+            DisableUserPassword.Name = "DisableUserPassword";
+            DisableUserPassword.ReadOnly = true;
+            // 
+            // DisableUserRole
+            // 
+            DisableUserRole.HeaderText = "Role";
+            DisableUserRole.Name = "DisableUserRole";
+            DisableUserRole.ReadOnly = true;
+            // 
             // ctrlUsers
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
+            Controls.Add(btnDisable);
             Controls.Add(lbActiveUsers);
             Controls.Add(lbDisablesUser);
-            Controls.Add(dataGridView2);
+            Controls.Add(dgvDisabledUsers);
             Controls.Add(btnModUser);
-            Controls.Add(dataGridView1);
+            Controls.Add(dgvActiveUsers);
             Controls.Add(btnAddNewUser);
             Controls.Add(btnClose);
-            Name = "ctrlUsers";
-            Size = new Size(558, 436);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            Size = new Size(723, 436);
+            ((System.ComponentModel.ISupportInitialize)dgvActiveUsers).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDisabledUsers).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -128,10 +188,17 @@
 
         private Button btnClose;
         private Button btnAddNewUser;
-        private DataGridView dataGridView1;
+        private DataGridView dgvActiveUsers;
         private Button btnModUser;
-        private DataGridView dataGridView2;
+        private DataGridView dgvDisabledUsers;
         private Label lbDisablesUser;
         private Label lbActiveUsers;
+        private Button btnDisable;
+        private DataGridViewTextBoxColumn Name;
+        private DataGridViewTextBoxColumn Password;
+        private DataGridViewTextBoxColumn Role;
+        private DataGridViewTextBoxColumn DisableUserName;
+        private DataGridViewTextBoxColumn DisableUserPassword;
+        private DataGridViewTextBoxColumn DisableUserRole;
     }
 }

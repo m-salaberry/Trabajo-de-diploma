@@ -1,4 +1,6 @@
 ﻿using Services.Contracts.CustomsException;
+using Services.Domain;
+using Services.Implementations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +18,17 @@ namespace UI.secondaryForms
         public ctrlUsers()
         {
             InitializeComponent();
+            loadActiveUsers();
+        }
+
+        private void loadActiveUsers()
+        {
+            List<User> _users = UserService.Instance().GetAllActive();
+            foreach (User user in _users)
+            {
+                dgvActiveUsers.Rows.Add(user.Name, user.Password, user.Role);
+            }
+            dgvActiveUsers.Refresh();
         }
 
         private void btnClose_Click(object sender, EventArgs e)

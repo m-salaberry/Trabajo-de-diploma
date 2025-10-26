@@ -17,7 +17,7 @@ namespace Services.Domain
         {
             get
             {
-                return _children;
+                return _children.AsReadOnly();
             }
         }
         public override void AddChild(Component c)

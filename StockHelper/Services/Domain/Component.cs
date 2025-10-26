@@ -27,7 +27,25 @@ namespace Services.Domain
         /// </summary>
         /// <param name="component"></param>
         public abstract void RemoveChild(Component component);
-        public PermissionTypes Perm { get; set; }
+
+        public bool HasPermission (string permissionName)
+        {
+            if (this.Name == permissionName)
+            {
+                return true;
+            }
+
+            foreach (var child in Children)
+            {
+                if (child.HasPermission(permissionName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
 
         public override string ToString()
         {

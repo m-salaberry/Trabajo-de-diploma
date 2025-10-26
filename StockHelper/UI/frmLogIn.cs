@@ -8,7 +8,7 @@ namespace UI
     public partial class frmLogIn : Form
     {
         internal LoginService _loginService = new LoginService();
-        internal UserService _userService = new UserService();
+        internal UserService _userService = UserService.Instance();
         public frmLogIn()
         {
             InitializeComponent();

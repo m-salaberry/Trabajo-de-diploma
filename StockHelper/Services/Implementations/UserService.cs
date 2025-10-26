@@ -6,16 +6,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Services.DAL.Implementations.Repositories;
+using Services.Contracts.CustomsException;
 
 namespace Services.Implementations
 {
     public class UserService : IUserService
     {
         private UsersRepository _userRepository;
+        private static UserService _instance = null;
 
-        public UserService()
+        private UserService()
         {
             _userRepository = new UsersRepository();
+        }
+
+        public static UserService Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new UserService();
+            }
+            return _instance;
         }
 
         public void Delete(Guid id)
@@ -38,6 +49,11 @@ namespace Services.Implementations
             return _userRepository.GetAll<User>().ToList();
         }
 
+        public List<User> GetAllActive()
+        {
+            return _userRepository.GetAllActive<User>().ToList();
+        }
+
         public User GetById(Guid id)
         {
             return _userRepository.GetById<User>(id);
@@ -50,7 +66,14 @@ namespace Services.Implementations
 
         public void Insert(User entity)
         {
-            _userRepository.Create(entity);
+            if (this.Exists(entity.Id))
+            {
+                _userRepository.Create(entity);
+            }
+            else
+            {
+                throw new MySystemException("User already exists", "BLL");
+            }
         }
 
         public void Update(User entity)

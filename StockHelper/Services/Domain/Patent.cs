@@ -9,11 +9,12 @@ namespace Services.Domain
 {
     public class Patent: Component
     {
+        private static readonly IList<Component> _emptyChildren = new List<Component>();
         public override IList<Component> Children
         {
             get
             {
-                return new List<Component>();
+                return _emptyChildren;
             }
         }
 

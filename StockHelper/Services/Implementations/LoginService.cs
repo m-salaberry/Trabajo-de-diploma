@@ -14,7 +14,7 @@ namespace Services.Implementations
         private UserService _userService;
         public LoginService()
         {
-            _userService = new UserService();
+            _userService = UserService.Instance();
         }
         public bool Authenticate(string username, string password)
         {

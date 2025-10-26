@@ -34,7 +34,6 @@ namespace Services.DAL.Implementations.Repositories
                     var patent = new Patent
                     {
                         Name = (string)reader["Name"],
-                        Perm = (PermissionTypes)Enum.GetValues(typeof(PermissionTypes)).GetValue((int)reader["Permission"])
                     };
                     patents.Add(patent);
                 }
@@ -96,7 +95,6 @@ namespace Services.DAL.Implementations.Repositories
                     var patent = new Patent
                     {
                         Name = (string)reader["Name"],
-                        Perm = (PermissionTypes)Enum.GetValues(typeof(PermissionTypes)).GetValue((int)reader["Permission"])
                     };
                     family.Children.Add(patent);
                 }

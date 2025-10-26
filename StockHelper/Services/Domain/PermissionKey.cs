@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Services.Domain
 {
-    public enum PermissionTypes
+    public enum PermissionKey
     {
-        Employee,
-        Manager,
-        Admin
+        UserManagement,
+        PermissionManagement,
+
     }
 }
