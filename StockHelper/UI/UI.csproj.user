@@ -7,10 +7,16 @@
     <Compile Update="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="secondaryForms\ctrlPermsissions.cs">
+    <Compile Update="controlForms\ctrlPermsissions.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="secondaryForms\ctrlUsers.cs">
+    <Compile Update="controlForms\ctrlUsers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Implementations\TranslatableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Implementations\TranslatableUserControls.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="secondaryForms\newUserForm.cs">

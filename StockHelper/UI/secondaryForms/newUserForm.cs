@@ -39,7 +39,8 @@ namespace UI.secondaryForms
                 User user = new User
                 {
                     Name = txtUsername.Text,
-                    Password = (txtPassword.Text == txtRepeatedPassword.Text) ? txtPassword.Text : throw new Exception(""),
+                    Password = (txtPassword.Text == txtRepeatedPassword.Text) ? txtPassword.Text : throw new Exception("Both passwords must be identicals"),
+                    Role = cbRoleSelector.SelectedText,
                 };
                 userService.Insert(user);
             }

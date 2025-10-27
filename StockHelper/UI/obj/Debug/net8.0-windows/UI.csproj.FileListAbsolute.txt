@@ -188,3 +188,4 @@ D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.second
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlPermsissions.resources
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlUsers.resources
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.newUserForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.newUserForm.resources

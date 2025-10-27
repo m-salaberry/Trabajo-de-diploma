@@ -41,4 +41,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="I18n\" />
+  </ItemGroup>
+
 </Project>

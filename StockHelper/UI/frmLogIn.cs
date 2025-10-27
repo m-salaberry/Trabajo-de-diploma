@@ -2,10 +2,11 @@ using Services.Implementations;
 using Microsoft.Identity.Client;
 using Services.Domain;
 using Services.Contracts.Logs;
+using UI.Implementations;
 
 namespace UI
 {
-    public partial class frmLogIn : Form
+    public partial class frmLogIn : TranslatableForm
     {
         internal LoginService _loginService = new LoginService();
         internal UserService _userService = UserService.Instance();
@@ -13,6 +14,17 @@ namespace UI
         {
             InitializeComponent();
             
+        }
+
+        public override void ApplyTranslations()
+        {
+            var lang = LanguageService.GetInstance;
+            this.Text = lang.Translate("Log In");
+            gBoxLogin.Text = lang.Translate("Enter your username and password to continue");
+            usernametxt.PlaceholderText = lang.Translate("Username");
+            passwordtxt.PlaceholderText = lang.Translate("Password");
+            checkShowPassword.Text = lang.Translate("Show");
+            loginbtn.Text = lang.Translate("Log In");
         }
 
         private void checkShowPassword_CheckedChanged(object sender, EventArgs e)

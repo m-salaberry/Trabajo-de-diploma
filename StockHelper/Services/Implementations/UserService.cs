@@ -66,7 +66,7 @@ namespace Services.Implementations
 
         public void Insert(User entity)
         {
-            if (this.Exists(entity.Id))
+            if (Exists(entity.Id))
             {
                 _userRepository.Create(entity);
             }
