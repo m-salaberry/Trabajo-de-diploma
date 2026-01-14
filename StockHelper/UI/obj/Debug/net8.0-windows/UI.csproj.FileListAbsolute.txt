@@ -189,3 +189,5 @@ C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.ctrlUsers.resources
 C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.newUserForm.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.newUserForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.Implementations.TranslatableForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.Implementations.TranslatableUserControls.resources

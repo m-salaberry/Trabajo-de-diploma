@@ -10,16 +10,21 @@ using System.Windows.Forms;
 using Services.Implementations;
 using Services.Domain;
 using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
 
 namespace UI.secondaryForms
 {
     public partial class newUserForm : Form
     {
         UserService userService = UserService.Instance();
+        PermissionService permissionService = PermissionService.Instance();
+
+        public event EventHandler UserCreated;
         public newUserForm()
         {
             InitializeComponent();
             this.CenterToScreen();
+            LoadRoleDropdown();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -40,9 +45,19 @@ namespace UI.secondaryForms
                 {
                     Name = txtUsername.Text,
                     Password = (txtPassword.Text == txtRepeatedPassword.Text) ? txtPassword.Text : throw new Exception("Both passwords must be identicals"),
-                    Role = cbRoleSelector.SelectedText,
+                    IsActive = ckbActiveUser.Checked,
+                    Role = cbRoleSelector.Text,
                 };
                 userService.Insert(user);
+
+                MessageBox.Show($"The user '{user.Name}' was created succesfully");
+                Logger.Current.Info($"The user '{user.Name}' was created succesfully");
+
+                UserCreated?.Invoke(this, EventArgs.Empty);
+
+                txtUsername.Text = "";
+                txtPassword.Text = "";
+                txtRepeatedPassword.Text = "";
             }
             catch (MySystemException ex)
             {
@@ -52,6 +67,12 @@ namespace UI.secondaryForms
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void LoadRoleDropdown()
+        {
+            List<string> roles = permissionService.GetAllFamilies().Select(r => r.Name).ToList();
+            cbRoleSelector.DataSource = roles;
         }
     }
 }

@@ -7,9 +7,21 @@ using System.Threading.Tasks;
 
 namespace Services.Domain
 {
-    public class Patent: Component
+    /// <summary>
+    /// Represents a leaf component in the Composite pattern (cannot have children).
+    /// Used to define atomic permissions that cannot be subdivided.
+    /// </summary>
+    public class Patent : Component
     {
-        private static readonly IList<Component> _emptyChildren = new List<Component>();
+        // Prevents shared state between instances
+        private readonly IList<Component> _emptyChildren;
+
+        public Patent()
+        {
+            // Create a readonly empty collection for each instance
+            _emptyChildren = new List<Component>().AsReadOnly();
+        }
+
         public override IList<Component> Children
         {
             get
@@ -27,7 +39,5 @@ namespace Services.Domain
         {
             throw new LeafComponentException();
         }
-
-
     }
 }

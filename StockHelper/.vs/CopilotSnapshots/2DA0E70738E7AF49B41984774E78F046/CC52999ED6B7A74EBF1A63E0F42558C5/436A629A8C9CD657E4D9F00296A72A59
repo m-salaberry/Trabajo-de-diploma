@@ -1,0 +1,60 @@
+﻿using Services.Contracts.Logs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.ConstrainedExecution;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Services.Contracts.CustomsException
+{
+    public class MySystemException : Exception
+    {
+        private string layerOrigin;
+
+        public MySystemException(string message, string layer) : base(message)
+        {
+            this.layerOrigin = layer;
+        }
+
+        public MySystemException(string message, string layer, Exception innerException) 
+            : base(message, innerException)
+        {
+            this.layerOrigin = layer;
+        }
+
+        /// <summary>
+        /// This method is used to handle the exception of the system
+        /// </summary>
+        public void Handler()
+        {
+            switch (layerOrigin)
+            {
+                case "UI":
+                    new UIExceptionHandler(this.Message).Handler();
+                    break;
+                case "BLL":
+                    new BLLExceptionHandler(this.Message).Handler();
+                    break;
+                case "DAL":
+                    new DALExceptionHandler(this.Message).Handler();
+                    break;
+                case "Service":
+                case "Services":
+                    Logger.Current.Error($"Services Exception: {this.Message}");
+                    if (this.InnerException != null)
+                    {
+                        Logger.Current.LogException(LogLevels.Error, "Inner exception details", this.InnerException);
+                    }
+                    break;
+                default:
+                    Logger.Current.Warning($"System Exception from unknown layer '{layerOrigin}': {this.Message}");
+                    if (this.InnerException != null)
+                    {
+                        Logger.Current.LogException(LogLevels.Warning, "Inner exception details", this.InnerException);
+                    }
+                    break;
+            }
+        }
+    }
+}

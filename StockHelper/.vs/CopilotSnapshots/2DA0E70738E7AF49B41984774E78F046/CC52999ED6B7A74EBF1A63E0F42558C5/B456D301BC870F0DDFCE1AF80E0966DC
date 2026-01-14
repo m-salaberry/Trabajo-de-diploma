@@ -1,0 +1,177 @@
+﻿using Services.Domain;
+using System;
+using Services.Contracts.Logs;
+using System.Windows.Forms;
+
+namespace UI
+{
+    internal static class NativeMethods
+    {
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        internal static extern bool AllocConsole();
+
+        internal static bool testEnvironment = true;
+        internal static bool productionEnvironment = false;
+    }
+
+    internal static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            try
+            {
+                // Initialize Logger based on environment
+                InitializeLogger();
+
+                Logger.Current.Info("StockHelper application starting...");
+
+                // Initialize WinForms application
+                ApplicationConfiguration.Initialize();
+
+                Logger.Current.Info("ApplicationConfiguration initialized successfully");
+
+                // Run the main form
+                Application.Run(new frmLogIn());
+
+                Logger.Current.Info("StockHelper application shutting down normally");
+            }
+            catch (Exception ex)
+            {
+                // Log fatal errors
+                Logger.Current.LogException(LogLevels.Fatal, "Fatal error during application startup", ex);
+
+                MessageBox.Show(
+                    $"A fatal error occurred during application startup:\n\n{ex.Message}\n\nPlease check the log files for more details.",
+                    "Fatal Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Cleanup logger resources
+                Logger.Current.Info("Application terminated");
+            }
+        }
+
+        /// <summary>
+        /// Initializes the logger based on the current environment.
+        /// </summary>
+        private static void InitializeLogger()
+        {
+            LoggerConfiguration config;
+
+            if (NativeMethods.testEnvironment)
+            {
+                // Test/Development environment configuration
+                NativeMethods.AllocConsole(); // Opens the console for debugging
+                config = LoggerConfiguration.CreateTestConfiguration();
+                Console.WriteLine("=== TEST ENVIRONMENT ===");
+                Console.WriteLine("Console appender enabled for debugging");
+            }
+            else if (NativeMethods.productionEnvironment)
+            {
+                // Production environment configuration
+                config = LoggerConfiguration.CreateProductionConfiguration();
+            }
+            else
+            {
+                // Default configuration (file only)
+                config = new LoggerConfiguration
+                {
+                    EnableConsoleLogging = false,
+                    EnableFileLogging = true,
+                    LogFilePath = "system.log",
+                    MinimumLogLevel = LogLevels.Info
+                };
+            }
+
+            // Initialize logger with the selected configuration
+            config.InitializeLogger();
+        }
+
+        /// <summary>
+        /// Test method for Patent & Family with User (for development/testing)
+        /// </summary>
+        private static void Test_Patent_Family()
+        {
+            try
+            {
+                Logger.Current.Debug("Starting Test_Patent_Family");
+                Console.WriteLine("This is a test method for Patent & Family");
+
+                Component p1 = new Patent
+                {
+                    Name = "A001",
+                    Id = Guid.NewGuid()
+                };
+                Console.WriteLine($"Patent 1:\n{p1.Name}");
+
+                Component p2 = new Patent
+                {
+                    Name = "A002",
+                    Id = Guid.NewGuid()
+                };
+                Console.WriteLine($"Patent 2:\n{p2.Name}");
+
+                Component p3 = new Patent
+                {
+                    Name = "A003",
+                    Id = Guid.NewGuid(),
+                };
+
+                Component f1 = new Family
+                {
+                    Name = "Administrator",
+                    Id = Guid.NewGuid(),
+                };
+
+                f1.AddChild(p1);
+                f1.AddChild(p2);
+                f1.AddChild(p3);
+
+                Console.WriteLine($"Family 1:\n{f1.Name}\n Patents:");
+                foreach (var child in f1.Children)
+                {
+                    Console.WriteLine($" - {child.Name}");
+                }
+
+                Console.ReadKey();
+                Console.Clear();
+
+                User u1 = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "admin",
+                    Password = "admin",
+                };
+
+                u1.Permissions.Add(f1);
+                Console.WriteLine($"User 1:\n{u1.Name}\n Permissions:");
+                foreach (var perm in u1.Permissions)
+                {
+                    Console.WriteLine($" - {perm.Name} ({perm.GetType().Name})");
+                    if (perm is Family family)
+                    {
+                        Console.WriteLine("   Patents:");
+                        foreach (var child in family.Children)
+                        {
+                            Console.WriteLine($"    - {child.Name}");
+                        }
+                    }
+                }
+
+                Console.ReadKey();
+                Logger.Current.Debug("Test_Patent_Family completed successfully");
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, "Error in Test_Patent_Family", ex);
+                throw;
+            }
+        }
+    }
+}

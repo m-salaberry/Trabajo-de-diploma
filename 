@@ -1,0 +1,10 @@
+[33m1b6cef6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Multilanguage feature addded - Implemented in Log In Form
+[33md327928[m Some updates in the usermanagement module
+[33m83c3abd[m Users management form created (not functional)
+[33m47fbd18[m Reorganization of project's folders
+[33m078d9cb[m Control user working as forms (only show functionability implemented)
+[33mc86b68e[m DALException + UIException added
+[33m400cc5a[m Users and Permissions partially implemented + Functional Log In
+[33m1c66a4b[m Domain of the Service + LogIn WinForm
+[33m90152e4[m Init of project
+[33m4d64947[m Initial commit

@@ -5,29 +5,29 @@ using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Services.Domain;
 
 namespace Services.DAL.Implementations.Repositories
 {
     public class UsersRepository : IRepository
     {
-        private PermissionsRepository repoPermissions;
+        private FamilyRepository _familyRepository;
 
         public UsersRepository()
         {
-            repoPermissions = new PermissionsRepository();
+            _familyRepository = new FamilyRepository();
         }
 
         public void Create<T>(T entity) where T : class
         {
-            string command = "INSERT INTO USERS (Username, Password) VALUES (@Username, @Password)";
+            string command = "INSERT INTO USERS (Id, Name, Password, IsActive, Role) VALUES (@Id, @Name, @Password, @IsActive, @Role)";
             var parameters = new[]
             {
-                new SqlParameter("@Username", typeof(T).GetProperty("Username")?.GetValue(entity)),
+                new SqlParameter("@Id", typeof(T).GetProperty("Id")?.GetValue(entity)),
+                new SqlParameter("@Name", typeof(T).GetProperty("Name")?.GetValue(entity)),
                 new SqlParameter("@Password", typeof(T).GetProperty("Password")?.GetValue(entity)),
-                new SqlParameter("@IsActive", typeof(T).GetProperty("IsActive")?.GetValue(entity))
+                new SqlParameter("@IsActive", typeof(T).GetProperty("IsActive")?.GetValue(entity)),
+                new SqlParameter("@Role", typeof(T).GetProperty("Role")?.GetValue(entity) ?? DBNull.Value)
             };
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
@@ -36,10 +36,10 @@ namespace Services.DAL.Implementations.Repositories
         {
             User user = (User)(object)entity;
             // First, delete related entries in USERS_FAMILIES
-            repoPermissions.FillUserFamily(user);
-            foreach (var family in user.Permissions)
+            FillUserFamily(user);
+            foreach (var family in user.Permissions.OfType<Family>())
             {
-                DeleteRelationBetweenUserAndFamily(user, (Family)family);
+                DeleteRelationBetweenUserAndFamily(user, family);
             }
             // Then, delete the user
             string command = "DELETE FROM USERS WHERE Id = @Id";
@@ -64,10 +64,11 @@ namespace Services.DAL.Implementations.Repositories
                 while (reader.Read())
                 {
                     var user = Activator.CreateInstance(typeof(T));
-                    typeof(T).GetProperty("Id").SetValue(user, (reader["Id"]));
-                    typeof(T).GetProperty("Name").SetValue(user, (reader["Name"]));
-                    typeof(T).GetProperty("Password").SetValue(user, (reader["Password"]));
-                    typeof(T).GetProperty("IsActive").SetValue(user, (reader["IsActive"]));
+                    typeof(T).GetProperty("Id")?.SetValue(user, reader["Id"]);
+                    typeof(T).GetProperty("Name")?.SetValue(user, reader["Name"]);
+                    typeof(T).GetProperty("Password")?.SetValue(user, reader["Password"]);
+                    typeof(T).GetProperty("IsActive")?.SetValue(user, reader["IsActive"]);
+                    typeof(T).GetProperty("Role")?.SetValue(user, reader["Role"] != DBNull.Value ? reader["Role"] : null);
                     list.Add((T)user);
                 }
             }
@@ -92,9 +93,11 @@ namespace Services.DAL.Implementations.Repositories
                 if (reader.Read())
                 {
                     var user = Activator.CreateInstance(typeof(T));
-                    typeof(T).GetProperty("Id").SetValue(user, (reader["Id"]));
-                    typeof(T).GetProperty("Name").SetValue(user, (reader["Name"]));
-                    typeof(T).GetProperty("Password").SetValue(user, (reader["Password"]));
+                    typeof(T).GetProperty("Id")?.SetValue(user, reader["Id"]);
+                    typeof(T).GetProperty("Name")?.SetValue(user, reader["Name"]);
+                    typeof(T).GetProperty("Password")?.SetValue(user, reader["Password"]);
+                    typeof(T).GetProperty("IsActive")?.SetValue(user, reader["IsActive"]);
+                    typeof(T).GetProperty("Role")?.SetValue(user, reader["Role"] != DBNull.Value ? reader["Role"] : null);
                     return (T)user!;
                 }
                 else
@@ -109,6 +112,14 @@ namespace Services.DAL.Implementations.Repositories
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Retrieves a user by their name from the database.
+        /// </summary>
+        /// <remarks>The returned user object includes associated families and patents. This method
+        /// performs a database query and may impact performance if called frequently.</remarks>
+        /// <param name="name">The name of the user to retrieve. Cannot be null or empty.</param>
+        /// <returns>A <see cref="User"/> object representing the user with the specified name, or <see langword="null"/> if no
+        /// matching user is found.</returns>
         public User GetByName(string name)
         {
             string command = "SELECT * FROM USERS WHERE Name = @Name";
@@ -124,14 +135,16 @@ namespace Services.DAL.Implementations.Repositories
                     {
                         Id = (Guid)reader["Id"],
                         Name = (string)reader["Name"],
-                        Password = (string)reader["Password"]
+                        Password = (string)reader["Password"],
+                        IsActive = reader["IsActive"] != DBNull.Value ? (bool)reader["IsActive"] : false,
+                        Role = reader["Role"] != DBNull.Value ? (string)reader["Role"] : null
                     };
                     // Fill user's families
-                    repoPermissions.FillUserFamily(user);
+                    FillUserFamily(user);
                     // Fill patents for each family
                     foreach (var family in user.Permissions.OfType<Family>())
                     {
-                        repoPermissions.FillUserPatents(user, family);
+                        _familyRepository.FillFamilyPatents(family);
                     }
                     return user;
                 }
@@ -147,7 +160,6 @@ namespace Services.DAL.Implementations.Repositories
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public List<User> GetAllActive<T>() where T : class
         {
             string command = "SELECT * FROM USERS WHERE IsActive = 1";
@@ -161,14 +173,15 @@ namespace Services.DAL.Implementations.Repositories
                         Id = (Guid)reader["Id"],
                         Name = (string)reader["Name"],
                         Password = (string)reader["Password"],
-                        IsActive = (bool)reader["IsActive"]
+                        IsActive = (bool)reader["IsActive"],
+                        Role = reader["Role"] != DBNull.Value ? (string)reader["Role"] : null
                     };
                     // Fill user's families
-                    repoPermissions.FillUserFamily(user);
+                    FillUserFamily(user);
                     // Fill patents for each family
                     foreach (var family in user.Permissions.OfType<Family>())
                     {
-                        repoPermissions.FillUserPatents(user, family);
+                        _familyRepository.FillFamilyPatents(family);
                     }
                     list.Add(user);
                 }
@@ -177,31 +190,60 @@ namespace Services.DAL.Implementations.Repositories
         }
 
         /// <summary>
-        /// Saves related Family for a user.
+        /// Fills the user's families (roles) based on their user ID.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="entity"></param>
+        /// <param name="user">User to fill with families</param>
+        public void FillUserFamily(User user)
+        {
+            string command = "SELECT f.Id, f.Name FROM FAMILIES f " +
+                             "JOIN USERS_FAMILIES uf ON f.Id = uf.FamilyId " +
+                             "WHERE uf.UserId = @UserId";
+            SqlParameter[] parameters = {
+                new SqlParameter("@UserId", user.Id)
+            };
+            using (var reader = SqlHelper.ExecuteReader(command, CommandType.Text, parameters))
+            {
+                while (reader.Read())
+                {
+                    var family = new Family
+                    {
+                        Id = (Guid)reader["Id"],
+                        Name = (string)reader["Name"]
+                    };
+                    user.Permissions.Add(family);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves related Family for a user.
+        /// Assigns a role (family) to a user.
+        /// </summary>
+        /// <param name="user">User to assign role to</param>
+        /// <param name="family">Role (family) to assign</param>
         public void SaveRelatedFamilyOfUser(User user, Family family)
         {
             string command = "INSERT INTO USERS_FAMILIES (UserId, FamilyId) VALUES (@UserId, @FamilyId)";
             SqlParameter[] parameters = new SqlParameter[] {
                 new SqlParameter("@UserId", user.Id),
                 new SqlParameter("@FamilyId", family.Id)
-                };
+            };
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
+
         /// <summary>
         /// Deletes the relation between a user and a family.
+        /// Removes a role (family) from a user.
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="family"></param>
+        /// <param name="user">User to remove role from</param>
+        /// <param name="family">Role (family) to remove</param>
         public void DeleteRelationBetweenUserAndFamily(User user, Family family)
         {
             string command = "DELETE FROM USERS_FAMILIES WHERE UserId = @UserId AND FamilyId = @FamilyId";
             SqlParameter[] parameters = new SqlParameter[] {
                 new SqlParameter("@UserId", user.Id),
                 new SqlParameter("@FamilyId", family.Id)
-                };
+            };
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
     }

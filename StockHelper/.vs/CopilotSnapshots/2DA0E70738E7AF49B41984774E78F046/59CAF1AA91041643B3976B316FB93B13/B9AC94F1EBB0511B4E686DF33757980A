@@ -1,0 +1,91 @@
+﻿using Services.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Services.Domain;
+using Services.DAL.Implementations.Repositories;
+
+namespace Services.Implementations
+{
+    public class PermissionService : IGenericService<Component>
+    {
+        private PermissionsRepository _permsRepository;
+        private static PermissionService _instance = null;
+        private static readonly object _lock = new object();
+
+        private List<Component> _cachedPermissions = null;
+        private List<Family> _cachedFamilies = null;
+        private DateTime? _lastCacheUpdate = null;
+        private readonly TimeSpan _cacheExpiration = TimeSpan.FromMinutes(30);
+        public static PermissionService Instance()
+        {
+            if (_instance == null)
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new PermissionService();
+                    }
+                }
+            }
+            return _instance;
+        }
+        public PermissionService()
+        {
+            _permsRepository = new PermissionsRepository();
+        }
+        public void Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Exists(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Component> GetAll()
+        {
+            // Check if cache is valid
+            if (_cachedPermissions == null ||
+            _lastCacheUpdate == null ||
+            DateTime.Now - _lastCacheUpdate > _cacheExpiration)
+            {
+                _cachedPermissions = _permsRepository.GetAll<Component>().ToList();
+                _cachedFamilies = _permsRepository.GetAll<Family>().ToList();
+                _lastCacheUpdate = DateTime.Now;
+            }
+
+            return _cachedPermissions;
+        }
+
+        public Component GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Insert(Component entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Component entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InvalidateCache()
+        {
+            _cachedPermissions = null;
+            _lastCacheUpdate = null;
+        }
+
+        public List<Family> GetFamilies()
+        {
+
+        }
+    }
+}

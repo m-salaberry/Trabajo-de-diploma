@@ -1,0 +1,266 @@
+﻿using System;
+
+namespace Services.Domain
+{
+    /// <summary>
+    /// Constants for system permissions.
+    /// Provides type-safe permission names and prevents typos.
+    /// </summary>
+    public static class PermissionNames
+    {
+        // ============================================
+        // USER MANAGEMENT PERMISSIONS
+        // ============================================
+        
+        /// <summary>
+        /// Permission to view the user management form/module.
+        /// </summary>
+        public const string ViewUserManagement = "ViewUserManagement";
+
+        /// <summary>
+        /// Permission to create new users.
+        /// </summary>
+        public const string CreateUser = "CreateUser";
+
+        /// <summary>
+        /// Permission to edit existing users.
+        /// </summary>
+        public const string EditUser = "EditUser";
+
+        /// <summary>
+        /// Permission to delete users.
+        /// </summary>
+        public const string DeleteUser = "DeleteUser";
+
+        /// <summary>
+        /// Permission to activate/deactivate users.
+        /// </summary>
+        public const string ToggleUserStatus = "ToggleUserStatus";
+
+        /// <summary>
+        /// Permission to view user details.
+        /// </summary>
+        public const string ViewUserDetails = "ViewUserDetails";
+
+        // ============================================
+        // PERMISSION MANAGEMENT PERMISSIONS
+        // ============================================
+
+        /// <summary>
+        /// Permission to view the permission management form/module.
+        /// </summary>
+        public const string ViewPermissionManagement = "ViewPermissionManagement";
+
+        /// <summary>
+        /// Permission to assign permissions to users.
+        /// </summary>
+        public const string AssignPermissions = "AssignPermissions";
+
+        /// <summary>
+        /// Permission to create new roles (families).
+        /// </summary>
+        public const string CreateRole = "CreateRole";
+
+        /// <summary>
+        /// Permission to edit existing roles.
+        /// </summary>
+        public const string EditRole = "EditRole";
+
+        /// <summary>
+        /// Permission to delete roles.
+        /// </summary>
+        public const string DeleteRole = "DeleteRole";
+
+        /// <summary>
+        /// Permission to view role details.
+        /// </summary>
+        public const string ViewRoleDetails = "ViewRoleDetails";
+
+        // ============================================
+        // INVENTORY/STOCK MANAGEMENT PERMISSIONS
+        // ============================================
+
+        /// <summary>
+        /// Permission to view the inventory management form/module.
+        /// </summary>
+        public const string ViewInventory = "ViewInventory";
+
+        /// <summary>
+        /// Permission to add new products to inventory.
+        /// </summary>
+        public const string CreateProduct = "CreateProduct";
+
+        /// <summary>
+        /// Permission to edit existing products.
+        /// </summary>
+        public const string EditProduct = "EditProduct";
+
+        /// <summary>
+        /// Permission to delete products.
+        /// </summary>
+        public const string DeleteProduct = "DeleteProduct";
+
+        /// <summary>
+        /// Permission to adjust stock levels.
+        /// </summary>
+        public const string AdjustStock = "AdjustStock";
+
+        /// <summary>
+        /// Permission to view product details.
+        /// </summary>
+        public const string ViewProductDetails = "ViewProductDetails";
+
+        // ============================================
+        // REPORTS PERMISSIONS
+        // ============================================
+
+        /// <summary>
+        /// Permission to view reports module.
+        /// </summary>
+        public const string ViewReports = "ViewReports";
+
+        /// <summary>
+        /// Permission to generate sales reports.
+        /// </summary>
+        public const string GenerateSalesReport = "GenerateSalesReport";
+
+        /// <summary>
+        /// Permission to generate inventory reports.
+        /// </summary>
+        public const string GenerateInventoryReport = "GenerateInventoryReport";
+
+        /// <summary>
+        /// Permission to generate financial reports.
+        /// </summary>
+        public const string GenerateFinancialReport = "GenerateFinancialReport";
+
+        /// <summary>
+        /// Permission to export reports to file.
+        /// </summary>
+        public const string ExportReports = "ExportReports";
+
+        // ============================================
+        // SALES PERMISSIONS
+        // ============================================
+
+        /// <summary>
+        /// Permission to view sales module.
+        /// </summary>
+        public const string ViewSales = "ViewSales";
+
+        /// <summary>
+        /// Permission to create new sales.
+        /// </summary>
+        public const string CreateSale = "CreateSale";
+
+        /// <summary>
+        /// Permission to cancel sales.
+        /// </summary>
+        public const string CancelSale = "CancelSale";
+
+        /// <summary>
+        /// Permission to apply discounts.
+        /// </summary>
+        public const string ApplyDiscount = "ApplyDiscount";
+
+        /// <summary>
+        /// Permission to view sale details.
+        /// </summary>
+        public const string ViewSaleDetails = "ViewSaleDetails";
+
+        // ============================================
+        // PURCHASE PERMISSIONS
+        // ============================================
+
+        /// <summary>
+        /// Permission to view purchase module.
+        /// </summary>
+        public const string ViewPurchases = "ViewPurchases";
+
+        /// <summary>
+        /// Permission to create new purchase orders.
+        /// </summary>
+        public const string CreatePurchase = "CreatePurchase";
+
+        /// <summary>
+        /// Permission to approve purchase orders.
+        /// </summary>
+        public const string ApprovePurchase = "ApprovePurchase";
+
+        /// <summary>
+        /// Permission to cancel purchase orders.
+        /// </summary>
+        public const string CancelPurchase = "CancelPurchase";
+
+        // ============================================
+        // SYSTEM CONFIGURATION PERMISSIONS
+        // ============================================
+
+        /// <summary>
+        /// Permission to access system configuration.
+        /// </summary>
+        public const string AccessSystemConfiguration = "AccessSystemConfiguration";
+
+        /// <summary>
+        /// Permission to change system settings.
+        /// </summary>
+        public const string ChangeSystemSettings = "ChangeSystemSettings";
+
+        /// <summary>
+        /// Permission to view system logs.
+        /// </summary>
+        public const string ViewSystemLogs = "ViewSystemLogs";
+
+        /// <summary>
+        /// Permission to backup database.
+        /// </summary>
+        public const string BackupDatabase = "BackupDatabase";
+
+        /// <summary>
+        /// Permission to restore database.
+        /// </summary>
+        public const string RestoreDatabase = "RestoreDatabase";
+    }
+
+    /// <summary>
+    /// Constants for system roles (Families).
+    /// Provides type-safe role names.
+    /// </summary>
+    public static class RoleNames
+    {
+        /// <summary>
+        /// Administrator role - Full system access.
+        /// </summary>
+        public const string Administrator = "Administrator";
+
+        /// <summary>
+        /// Manager role - Management level access.
+        /// </summary>
+        public const string Manager = "Manager";
+
+        /// <summary>
+        /// Salesperson role - Sales operations access.
+        /// </summary>
+        public const string Salesperson = "Salesperson";
+
+        /// <summary>
+        /// Inventory Manager role - Inventory management access.
+        /// </summary>
+        public const string InventoryManager = "InventoryManager";
+
+        /// <summary>
+        /// Cashier role - Basic sales operations.
+        /// </summary>
+        public const string Cashier = "Cashier";
+
+        /// <summary>
+        /// Auditor role - Read-only access to reports and logs.
+        /// </summary>
+        public const string Auditor = "Auditor";
+
+        /// <summary>
+        /// Guest role - Minimal read-only access.
+        /// </summary>
+        public const string Guest = "Guest";
+    }
+}

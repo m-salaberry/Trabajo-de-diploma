@@ -18,17 +18,33 @@ namespace UI.secondaryForms
         public ctrlUsers()
         {
             InitializeComponent();
-            loadActiveUsers();
+            LoadUsers();
         }
 
-        private void loadActiveUsers()
+        private void LoadUsers()
         {
-            List<User> _users = UserService.Instance().GetAllActive();
+            dgvActiveUsers.Rows.Clear();
+            dgvDisabledUsers.Rows.Clear();
+
+            List<User> _users = UserService.Instance().GetAll();
             foreach (User user in _users)
             {
-                dgvActiveUsers.Rows.Add(user.Name, user.Password, user.Role);
+                if (user.IsActive)
+                {
+                    dgvActiveUsers.Rows.Add(user.Name, user.Password, user.Role);
+                }
+                if (!user.IsActive)
+                {
+                    dgvDisabledUsers.Rows.Add(user.Name, user.Password, user.Role);
+                }
             }
             dgvActiveUsers.Refresh();
+            dgvDisabledUsers.Refresh();
+        }
+
+        public void RefreshUserList()
+        {
+            LoadUsers();
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -43,6 +59,8 @@ namespace UI.secondaryForms
             try
             {
                 newUserForm newUserForm = new newUserForm();
+                // Subscribe to the UserCreated event
+                newUserForm.UserCreated += (s, ev) => RefreshUserList();
                 newUserForm.ShowDialog();
                 newUserForm.BringToFront();
 

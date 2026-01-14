@@ -44,6 +44,15 @@ namespace Services.Implementations
             return false;
         }
 
+        public bool ExistsByName(string name)
+        {
+            if (_userRepository.GetByName(name) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public List<User> GetAll()
         {
             return _userRepository.GetAll<User>().ToList();
@@ -66,8 +75,9 @@ namespace Services.Implementations
 
         public void Insert(User entity)
         {
-            if (Exists(entity.Id))
+            if (!ExistsByName(entity.Name))
             {
+                entity.Id = GenerateUniqueGuid();
                 _userRepository.Create(entity);
             }
             else
@@ -79,6 +89,34 @@ namespace Services.Implementations
         public void Update(User entity)
         {
             _userRepository.Update(entity);
+        }
+
+        /// <summary>
+        /// Generates a unique GUID that doesn't exist in the database.
+        /// While GUID collisions are extremely rare, this ensures database integrity.
+        /// </summary>
+        /// <returns>A unique GUID</returns>
+        private Guid GenerateUniqueGuid()
+        {
+            Guid newGuid;
+            int maxAttempts = 10; // Límite de intentos por seguridad
+            int attempts = 0;
+
+            do
+            {
+                newGuid = Guid.NewGuid();
+                attempts++;
+
+                if (attempts >= maxAttempts)
+                {
+                    throw new MySystemException(
+                        "Unable to generate unique GUID after multiple attempts",
+                        "BLL");
+                }
+            }
+            while (Exists(newGuid));
+
+            return newGuid;
         }
     }
 }

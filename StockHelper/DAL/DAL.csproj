@@ -7,10 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Implementations\**" />
     <Compile Remove="Scripts\**" />
     <Compile Remove="Tools\**" />
+    <EmbeddedResource Remove="Implementations\**" />
     <EmbeddedResource Remove="Scripts\**" />
     <EmbeddedResource Remove="Tools\**" />
+    <None Remove="Implementations\**" />
     <None Remove="Scripts\**" />
     <None Remove="Tools\**" />
   </ItemGroup>
@@ -24,10 +27,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Implementations\Repositories\" />
   </ItemGroup>
 
 </Project>

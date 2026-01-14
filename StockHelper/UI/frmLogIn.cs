@@ -53,9 +53,15 @@ namespace UI
         {
             try
             {
+                if (!ValidateCredentials(out string validationMessage))
+                {
+                    MessageBox.Show(validationMessage, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 User loginUser = new User
                 {
-                    Name = usernametxt.Text,
+                    Name = usernametxt.Text.Trim(),
                     Password = passwordtxt.Text
                 };
 
@@ -76,8 +82,82 @@ namespace UI
             }
             catch (Exception ex)
             {
+                Logger.Current.LogException(LogLevels.Error, "Login error", ex);
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Validates username and password before authentication.
+        /// </summary>
+        /// <param name="validationMessage">Message describing validation failure</param>
+        /// <returns>True if validation passes, false otherwise</returns>
+        private bool ValidateCredentials(out string validationMessage)
+        {
+            validationMessage = string.Empty;
+            var lang = LanguageService.GetInstance;
+
+            // 1. Check if username is empty or whitespace
+            if (string.IsNullOrWhiteSpace(usernametxt.Text))
+            {
+                validationMessage = lang.Translate("Username cannot be empty");
+                usernametxt.Focus();
+                return false;
+            }
+
+            // 2. Check if password is empty
+            if (string.IsNullOrEmpty(passwordtxt.Text))
+            {
+                validationMessage = lang.Translate("Password cannot be empty");
+                passwordtxt.Focus();
+                return false;
+            }
+
+            // 3. Validate username length (minimum 3 characters)
+            if (usernametxt.Text.Trim().Length < 3)
+            {
+                validationMessage = lang.Translate("Username must be at least 3 characters long");
+                usernametxt.Focus();
+                return false;
+            }
+
+            // 4. Validate username length (maximum 50 characters)
+            if (usernametxt.Text.Trim().Length > 50)
+            {
+                validationMessage = lang.Translate("Username cannot exceed 50 characters");
+                usernametxt.Focus();
+                return false;
+            }
+
+            // 5. Validate password length (minimum 4 characters)
+            if (passwordtxt.Text.Length < 4)
+            {
+                validationMessage = lang.Translate("Password must be at least 4 characters long");
+                passwordtxt.Focus();
+                return false;
+            }
+
+            // 6. Validate password length (maximum 100 characters)
+            if (passwordtxt.Text.Length > 100)
+            {
+                validationMessage = lang.Translate("Password cannot exceed 100 characters");
+                passwordtxt.Focus();
+                return false;
+            }
+
+            // 7. Check for invalid characters in username (only alphanumeric, underscore, dot, hyphen)
+            if (!System.Text.RegularExpressions.Regex.IsMatch(usernametxt.Text.Trim(), @"^[a-zA-Z0-9._-]+$"))
+            {
+                validationMessage = lang.Translate("Username contains invalid characters. Only letters, numbers, dots, underscores and hyphens are allowed");
+                usernametxt.Focus();
+                return false;
+            }
+
+            // 8. Trim whitespace from username
+            usernametxt.Text = usernametxt.Text.Trim();
+
+            Logger.Current.Debug($"Credentials validation passed for user: {usernametxt.Text}");
+            return true;
         }
     }
 }

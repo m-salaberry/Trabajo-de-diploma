@@ -1,0 +1,368 @@
+﻿using Services.Contracts.CustomException;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+
+namespace Services.DAL.Implementations.Repositories
+{
+    /// <summary>
+    /// Repository for managing translation files and providing translation services.
+    /// Implements caching and thread-safe operations.
+    /// </summary>
+    public sealed class LanguageRepository
+    {
+        #region Singleton
+        private readonly static LanguageRepository _instance = new LanguageRepository();
+
+        public static LanguageRepository GetInstance => _instance;
+
+        private LanguageRepository()
+        {
+            InitializePaths();
+            Logger.Current.Debug("LanguageRepository initialized");
+        }
+        #endregion
+
+        #region Fields
+        private static string _folderPath;
+        private static string _fileName;
+        private static string _baseFilePath;
+
+        // Cache for translations by culture
+        private readonly Dictionary<string, Dictionary<string, string>> _translationCache;
+        private readonly object _cacheLock = new object();
+        private readonly object _fileLock = new object();
+
+        // File watcher for automatic cache invalidation
+        private Dictionary<string, DateTime> _fileLastModified;
+        #endregion
+
+        #region Initialization
+        private void InitializePaths()
+        {
+            _translationCache = new Dictionary<string, Dictionary<string, string>>();
+            _fileLastModified = new Dictionary<string, DateTime>();
+
+            _folderPath = ConfigurationManager.AppSettings["LanguageFolderPath"];
+            _fileName = ConfigurationManager.AppSettings["LanguageFileName"];
+
+            if (string.IsNullOrWhiteSpace(_folderPath))
+            {
+                _folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "I18n");
+                Logger.Current.Warning("LanguageFolderPath not configured, using default: " + _folderPath);
+            }
+
+            if (string.IsNullOrWhiteSpace(_fileName))
+            {
+                _fileName = "translations";
+                Logger.Current.Warning("LanguageFileName not configured, using default: " + _fileName);
+            }
+
+            // Resolve to absolute path
+            if (!Path.IsPathRooted(_folderPath))
+            {
+                _folderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _folderPath);
+            }
+
+            // Normalize path
+            _folderPath = Path.GetFullPath(_folderPath);
+            _baseFilePath = Path.Combine(_folderPath, _fileName);
+
+            Logger.Current.Info($"Language files base path: {_baseFilePath}");
+        }
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Translates a word to the current thread culture.
+        /// Uses cache for performance.
+        /// </summary>
+        /// <param name="word">The word/key to translate</param>
+        /// <returns>Translated string or original word if not found</returns>
+        public string Translate(string word)
+        {
+            if (string.IsNullOrWhiteSpace(word))
+            {
+                return word;
+            }
+
+            try
+            {
+                string culture = Thread.CurrentThread.CurrentCulture.Name;
+                
+                // Get or load translations for the current culture
+                Dictionary<string, string> translations = GetTranslationsForCulture(culture);
+
+                // Try to find the translation
+                if (translations.TryGetValue(word, out string translatedValue))
+                {
+                    return translatedValue;
+                }
+
+                // Word not found - throw exception to be handled by LanguageService
+                Logger.Current.Debug($"Translation not found for key '{word}' in culture '{culture}'");
+                throw new WordNotFoundException($"Translation key '{word}' not found in culture '{culture}'");
+            }
+            catch (WordNotFoundException)
+            {
+                throw; // Re-throw to be handled by LanguageService
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    $"Error translating word '{word}'", ex);
+                return word; // Return original word on error
+            }
+        }
+
+        /// <summary>
+        /// Adds a new translation key to the file for the current culture.
+        /// Thread-safe operation.
+        /// </summary>
+        /// <param name="word">The word/key to add</param>
+        public void AddDatakey(string word)
+        {
+            if (string.IsNullOrWhiteSpace(word))
+            {
+                return;
+            }
+
+            try
+            {
+                string culture = Thread.CurrentThread.CurrentCulture.Name;
+                string filePath = GetFilePathForCulture(culture);
+
+                lock (_fileLock)
+                {
+                    // Ensure directory exists
+                    string directory = Path.GetDirectoryName(filePath);
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+                    // Check if key already exists in file to avoid duplicates
+                    if (File.Exists(filePath) && KeyExistsInFile(filePath, word))
+                    {
+                        Logger.Current.Debug($"Key '{word}' already exists in translation file");
+                        return;
+                    }
+
+                    // Append the new key
+                    using (StreamWriter sw = new StreamWriter(filePath, true, Encoding.UTF8))
+                    {
+                        sw.WriteLine($"{word}={word}");
+                    }
+
+                    Logger.Current.Info($"Added translation key '{word}' to culture '{culture}'");
+
+                    // Invalidate cache for this culture
+                    InvalidateCacheForCulture(culture);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    $"Error adding translation key '{word}'", ex);
+            }
+        }
+
+        /// <summary>
+        /// Clears the translation cache for all cultures.
+        /// </summary>
+        public void ClearCache()
+        {
+            lock (_cacheLock)
+            {
+                _translationCache.Clear();
+                _fileLastModified.Clear();
+                Logger.Current.Info("Translation cache cleared");
+            }
+        }
+
+        /// <summary>
+        /// Clears the translation cache for a specific culture.
+        /// </summary>
+        /// <param name="culture">Culture code (e.g., "es-ES")</param>
+        public void InvalidateCacheForCulture(string culture)
+        {
+            if (string.IsNullOrWhiteSpace(culture))
+            {
+                return;
+            }
+
+            lock (_cacheLock)
+            {
+                if (_translationCache.ContainsKey(culture))
+                {
+                    _translationCache.Remove(culture);
+                    _fileLastModified.Remove(culture);
+                    Logger.Current.Debug($"Cache invalidated for culture '{culture}'");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks if a translation file exists for the specified culture.
+        /// </summary>
+        /// <param name="culture">Culture code (e.g., "es-ES")</param>
+        /// <returns>True if file exists, false otherwise</returns>
+        public bool TranslationFileExists(string culture)
+        {
+            string filePath = GetFilePathForCulture(culture);
+            return File.Exists(filePath);
+        }
+        #endregion
+
+        #region Private Methods
+        private Dictionary<string, string> GetTranslationsForCulture(string culture)
+        {
+            lock (_cacheLock)
+            {
+                // Check if cache exists and is up to date
+                if (_translationCache.TryGetValue(culture, out Dictionary<string, string> cachedTranslations))
+                {
+                    string filePath = GetFilePathForCulture(culture);
+                    
+                    // Check if file was modified since last cache
+                    if (File.Exists(filePath))
+                    {
+                        DateTime lastModified = File.GetLastWriteTime(filePath);
+                        if (_fileLastModified.TryGetValue(culture, out DateTime cachedTime) 
+                            && cachedTime >= lastModified)
+                        {
+                            // Cache is valid
+                            return cachedTranslations;
+                        }
+                    }
+                }
+
+                // Load translations from file
+                Dictionary<string, string> translations = LoadTranslationsFromFile(culture);
+                _translationCache[culture] = translations;
+
+                string path = GetFilePathForCulture(culture);
+                if (File.Exists(path))
+                {
+                    _fileLastModified[culture] = File.GetLastWriteTime(path);
+                }
+
+                Logger.Current.Debug($"Loaded {translations.Count} translations for culture '{culture}'");
+                return translations;
+            }
+        }
+
+        private Dictionary<string, string> LoadTranslationsFromFile(string culture)
+        {
+            Dictionary<string, string> translations = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            string filePath = GetFilePathForCulture(culture);
+
+            if (!File.Exists(filePath))
+            {
+                Logger.Current.Warning($"Translation file not found: {filePath}");
+                return translations;
+            }
+
+            try
+            {
+                using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8))
+                {
+                    int lineNumber = 0;
+                    while (!sr.EndOfStream)
+                    {
+                        lineNumber++;
+                        string line = sr.ReadLine();
+
+                        // Skip empty lines and comments
+                        if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith("#"))
+                        {
+                            continue;
+                        }
+
+                        // Parse key=value
+                        int equalsIndex = line.IndexOf('=');
+                        if (equalsIndex <= 0)
+                        {
+                            Logger.Current.Warning($"Invalid format in {filePath} at line {lineNumber}: '{line}'");
+                            continue;
+                        }
+
+                        string key = line.Substring(0, equalsIndex).Trim();
+                        string value = line.Substring(equalsIndex + 1).Trim();
+
+                        if (string.IsNullOrEmpty(key))
+                        {
+                            Logger.Current.Warning($"Empty key in {filePath} at line {lineNumber}");
+                            continue;
+                        }
+
+                        // Add or update translation (last one wins if duplicate)
+                        if (translations.ContainsKey(key))
+                        {
+                            Logger.Current.Warning($"Duplicate key '{key}' in {filePath} at line {lineNumber}");
+                        }
+
+                        translations[key] = value;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    $"Error loading translations from {filePath}", ex);
+            }
+
+            return translations;
+        }
+
+        private string GetFilePathForCulture(string culture)
+        {
+            return $"{_baseFilePath}.{culture}";
+        }
+
+        private bool KeyExistsInFile(string filePath, string key)
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader(filePath, Encoding.UTF8))
+                {
+                    while (!sr.EndOfStream)
+                    {
+                        string line = sr.ReadLine();
+                        
+                        if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith("#"))
+                        {
+                            continue;
+                        }
+
+                        int equalsIndex = line.IndexOf('=');
+                        if (equalsIndex <= 0)
+                        {
+                            continue;
+                        }
+
+                        string existingKey = line.Substring(0, equalsIndex).Trim();
+                        if (existingKey.Equals(key, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Warning, 
+                    $"Error checking if key exists in {filePath}", ex);
+            }
+
+            return false;
+        }
+        #endregion
+    }
+}

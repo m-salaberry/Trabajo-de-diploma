@@ -92,7 +92,7 @@
             cbRoleSelector.Location = new Point(200, 193);
             cbRoleSelector.Name = "cbRoleSelector";
             cbRoleSelector.Size = new Size(257, 23);
-            cbRoleSelector.TabIndex = 5;
+            cbRoleSelector.TabIndex = 8;
             // 
             // ckbActiveUser
             // 
@@ -103,7 +103,7 @@
             ckbActiveUser.Location = new Point(200, 232);
             ckbActiveUser.Name = "ckbActiveUser";
             ckbActiveUser.Size = new Size(112, 25);
-            ckbActiveUser.TabIndex = 6;
+            ckbActiveUser.TabIndex = 10;
             ckbActiveUser.Text = "Active User";
             ckbActiveUser.UseVisualStyleBackColor = true;
             // 
@@ -122,14 +122,14 @@
             txtRepeatedPassword.Location = new Point(197, 142);
             txtRepeatedPassword.Name = "txtRepeatedPassword";
             txtRepeatedPassword.Size = new Size(257, 23);
-            txtRepeatedPassword.TabIndex = 8;
+            txtRepeatedPassword.TabIndex = 5;
             // 
             // btnSaveUser
             // 
             btnSaveUser.Location = new Point(177, 272);
             btnSaveUser.Name = "btnSaveUser";
             btnSaveUser.Size = new Size(117, 46);
-            btnSaveUser.TabIndex = 9;
+            btnSaveUser.TabIndex = 11;
             btnSaveUser.Text = "Save";
             btnSaveUser.UseVisualStyleBackColor = true;
             btnSaveUser.Click += btnSaveUser_Click;

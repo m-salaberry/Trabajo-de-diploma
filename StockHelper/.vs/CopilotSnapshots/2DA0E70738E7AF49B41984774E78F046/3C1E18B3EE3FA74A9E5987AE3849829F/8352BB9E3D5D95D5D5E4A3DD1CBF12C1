@@ -1,0 +1,168 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Services.Domain;
+using Services.Implementations;
+using Services.Contracts.Logs;
+using UI.secondaryForms;
+using UI.Helpers;
+
+namespace UI
+{
+    public partial class frmMain : Form
+    {
+        private PermissionService _permissionService;
+        private User currentUser;
+        private static frmMain _instance;
+
+        private frmMain(User logedUser)
+        {
+            InitializeComponent();
+            
+            _permissionService = new PermissionService();
+            currentUser = logedUser;
+            
+            ResetMainPanelSize();
+            this.CenterToScreen();
+            this.Text = $"StockHelper - Logged in as: {currentUser.Name}";
+            
+            // Configure UI based on user permissions
+            ConfigurePermissions();
+            
+            Logger.Current.Info($"Main form initialized for user '{currentUser.Name}'");
+        }
+
+        public static frmMain GetInstance(User logedUser = null!)
+        {
+            if (_instance == null || _instance.IsDisposed)
+            {
+                _instance = new frmMain(logedUser);
+            }
+            return _instance;
+        }
+
+        /// <summary>
+        /// Configures menu visibility and state based on user permissions.
+        /// This method is called during form initialization to hide/show menu items
+        /// according to what the current user is allowed to access.
+        /// </summary>
+        private void ConfigurePermissions()
+        {
+            // Configure User Management menu visibility
+            UIPermissionHelper.ShowMenuItemIfHasPermission(
+                tsmUsers, 
+                currentUser, 
+                PermissionNames.UserManagement);
+
+            // Configure Permission Management menu visibility
+            UIPermissionHelper.ShowMenuItemIfHasPermission(
+                tsmPerms, 
+                currentUser, 
+                PermissionNames.PermissionManagement);
+
+            // Future menus can be added here:
+            // UIPermissionHelper.ShowMenuItemIfHasPermission(
+            //     tsmInventory, currentUser, PermissionNames.InventoryManagement);
+            // UIPermissionHelper.ShowMenuItemIfHasPermission(
+            //     tsmReports, currentUser, PermissionNames.Reports);
+            // UIPermissionHelper.ShowMenuItemIfHasPermission(
+            //     tsmSales, currentUser, PermissionNames.SalesManagement);
+
+            Logger.Current.Info($"Menu configured for user '{currentUser.Name}' - " +
+                $"Visible: Users={tsmUsers.Visible}, Permissions={tsmPerms.Visible}");
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            // Get all atomic permissions using extension method
+            List<Patent> userPermissions = currentUser.GetAllAtomicPermissions();
+            
+            // Detailed logging only in test environment
+            if (NativeMethods.testEnvironment)
+            {
+                Console.WriteLine($"\n=== User Permissions for '{currentUser.Name}' ===");
+                Console.WriteLine($"Total permissions: {userPermissions.Count}");
+                
+                List<Family> roles = currentUser.GetRoles();
+                Console.WriteLine($"Roles: {string.Join(", ", roles.Select(r => r.Name))}");
+                
+                Console.WriteLine("\nPermissions:");
+                foreach (var permission in userPermissions)
+                {
+                    Console.WriteLine($"  - {permission.Name}");
+                }
+                Console.WriteLine("=====================================\n");
+            }
+            else
+            {
+                // Simple log in production
+                Logger.Current.Info(
+                    $"User '{currentUser.Name}' loaded main form with {userPermissions.Count} permissions");
+            }
+        }
+
+        private void tsmUsers_Click(object sender, EventArgs e)
+        {
+            Logger.Current.Info($"User '{currentUser.Name}' attempting to access User Management");
+            
+            // Verify permission before opening the module
+            if (!UIPermissionHelper.CanAccessForm(
+                currentUser, 
+                PermissionNames.UserManagement,
+                "User Management"))
+            {
+                return; // Error message already shown by helper
+            }
+
+            Logger.Current.Info($"User '{currentUser.Name}' opened User Management module");
+            
+            ctrlUsers userManagement = new ctrlUsers();
+            showContent(userManagement);
+        }
+
+        private void tsmPerms_Click(object sender, EventArgs e)
+        {
+            Logger.Current.Info($"User '{currentUser.Name}' attempting to access Permission Management");
+            
+            // Verify permission before opening the module
+            if (!UIPermissionHelper.CanAccessForm(
+                currentUser, 
+                PermissionNames.PermissionManagement,
+                "Permission Management"))
+            {
+                return; // Error message already shown by helper
+            }
+
+            Logger.Current.Info($"User '{currentUser.Name}' opened Permission Management module");
+            
+            ctrlPermsissions permissionManagement = new ctrlPermsissions();
+            showContent(permissionManagement);
+        }
+
+        private void showContent(UserControl newContent)
+        {
+            this.MinimumSize = new Size(0, 0);
+            panelContainerMain.Controls.Clear();
+            newContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panelContainerMain.Controls.Add(newContent);
+            newContent.BringToFront();
+        }
+
+        public void ResetMainPanelSize()
+        {
+            this.MinimumSize = new Size(800, 600);
+        }
+
+        /// <summary>
+        /// Gets the current logged-in user.
+        /// </summary>
+        public User CurrentUser => currentUser;
+    }
+}

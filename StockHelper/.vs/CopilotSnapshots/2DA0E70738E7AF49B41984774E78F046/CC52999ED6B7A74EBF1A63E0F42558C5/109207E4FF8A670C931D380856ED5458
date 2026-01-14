@@ -1,0 +1,265 @@
+﻿# UI Common Terms
+Users=Usuarios
+User=Usuario
+Password=Contraseña
+Name=Nombre
+Role=Rol
+Active Users=Usuarios Activos
+Disabled Users=Usuarios Deshabilitados
+Add User=Agregar Usuario
+Modify User=Modificar Usuario
+Disable User=Deshabilitar Usuario
+Enable User=Habilitar Usuario
+Delete User=Eliminar Usuario
+Close=Cerrar
+Save=Guardar
+Cancel=Cancelar
+Edit=Editar
+Delete=Eliminar
+Search=Buscar
+Filter=Filtrar
+Refresh=Actualizar
+Export=Exportar
+Import=Importar
+Print=Imprimir
+
+# Permissions
+Permissions=Permisos
+Permission=Permiso
+Assign Permissions=Asignar Permisos
+Role Management=Gestión de Roles
+Access Control=Control de Acceso
+
+# Login
+Login=Iniciar Sesión
+Username=Nombre de Usuario
+Logout=Cerrar Sesión
+Sign In=Entrar
+Sign Out=Salir
+Forgot Password=Olvidé mi Contraseña
+Remember Me=Recordarme
+Show Password=Mostrar Contraseña
+Hide Password=Ocultar Contraseña
+
+# Messages
+Success=Éxito
+Error=Error
+Warning=Advertencia
+Information=Información
+Confirmation=Confirmación
+Are you sure?=¿Está seguro?
+Operation completed successfully=Operación completada exitosamente
+An error occurred=Ocurrió un error
+Please try again=Por favor, intente nuevamente
+Invalid credentials=Credenciales inválidas
+Access denied=Acceso denegado
+Session expired=Sesión expirada
+
+# Form Validation
+Required field=Campo requerido
+Invalid format=Formato inválido
+Field cannot be empty=El campo no puede estar vacío
+Passwords must match=Las contraseñas deben coincidir
+Password too short=Contraseña muy corta
+Password too weak=Contraseña muy débil
+Invalid email=Email inválido
+Invalid phone number=Número de teléfono inválido
+Invalid date=Fecha inválida
+
+# CRUD Operations
+Create=Crear
+Read=Leer
+Update=Actualizar
+New=Nuevo
+View=Ver
+Details=Detalles
+List=Lista
+Add=Agregar
+Remove=Remover
+Modify=Modificar
+
+# Data Grid
+Column=Columna
+Row=Fila
+Page=Página
+Records per page=Registros por página
+Total records=Total de registros
+No records found=No se encontraron registros
+Loading=Cargando
+Select all=Seleccionar todo
+Deselect all=Deseleccionar todo
+Sort ascending=Ordenar ascendente
+Sort descending=Ordenar descendente
+
+# Status
+Active=Activo
+Inactive=Inactivo
+Enabled=Habilitado
+Disabled=Deshabilitado
+Pending=Pendiente
+Approved=Aprobado
+Rejected=Rechazado
+Processing=Procesando
+Completed=Completado
+Failed=Fallido
+
+# Date and Time
+Date=Fecha
+Time=Hora
+Start Date=Fecha de Inicio
+End Date=Fecha de Fin
+Created=Creado
+Modified=Modificado
+Last Update=Última Actualización
+Today=Hoy
+Yesterday=Ayer
+Tomorrow=Mañana
+Week=Semana
+Month=Mes
+Year=Año
+
+# File Operations
+File=Archivo
+Open=Abrir
+Save As=Guardar Como
+Upload=Cargar
+Download=Descargar
+Browse=Explorar
+Select File=Seleccionar Archivo
+File Name=Nombre de Archivo
+File Type=Tipo de Archivo
+File Size=Tamaño de Archivo
+
+# Settings
+Settings=Configuración
+Preferences=Preferencias
+Options=Opciones
+Configuration=Configuración
+Language=Idioma
+Theme=Tema
+Appearance=Apariencia
+Notifications=Notificaciones
+Privacy=Privacidad
+Security=Seguridad
+General=General
+Advanced=Avanzado
+
+# Navigation
+Home=Inicio
+Back=Atrás
+Forward=Adelante
+Next=Siguiente
+Previous=Anterior
+First=Primero
+Last=Último
+Go to=Ir a
+Dashboard=Panel de Control
+Menu=Menú
+
+# Stock/Inventory (para tu aplicación StockHelper)
+Stock=Inventario
+Product=Producto
+Products=Productos
+Category=Categoría
+Categories=Categorías
+Price=Precio
+Quantity=Cantidad
+Available=Disponible
+Out of Stock=Agotado
+Low Stock=Bajo Stock
+Supplier=Proveedor
+Suppliers=Proveedores
+Order=Pedido
+Orders=Pedidos
+Purchase=Compra
+Sale=Venta
+Invoice=Factura
+Receipt=Recibo
+Warehouse=Almacén
+Location=Ubicación
+Barcode=Código de Barras
+SKU=SKU
+Unit Price=Precio Unitario
+Total Price=Precio Total
+Discount=Descuento
+Tax=Impuesto
+Subtotal=Subtotal
+Total=Total
+
+# Reports
+Report=Reporte
+Reports=Reportes
+Generate Report=Generar Reporte
+Report Date=Fecha del Reporte
+Sales Report=Reporte de Ventas
+Inventory Report=Reporte de Inventario
+Financial Report=Reporte Financiero
+Summary=Resumen
+Statistics=Estadísticas
+Analytics=Analítica
+
+# Actions
+Actions=Acciones
+Execute=Ejecutar
+Apply=Aplicar
+Reset=Restablecer
+Clear=Limpiar
+Undo=Deshacer
+Redo=Rehacer
+Copy=Copiar
+Paste=Pegar
+Cut=Cortar
+Duplicate=Duplicar
+Move=Mover
+Rename=Renombrar
+
+# Help
+Help=Ayuda
+About=Acerca de
+Documentation=Documentación
+Tutorial=Tutorial
+FAQ=Preguntas Frecuentes
+Contact=Contacto
+Support=Soporte
+Version=Versión
+License=Licencia
+
+# Yes/No/OK
+Yes=Sí
+No=No
+OK=Aceptar
+Accept=Aceptar
+Decline=Rechazar
+Agree=Aceptar
+Disagree=Rechazar
+Confirm=Confirmar
+Continue=Continuar
+Exit=Salir
+Quit=Salir
+
+# Errors and Exceptions
+Exception=Excepción
+System Error=Error del Sistema
+Database Error=Error de Base de Datos
+Connection Error=Error de Conexión
+Timeout=Tiempo de Espera Agotado
+Not Found=No Encontrado
+Unauthorized=No Autorizado
+Forbidden=Prohibido
+Bad Request=Solicitud Incorrecta
+Internal Server Error=Error Interno del Servidor
+Service Unavailable=Servicio No Disponible
+
+# Both passwords must be identicals
+Both passwords must be identicals=Ambas contraseñas deben ser idénticas
+
+# Application Specific
+Logged in as=Conectado como
+Welcome=Bienvenido
+Good morning=Buenos días
+Good afternoon=Buenas tardes
+Good evening=Buenas noches
+Enter your username and password to continue=Ingrese su nombre de usuario y contraseña para continuar
+Log In=Iniciar Sesión
+Show=Mostrar
+Hide=Ocultar

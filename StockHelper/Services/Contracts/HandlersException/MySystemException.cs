@@ -8,14 +8,22 @@ using System.Threading.Tasks;
 
 namespace Services.Contracts.CustomsException
 {
-    public class MySystemException: Exception
+    public class MySystemException : Exception
     {
         private string layerOrigin;
-        public MySystemException(string message, string layer) : base(message) {
+
+        public MySystemException(string message, string layer) : base(message)
+        {
             this.layerOrigin = layer;
         }
 
-        ///<summary>
+        public MySystemException(string message, string layer, Exception innerException) 
+            : base(message, innerException)
+        {
+            this.layerOrigin = layer;
+        }
+
+        /// <summary>
         /// This method is used to handle the exception of the system
         /// </summary>
         public void Handler()
@@ -31,11 +39,21 @@ namespace Services.Contracts.CustomsException
                 case "DAL":
                     new DALExceptionHandler(this.Message).Handler();
                     break;
+                case "Services":
+                    Logger.Current.Error($"Services Exception: {this.Message}");
+                    if (this.InnerException != null)
+                    {
+                        Logger.Current.LogException(LogLevels.Error, "Inner exception details", this.InnerException);
+                    }
+                    break;
                 default:
-                    Logger.Current.Warning("System Exception: " + this.Message);
+                    Logger.Current.Warning($"System Exception from unknown layer '{layerOrigin}': {this.Message}");
+                    if (this.InnerException != null)
+                    {
+                        Logger.Current.LogException(LogLevels.Warning, "Inner exception details", this.InnerException);
+                    }
                     break;
             }
         }
-
     }
 }

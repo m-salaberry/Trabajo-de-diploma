@@ -1,0 +1,333 @@
+﻿// ==================================================
+// EJEMPLO DE USO EN frmMain.cs CON MEJORAS
+// ==================================================
+
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using Services.Domain;
+using Services.Implementations;
+using UI.secondaryForms;
+using UI.Helpers;
+
+namespace UI
+{
+    public partial class frmMain : Form
+    {
+        private PermissionService _permissionService;
+        private User _currentUser;
+        private static frmMain _instance;
+
+        private frmMain(User logedUser)
+        {
+            InitializeComponent();
+            _permissionService = new PermissionService();
+            _currentUser = logedUser;
+            
+            ResetMainPanelSize();
+            this.CenterToScreen();
+            this.Text = $"StockHelper - Logged in as: {_currentUser.Name}";
+            
+            // Configurar UI según permisos
+            ConfigurePermissions();
+        }
+
+        public static frmMain GetInstance(User logedUser = null!)
+        {
+            if (_instance == null || _instance.IsDisposed)
+            {
+                _instance = new frmMain(logedUser);
+            }
+            return _instance;
+        }
+
+        /// <summary>
+        /// Configures UI elements visibility and state based on user permissions.
+        /// </summary>
+        private void ConfigurePermissions()
+        {
+            // ✅ NUEVO: Configurar menús con helpers
+
+            // User Management Menu
+            UIPermissionHelper.ShowMenuItemIfHasPermission(
+                tsmUsers, 
+                _currentUser, 
+                PermissionNames.ViewUserManagement);
+
+            // Permission Management Menu
+            UIPermissionHelper.ShowMenuItemIfHasPermission(
+                tsmPerms, 
+                _currentUser, 
+                PermissionNames.ViewPermissionManagement);
+
+            // Inventory Menu (si lo agregas en el futuro)
+            // UIPermissionHelper.ShowMenuItemIfHasPermission(
+            //     tsmInventory, 
+            //     _currentUser, 
+            //     PermissionNames.ViewInventory);
+
+            // Reports Menu (si lo agregas en el futuro)
+            // UIPermissionHelper.ShowMenuItemIfHasPermission(
+            //     tsmReports, 
+            //     _currentUser, 
+            //     PermissionNames.ViewReports);
+
+            // También puedes verificar roles
+            if (_currentUser.HasRole(RoleNames.Administrator))
+            {
+                // Mostrar opciones especiales para admin
+                Logger.Current.Info($"Administrator logged in: {_currentUser.Name}");
+            }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            // ✅ NUEVO: Usar extension methods para obtener permisos
+            List<Patent> userPermissions = _currentUser.GetAllAtomicPermissions();
+            
+            Logger.Current.Info($"User '{_currentUser.Name}' has {userPermissions.Count} permissions");
+            
+            // Opcional: Mostrar permisos en consola (debug)
+            if (NativeMethods.testEnvironment)
+            {
+                Console.WriteLine($"User Permissions for '{_currentUser.Name}':");
+                foreach (var permission in userPermissions)
+                {
+                    Console.WriteLine($"  - {permission.Name}");
+                }
+            }
+        }
+
+        private void tsmUsers_Click(object sender, EventArgs e)
+        {
+            // ✅ NUEVO: Verificar acceso con helper
+            if (!UIPermissionHelper.CanAccessForm(
+                _currentUser, 
+                PermissionNames.ViewUserManagement,
+                "User Management"))
+            {
+                return; // Mensaje de error ya mostrado por el helper
+            }
+
+            // Abrir formulario
+            ctrlUsers userManagement = new ctrlUsers();
+            showContent(userManagement);
+        }
+
+        private void tsmPerms_Click(object sender, EventArgs e)
+        {
+            // ✅ NUEVO: Verificar acceso con helper
+            if (!UIPermissionHelper.CanAccessForm(
+                _currentUser, 
+                PermissionNames.ViewPermissionManagement,
+                "Permission Management"))
+            {
+                return;
+            }
+
+            // Abrir formulario
+            ctrlPermsissions permissionManagement = new ctrlPermsissions();
+            showContent(permissionManagement);
+        }
+
+        private void showContent(UserControl newContent)
+        {
+            this.MinimumSize = new Size(0, 0);
+            panelContainerMain.Controls.Clear();
+            newContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            panelContainerMain.Controls.Add(newContent);
+            newContent.BringToFront();
+        }
+
+        public void ResetMainPanelSize()
+        {
+            this.MinimumSize = new Size(800, 600);
+        }
+    }
+}
+
+// ==================================================
+// EJEMPLO DE USO EN FORMULARIO DE USUARIO
+// ==================================================
+
+using System;
+using System.Windows.Forms;
+using Services.Domain;
+using Services.Implementations;
+using UI.Helpers;
+
+namespace UI.secondaryForms
+{
+    public partial class ctrlUsers : UserControl
+    {
+        private User _currentUser;
+        private UserService _userService;
+
+        public ctrlUsers()
+        {
+            InitializeComponent();
+            _userService = UserService.Instance();
+        }
+
+        public void SetCurrentUser(User currentUser)
+        {
+            _currentUser = currentUser;
+            ConfigurePermissions();
+            LoadUsers();
+        }
+
+        /// <summary>
+        /// Configures buttons and controls based on user permissions.
+        /// </summary>
+        private void ConfigurePermissions()
+        {
+            // ✅ NUEVO: Configurar botones con helpers
+
+            // Configurar múltiples controles a la vez
+            UIPermissionHelper.ConfigureControls(_currentUser,
+                (btnCreateUser, PermissionNames.CreateUser, PermissionAction.ShowHide),
+                (btnEditUser, PermissionNames.EditUser, PermissionAction.EnableDisable),
+                (btnDeleteUser, PermissionNames.DeleteUser, PermissionAction.Both),
+                (btnToggleStatus, PermissionNames.ToggleUserStatus, PermissionAction.EnableDisable)
+            );
+
+            // O individualmente
+            UIPermissionHelper.ShowButtonIfHasPermission(
+                btnViewDetails, _currentUser, PermissionNames.ViewUserDetails);
+        }
+
+        private void btnCreateUser_Click(object sender, EventArgs e)
+        {
+            // ✅ NUEVO: Verificar permiso antes de acción
+            if (!UIPermissionHelper.CanPerformAction(
+                _currentUser, 
+                PermissionNames.CreateUser,
+                "create users"))
+            {
+                return;
+            }
+
+            // Abrir formulario de creación
+            frmNewUser newUserForm = new frmNewUser();
+            if (newUserForm.ShowDialog() == DialogResult.OK)
+            {
+                LoadUsers(); // Recargar lista
+            }
+        }
+
+        private void btnEditUser_Click(object sender, EventArgs e)
+        {
+            if (!UIPermissionHelper.CanPerformAction(
+                _currentUser, 
+                PermissionNames.EditUser,
+                "edit users"))
+            {
+                return;
+            }
+
+            // Obtener usuario seleccionado
+            var selectedUser = GetSelectedUser();
+            if (selectedUser == null)
+            {
+                MessageBox.Show("Please select a user to edit.");
+                return;
+            }
+
+            // Abrir formulario de edición
+            frmEditUser editForm = new frmEditUser(selectedUser);
+            if (editForm.ShowDialog() == DialogResult.OK)
+            {
+                LoadUsers();
+            }
+        }
+
+        private void btnDeleteUser_Click(object sender, EventArgs e)
+        {
+            // ✅ NUEVO: Verificar permiso (doble verificación es buena práctica)
+            if (!_currentUser.HasPermission(PermissionNames.DeleteUser))
+            {
+                MessageBox.Show(
+                    "You do not have permission to delete users.",
+                    "Access Denied",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            var selectedUser = GetSelectedUser();
+            if (selectedUser == null)
+            {
+                MessageBox.Show("Please select a user to delete.");
+                return;
+            }
+
+            // Confirmar eliminación
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete user '{selectedUser.Name}'?",
+                "Confirm Delete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                DeleteUser(selectedUser);
+                LoadUsers();
+            }
+        }
+
+        private void LoadUsers()
+        {
+            // Cargar usuarios...
+        }
+
+        private User GetSelectedUser()
+        {
+            // Obtener usuario seleccionado del grid...
+            return null;
+        }
+
+        private void DeleteUser(User user)
+        {
+            // Eliminar usuario...
+        }
+    }
+}
+
+// ==================================================
+// EJEMPLO: MOSTRAR INFORMACIÓN DE PERMISOS
+// ==================================================
+
+private void ShowUserPermissionsInfo()
+{
+    // ✅ NUEVO: Usar extension methods para información detallada
+
+    // Obtener todos los roles
+    List<Family> roles = _currentUser.GetRoles();
+    Console.WriteLine($"User '{_currentUser.Name}' has {roles.Count} role(s):");
+    foreach (var role in roles)
+    {
+        Console.WriteLine($"  - {role.Name}");
+    }
+
+    // Obtener todos los permisos atómicos
+    List<string> permissionNames = _currentUser.GetPermissionNames();
+    Console.WriteLine($"\nTotal permissions: {permissionNames.Count}");
+    foreach (var permission in permissionNames)
+    {
+        Console.WriteLine($"  - {permission}");
+    }
+
+    // Verificaciones específicas
+    Console.WriteLine("\nPermission Checks:");
+    Console.WriteLine($"  Can create users: {_currentUser.HasPermission(PermissionNames.CreateUser)}");
+    Console.WriteLine($"  Can edit users: {_currentUser.HasPermission(PermissionNames.EditUser)}");
+    Console.WriteLine($"  Can delete users: {_currentUser.HasPermission(PermissionNames.DeleteUser)}");
+    Console.WriteLine($"  Is Administrator: {_currentUser.HasRole(RoleNames.Administrator)}");
+
+    // Verificar múltiples permisos
+    bool hasFullUserAccess = _currentUser.HasAllPermissions(
+        PermissionNames.CreateUser,
+        PermissionNames.EditUser,
+        PermissionNames.DeleteUser);
+    Console.WriteLine($"  Has full user access: {hasFullUserAccess}");
+}
