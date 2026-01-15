@@ -70,5 +70,22 @@ namespace UI.secondaryForms
                 throw new MySystemException(ex.Message, "");
             }
         }
+
+        private void btnModUser_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                modUserForm modUserForm = new modUserForm();
+                // Subscribe to the UserCreated event
+                modUserForm.UserUpdated += (s, ev) => RefreshUserList();
+                modUserForm.ShowDialog();
+                modUserForm.BringToFront();
+
+            }
+            catch (Exception ex)
+            {
+                throw new MySystemException(ex.Message, "");
+            }
+        }
     }
 }

@@ -11,15 +11,18 @@ using Services.Implementations;
 using Services.Domain;
 using Services.Contracts.CustomsException;
 using Services.Contracts.Logs;
+using UI.Implementations;
 
 namespace UI.secondaryForms
 {
-    public partial class newUserForm : Form
+    public partial class newUserForm : TranslatableForm
     {
         UserService userService = UserService.Instance();
         PermissionService permissionService = PermissionService.Instance();
+        LanguageService lang = LanguageService.GetInstance;
 
         public event EventHandler UserCreated;
+        
         public newUserForm()
         {
             InitializeComponent();
@@ -41,23 +44,43 @@ namespace UI.secondaryForms
         {
             try
             {
+                // Validation
+                if (!ValidateForm())
+                {
+                    return;
+                }
+                
                 User user = new User
                 {
-                    Name = txtUsername.Text,
-                    Password = (txtPassword.Text == txtRepeatedPassword.Text) ? txtPassword.Text : throw new Exception("Both passwords must be identicals"),
+                    Name = txtUsername.Text.Trim(),
+                    Password = txtPassword.Text,
                     IsActive = ckbActiveUser.Checked,
                     Role = cbRoleSelector.Text,
                 };
+
+                // Same password validation
+                if (txtPassword.Text != txtRepeatedPassword.Text)
+                {
+                    MessageBox.Show(
+                        lang.Translate("Both passwords must be identical"), 
+                        lang.Translate("Validation Error"), 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+                
                 userService.Insert(user);
 
-                MessageBox.Show($"The user '{user.Name}' was created succesfully");
-                Logger.Current.Info($"The user '{user.Name}' was created succesfully");
-
+                MessageBox.Show(
+                    string.Format(lang.Translate("The user '{0}' was created successfully"), user.Name),
+                    lang.Translate("Success"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                Logger.Current.Info($"The user '{user.Name}' was created successfully");
+                
                 UserCreated?.Invoke(this, EventArgs.Empty);
-
-                txtUsername.Text = "";
-                txtPassword.Text = "";
-                txtRepeatedPassword.Text = "";
+                
+                ClearForm();
             }
             catch (MySystemException ex)
             {
@@ -65,14 +88,84 @@ namespace UI.secondaryForms
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    ex.Message, 
+                    lang.Translate("Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
             }
+        }
+
+        private bool ValidateForm()
+        {
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                MessageBox.Show(
+                    lang.Translate("Username is required"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtUsername.Focus();
+                return false;
+            }
+            
+            if (txtUsername.Text.Length < 3)
+            {
+                MessageBox.Show(
+                    lang.Translate("Username must be at least 3 characters"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtUsername.Focus();
+                return false;
+            }
+            
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show(
+                    lang.Translate("Password is required"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtPassword.Focus();
+                return false;
+            }
+            
+            if (string.IsNullOrWhiteSpace(cbRoleSelector.Text))
+            {
+                MessageBox.Show(
+                    lang.Translate("Role is required"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                cbRoleSelector.Focus();
+                return false;
+            }
+            
+            return true;
+        }
+
+        private void ClearForm()
+        {
+            txtUsername.Text = "";
+            txtPassword.Text = "";
+            txtRepeatedPassword.Text = "";
         }
 
         private void LoadRoleDropdown()
         {
             List<string> roles = permissionService.GetAllFamilies().Select(r => r.Name).ToList();
             cbRoleSelector.DataSource = roles;
+        }
+
+        public override void ApplyTranslations()
+        {
+            lbUsername.Text = lang.Translate("Username:");
+            lblPassword.Text = lang.Translate("Password:");
+            lblRePassword.Text = lang.Translate("Repeat Password:");
+            lblRole.Text = lang.Translate("Select role:");
+            ckbActiveUser.Text = lang.Translate("Active User");
+            btnSaveUser.Text = lang.Translate("Save");
         }
     }
 }

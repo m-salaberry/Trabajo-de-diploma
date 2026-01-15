@@ -109,7 +109,16 @@ namespace Services.DAL.Implementations.Repositories
 
         public void Update<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            string command = "UPDATE USERS SET Name = @Name, Password = @Password, IsActive = @IsActive, Role = @Role WHERE Id = @Id";
+            var parameters = new[]
+            {
+                new SqlParameter("@Id", typeof(T).GetProperty("Id")?.GetValue(entity)),
+                new SqlParameter("@Name", typeof(T).GetProperty("Name")?.GetValue(entity)),
+                new SqlParameter("@Password", typeof(T).GetProperty("Password")?.GetValue(entity)),
+                new SqlParameter("@IsActive", typeof(T).GetProperty("IsActive")?.GetValue(entity)),
+                new SqlParameter("@Role", typeof(T).GetProperty("Role")?.GetValue(entity) ?? DBNull.Value)
+            };
+            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
         /// <summary>

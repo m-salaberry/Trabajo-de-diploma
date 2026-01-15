@@ -1,0 +1,159 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Services.Implementations;
+using Services.Domain;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class newUserForm : TranslatableForm
+    {
+        UserService userService = UserService.Instance();
+        PermissionService permissionService = PermissionService.Instance();
+
+        public event EventHandler UserCreated;
+        public newUserForm()
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            LoadRoleDropdown();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSaveUser_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validation
+                if (!ValidateForm())
+                {
+                    return;
+                }
+                
+                User user = new User
+                {
+                    Name = txtUsername.Text.Trim(),
+                    Password = txtPassword.Text,
+                    IsActive = ckbActiveUser.Checked,
+                    Role = cbRoleSelector.Text,
+                };
+
+                // Same password validation
+                if (txtPassword.Text != txtRepeatedPassword.Text)
+                {
+                    MessageBox.Show("Both passwords must be identical", "Validation Error", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                
+                userService.Insert(user);
+
+                MessageBox.Show($"The user '{user.Name}' was created successfully");
+                Logger.Current.Info($"The user '{user.Name}' was created successfully");
+                
+                UserCreated?.Invoke(this, EventArgs.Empty);
+                
+                ClearForm();
+            }
+            catch (MySystemException ex)
+            {
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool ValidateForm()
+        {
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                MessageBox.Show(
+                    lang.Translate("Username is required"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtUsername.Focus();
+                return false;
+            }
+            
+            if (txtUsername.Text.Length < 3)
+            {
+                MessageBox.Show(
+                    lang.Translate("Username must be at least 3 characters"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtUsername.Focus();
+                return false;
+            }
+            
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                MessageBox.Show(
+                    lang.Translate("Password is required"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtPassword.Focus();
+                return false;
+            }
+            
+            if (txtPassword.Text.Length < 8)
+            {
+                MessageBox.Show(
+                    lang.Translate("Password must be at least 8 characters"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtPassword.Focus();
+                return false;
+            }
+            
+            if (string.IsNullOrWhiteSpace(cbRoleSelector.Text))
+            {
+                MessageBox.Show(
+                    lang.Translate("Role is required"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                cbRoleSelector.Focus();
+                return false;
+            }
+            
+            return true;
+        }
+
+        private void ClearForm()
+        {
+            txtUsername.Text = "";
+            txtPassword.Text = "";
+            txtRepeatedPassword.Text = "";
+        }
+
+        private void LoadRoleDropdown()
+        {
+            List<string> roles = permissionService.GetAllFamilies().Select(r => r.Name).ToList();
+            cbRoleSelector.DataSource = roles;
+        }
+    }
+}

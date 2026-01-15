@@ -19,6 +19,9 @@
     <Compile Update="Implementations\TranslatableUserControls.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="secondaryForms\modUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="secondaryForms\newUserForm.cs">
       <SubType>Form</SubType>
     </Compile>

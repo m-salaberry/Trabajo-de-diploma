@@ -75,15 +75,13 @@ namespace Services.Implementations
 
         public void Insert(User entity)
         {
-            if (!ExistsByName(entity.Name))
-            {
-                entity.Id = GenerateUniqueGuid();
-                _userRepository.Create(entity);
-            }
-            else
+            if (ExistsByName(entity.Name))
             {
                 throw new MySystemException("User already exists", "BLL");
+                
             }
+            entity.Id = GenerateUniqueGuid();
+            _userRepository.Create(entity);
         }
 
         public void Update(User entity)

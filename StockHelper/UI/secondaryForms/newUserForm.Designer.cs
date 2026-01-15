@@ -30,12 +30,12 @@
         {
             txtUsername = new TextBox();
             lbUsername = new Label();
-            label1 = new Label();
+            lblPassword = new Label();
             txtPassword = new TextBox();
-            label2 = new Label();
+            lblRole = new Label();
             cbRoleSelector = new ComboBox();
             ckbActiveUser = new CheckBox();
-            label3 = new Label();
+            lblRePassword = new Label();
             txtRepeatedPassword = new TextBox();
             btnSaveUser = new Button();
             SuspendLayout();
@@ -57,16 +57,16 @@
             lbUsername.TabIndex = 1;
             lbUsername.Text = "Username:";
             // 
-            // label1
+            // lblPassword
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            label1.Location = new Point(85, 82);
-            label1.Name = "label1";
-            label1.Size = new Size(109, 30);
-            label1.TabIndex = 2;
-            label1.Text = "Password:";
-            label1.Click += label1_Click;
+            lblPassword.AutoSize = true;
+            lblPassword.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblPassword.Location = new Point(85, 82);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(109, 30);
+            lblPassword.TabIndex = 2;
+            lblPassword.Text = "Password:";
+            lblPassword.Click += label1_Click;
             // 
             // txtPassword
             // 
@@ -75,16 +75,16 @@
             txtPassword.Size = new Size(257, 23);
             txtPassword.TabIndex = 3;
             // 
-            // label2
+            // lblRole
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            label2.Location = new Point(78, 184);
-            label2.Name = "label2";
-            label2.Size = new Size(116, 30);
-            label2.TabIndex = 4;
-            label2.Text = "Select role:";
-            label2.Click += label2_Click;
+            lblRole.AutoSize = true;
+            lblRole.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblRole.Location = new Point(78, 184);
+            lblRole.Name = "lblRole";
+            lblRole.Size = new Size(116, 30);
+            lblRole.TabIndex = 4;
+            lblRole.Text = "Select role:";
+            lblRole.Click += label2_Click;
             // 
             // cbRoleSelector
             // 
@@ -107,15 +107,15 @@
             ckbActiveUser.Text = "Active User";
             ckbActiveUser.UseVisualStyleBackColor = true;
             // 
-            // label3
+            // lblRePassword
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            label3.Location = new Point(18, 133);
-            label3.Name = "label3";
-            label3.Size = new Size(181, 30);
-            label3.TabIndex = 7;
-            label3.Text = "Repeat Password:";
+            lblRePassword.AutoSize = true;
+            lblRePassword.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblRePassword.Location = new Point(18, 133);
+            lblRePassword.Name = "lblRePassword";
+            lblRePassword.Size = new Size(181, 30);
+            lblRePassword.TabIndex = 7;
+            lblRePassword.Text = "Repeat Password:";
             // 
             // txtRepeatedPassword
             // 
@@ -141,12 +141,12 @@
             ClientSize = new Size(478, 342);
             Controls.Add(btnSaveUser);
             Controls.Add(txtRepeatedPassword);
-            Controls.Add(label3);
+            Controls.Add(lblRePassword);
             Controls.Add(ckbActiveUser);
             Controls.Add(cbRoleSelector);
-            Controls.Add(label2);
+            Controls.Add(lblRole);
             Controls.Add(txtPassword);
-            Controls.Add(label1);
+            Controls.Add(lblPassword);
             Controls.Add(lbUsername);
             Controls.Add(txtUsername);
             Name = "newUserForm";
@@ -158,12 +158,12 @@
 
         private TextBox txtUsername;
         private Label lbUsername;
-        private Label label1;
+        private Label lblPassword;
         private TextBox txtPassword;
-        private Label label2;
+        private Label lblRole;
         private ComboBox cbRoleSelector;
         private CheckBox ckbActiveUser;
-        private Label label3;
+        private Label lblRePassword;
         private TextBox txtRepeatedPassword;
         private Button btnSaveUser;
     }

@@ -31,17 +31,16 @@
             btnClose = new Button();
             btnAddNewUser = new Button();
             dgvActiveUsers = new DataGridView();
-            btnModUser = new Button();
-            dgvDisabledUsers = new DataGridView();
-            lbDisablesUser = new Label();
-            lbActiveUsers = new Label();
-            btnDisable = new Button();
             Name = new DataGridViewTextBoxColumn();
             Password = new DataGridViewTextBoxColumn();
             Role = new DataGridViewTextBoxColumn();
+            btnModUser = new Button();
+            dgvDisabledUsers = new DataGridView();
             DisableUserName = new DataGridViewTextBoxColumn();
             DisableUserPassword = new DataGridViewTextBoxColumn();
             DisableUserRole = new DataGridViewTextBoxColumn();
+            lbDisablesUser = new Label();
+            lbActiveUsers = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvActiveUsers).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvDisabledUsers).BeginInit();
             SuspendLayout();
@@ -58,9 +57,9 @@
             // 
             // btnAddNewUser
             // 
-            btnAddNewUser.Location = new Point(114, 379);
+            btnAddNewUser.Location = new Point(18, 379);
             btnAddNewUser.Name = "btnAddNewUser";
-            btnAddNewUser.Size = new Size(113, 40);
+            btnAddNewUser.Size = new Size(340, 40);
             btnAddNewUser.TabIndex = 1;
             btnAddNewUser.Text = "Add User";
             btnAddNewUser.UseVisualStyleBackColor = true;
@@ -78,14 +77,33 @@
             dgvActiveUsers.Size = new Size(343, 314);
             dgvActiveUsers.TabIndex = 5;
             // 
+            // Name
+            // 
+            Name.HeaderText = "Name";
+            Name.Name = "Name";
+            Name.ReadOnly = true;
+            // 
+            // Password
+            // 
+            Password.HeaderText = "Password";
+            Password.Name = "Password";
+            Password.ReadOnly = true;
+            // 
+            // Role
+            // 
+            Role.HeaderText = "Role";
+            Role.Name = "Role";
+            Role.ReadOnly = true;
+            // 
             // btnModUser
             // 
-            btnModUser.Location = new Point(496, 379);
+            btnModUser.Location = new Point(364, 379);
             btnModUser.Name = "btnModUser";
-            btnModUser.Size = new Size(113, 40);
+            btnModUser.Size = new Size(343, 40);
             btnModUser.TabIndex = 7;
             btnModUser.Text = "Modify User";
             btnModUser.UseVisualStyleBackColor = true;
+            btnModUser.Click += btnModUser_Click;
             // 
             // dgvDisabledUsers
             // 
@@ -98,6 +116,24 @@
             dgvDisabledUsers.ReadOnly = true;
             dgvDisabledUsers.Size = new Size(343, 314);
             dgvDisabledUsers.TabIndex = 8;
+            // 
+            // DisableUserName
+            // 
+            DisableUserName.HeaderText = "Name";
+            DisableUserName.Name = "DisableUserName";
+            DisableUserName.ReadOnly = true;
+            // 
+            // DisableUserPassword
+            // 
+            DisableUserPassword.HeaderText = "Password";
+            DisableUserPassword.Name = "DisableUserPassword";
+            DisableUserPassword.ReadOnly = true;
+            // 
+            // DisableUserRole
+            // 
+            DisableUserRole.HeaderText = "Role";
+            DisableUserRole.Name = "DisableUserRole";
+            DisableUserRole.ReadOnly = true;
             // 
             // lbDisablesUser
             // 
@@ -119,57 +155,11 @@
             lbActiveUsers.TabIndex = 11;
             lbActiveUsers.Text = "Active Users:";
             // 
-            // btnDisable
-            // 
-            btnDisable.Location = new Point(305, 379);
-            btnDisable.Name = "btnDisable";
-            btnDisable.Size = new Size(113, 40);
-            btnDisable.TabIndex = 12;
-            btnDisable.Text = "Disable User";
-            btnDisable.UseVisualStyleBackColor = true;
-            // 
-            // Name
-            // 
-            Name.HeaderText = "Name";
-            Name.Name = "Name";
-            Name.ReadOnly = true;
-            // 
-            // Password
-            // 
-            Password.HeaderText = "Password";
-            Password.Name = "Password";
-            Password.ReadOnly = true;
-            // 
-            // Role
-            // 
-            Role.HeaderText = "Role";
-            Role.Name = "Role";
-            Role.ReadOnly = true;
-            // 
-            // DisableUserName
-            // 
-            DisableUserName.HeaderText = "Name";
-            DisableUserName.Name = "DisableUserName";
-            DisableUserName.ReadOnly = true;
-            // 
-            // DisableUserPassword
-            // 
-            DisableUserPassword.HeaderText = "Password";
-            DisableUserPassword.Name = "DisableUserPassword";
-            DisableUserPassword.ReadOnly = true;
-            // 
-            // DisableUserRole
-            // 
-            DisableUserRole.HeaderText = "Role";
-            DisableUserRole.Name = "DisableUserRole";
-            DisableUserRole.ReadOnly = true;
-            // 
             // ctrlUsers
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            Controls.Add(btnDisable);
             Controls.Add(lbActiveUsers);
             Controls.Add(lbDisablesUser);
             Controls.Add(dgvDisabledUsers);
@@ -193,7 +183,6 @@
         private DataGridView dgvDisabledUsers;
         private Label lbDisablesUser;
         private Label lbActiveUsers;
-        private Button btnDisable;
         private DataGridViewTextBoxColumn Name;
         private DataGridViewTextBoxColumn Password;
         private DataGridViewTextBoxColumn Role;

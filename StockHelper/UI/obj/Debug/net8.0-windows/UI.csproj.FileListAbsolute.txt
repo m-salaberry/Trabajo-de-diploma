@@ -191,3 +191,4 @@ C:\Users\user\Desktop\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.newUserForm.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.Implementations.TranslatableForm.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.Implementations.TranslatableUserControls.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.modUserForm.resources
