@@ -1,9 +1,10 @@
 ﻿using Services.Contracts;
+using Services.Contracts.CustomsException;
+using Services.DAL.Implementations.Repositories;
+using Services.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Services.Domain;
-using Services.DAL.Implementations.Repositories;
 using System.Runtime.InteropServices;
 
 namespace Services.Implementations
@@ -221,6 +222,45 @@ namespace Services.Implementations
         {
             var component = GetById(id);
             return component != null;
+        }
+
+        public void InsertNewFamily(Family family)
+        {
+            if (family == null)
+            {
+                throw new MySystemException(nameof(family) + ": Family cannot be null", "BLL");
+            }
+            family.Id = GenerateUniqueGuid();
+            _familyRepository.Create(family);
+            InvalidateCache();
+        }
+
+        /// <summary>
+        /// Generates a unique GUID that doesn't exist in the database.
+        /// While GUID collisions are extremely rare, this ensures database integrity.
+        /// </summary>
+        /// <returns>A unique GUID</returns>
+        private Guid GenerateUniqueGuid()
+        {
+            Guid newGuid;
+            int maxAttempts = 10; // Límite de intentos por seguridad
+            int attempts = 0;
+
+            do
+            {
+                newGuid = Guid.NewGuid();
+                attempts++;
+
+                if (attempts >= maxAttempts)
+                {
+                    throw new MySystemException(
+                        "Unable to generate unique GUID after multiple attempts",
+                        "BLL");
+                }
+            }
+            while (Exists(newGuid));
+
+            return newGuid;
         }
     }
 }

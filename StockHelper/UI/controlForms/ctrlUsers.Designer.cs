@@ -31,7 +31,7 @@
             btnClose = new Button();
             btnAddNewUser = new Button();
             dgvActiveUsers = new DataGridView();
-            Name = new DataGridViewTextBoxColumn();
+            UserName = new DataGridViewTextBoxColumn();
             Password = new DataGridViewTextBoxColumn();
             Role = new DataGridViewTextBoxColumn();
             btnModUser = new Button();
@@ -70,18 +70,21 @@
             dgvActiveUsers.AllowUserToAddRows = false;
             dgvActiveUsers.AllowUserToDeleteRows = false;
             dgvActiveUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvActiveUsers.Columns.AddRange(new DataGridViewColumn[] { Name, Password, Role });
+            dgvActiveUsers.Columns.AddRange(new DataGridViewColumn[] { UserName, Password, Role });
             dgvActiveUsers.Location = new Point(15, 51);
+            dgvActiveUsers.MultiSelect = false;
             dgvActiveUsers.Name = "dgvActiveUsers";
             dgvActiveUsers.ReadOnly = true;
+            dgvActiveUsers.RowHeadersVisible = false;
+            dgvActiveUsers.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvActiveUsers.Size = new Size(343, 314);
             dgvActiveUsers.TabIndex = 5;
             // 
-            // Name
+            // UserName
             // 
-            Name.HeaderText = "Name";
-            Name.Name = "Name";
-            Name.ReadOnly = true;
+            UserName.HeaderText = "Name";
+            UserName.Name = "UserName";
+            UserName.ReadOnly = true;
             // 
             // Password
             // 
@@ -112,8 +115,11 @@
             dgvDisabledUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDisabledUsers.Columns.AddRange(new DataGridViewColumn[] { DisableUserName, DisableUserPassword, DisableUserRole });
             dgvDisabledUsers.Location = new Point(364, 50);
+            dgvDisabledUsers.MultiSelect = false;
             dgvDisabledUsers.Name = "dgvDisabledUsers";
             dgvDisabledUsers.ReadOnly = true;
+            dgvDisabledUsers.RowHeadersVisible = false;
+            dgvDisabledUsers.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvDisabledUsers.Size = new Size(343, 314);
             dgvDisabledUsers.TabIndex = 8;
             // 
@@ -167,7 +173,9 @@
             Controls.Add(dgvActiveUsers);
             Controls.Add(btnAddNewUser);
             Controls.Add(btnClose);
+            Name = "ctrlUsers";
             Size = new Size(723, 436);
+            Load += ctrlUsers_Load;
             ((System.ComponentModel.ISupportInitialize)dgvActiveUsers).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvDisabledUsers).EndInit();
             ResumeLayout(false);
@@ -183,7 +191,7 @@
         private DataGridView dgvDisabledUsers;
         private Label lbDisablesUser;
         private Label lbActiveUsers;
-        private DataGridViewTextBoxColumn Name;
+        private DataGridViewTextBoxColumn UserName;
         private DataGridViewTextBoxColumn Password;
         private DataGridViewTextBoxColumn Role;
         private DataGridViewTextBoxColumn DisableUserName;

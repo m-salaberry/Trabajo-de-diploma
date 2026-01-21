@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Services.Contracts.CustomsException;
+using Services.Domain;
+using Services.Implementations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,14 +10,83 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.Implementations;
 
 namespace UI.secondaryForms
 {
-    public partial class ctrlPermsissions : UserControl
+    public partial class ctrlPermsissions : TranslatableUserControls
     {
+        List<Family> roles = null;
+        PermissionService _permissionService = PermissionService.Instance();
+        LanguageService lang = LanguageService.GetInstance;
+        
         public ctrlPermsissions()
         {
             InitializeComponent();
+            LoadRoles();
+            LoadRolesToGrid();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void LoadRoles()
+        {
+            roles = _permissionService.GetAllFamilies();
+        }
+
+        private void LoadRolesToGrid()
+        {
+            dgvRoles.DataSource = null;
+            dgvRoles.DataSource = roles;
+            dgvRoles.Columns["Id"].Visible = false;
+            dgvRoles.Columns["Children"].Visible = false;
+            dgvRoles.Columns["Name"].HeaderText = lang.Translate("Role Name");
+            dgvRoles.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvRoles.Refresh();
+        }
+
+        private void btnNewRole_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                newRoleForm newRoleForm = new newRoleForm();
+                // Subscribe to the RoleCreated event
+                newRoleForm.RoleCreated += (s, ev) => RefreshRoleList();
+                newRoleForm.ShowDialog();
+                newRoleForm.BringToFront();
+            }
+            catch (Exception ex)
+            {
+                throw new MySystemException(ex.Message, "");
+            }
+        }
+
+        public void RefreshRoleList()
+        {
+            LoadRoles();
+            LoadRolesToGrid();
+        }
+
+        public override void ApplyTranslations()
+        {
+            // Translate buttons
+            btnNewRole.Text = lang.Translate("New Role");
+            btnModifyRole.Text = lang.Translate("Modify Role");
+            btnDeleteRole.Text = lang.Translate("Delete Role");
+            
+            // Translate labels
+            lbRoles.Text = lang.Translate("Roles:");
+            
+            // Refresh grid to apply translations to column headers
+            if (roles != null)
+            {
+                LoadRolesToGrid();
+            }
         }
     }
 }

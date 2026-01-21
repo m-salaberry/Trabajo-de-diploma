@@ -32,10 +32,12 @@ namespace UI.secondaryForms
                 if (user.IsActive)
                 {
                     dgvActiveUsers.Rows.Add(user.Name, user.Password, user.Role);
+                    dgvActiveUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
                 if (!user.IsActive)
                 {
                     dgvDisabledUsers.Rows.Add(user.Name, user.Password, user.Role);
+                    dgvDisabledUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
             }
             dgvActiveUsers.Refresh();
@@ -86,6 +88,11 @@ namespace UI.secondaryForms
             {
                 throw new MySystemException(ex.Message, "");
             }
+        }
+
+        private void ctrlUsers_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

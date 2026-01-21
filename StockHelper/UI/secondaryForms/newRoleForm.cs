@@ -1,0 +1,123 @@
+﻿using Services.Contracts.CustomsException;
+using Services.Domain;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class newRoleForm : TranslatableForm
+    {
+        PermissionService _permissionService = PermissionService.Instance();
+        LanguageService lang = LanguageService.GetInstance;
+        List<Patent> permissions = null;
+        
+        public event EventHandler RoleCreated;
+        
+        public newRoleForm()
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            LoadPermissionsToCheckedList();
+        }
+
+        private void btnSaveNew_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!ValidateForm())
+                {
+                    return;
+                }
+                Family newRole = new Family
+                {
+                    Name = txtRoleName.Text,
+                };
+                foreach (var checkedItem in clbPermissions.CheckedItems)
+                {
+                    var perm = permissions.FirstOrDefault(p => p.Name == checkedItem.ToString());
+                    if (perm != null)
+                    {
+                        newRole.Children.Add(perm);
+                    }
+                }
+
+                _permissionService.InsertNewFamily(newRole);
+                
+                MessageBox.Show(
+                    string.Format(lang.Translate("The role '{0}' was created successfully"), newRole.Name),
+                    lang.Translate("Success"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                
+                // Trigger the RoleCreated event
+                RoleCreated?.Invoke(this, EventArgs.Empty);
+                
+                // Clear form
+                ClearForm();
+            }
+            catch (MySystemException ex)
+            {
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("Error Creating Role") + ": " + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadPermissionsToCheckedList()
+        {
+            permissions = _permissionService.GetAllPatents();
+            clbPermissions.Items.Clear();
+            foreach (var perm in permissions)
+            {
+                clbPermissions.Items.Add(perm.Name);
+            }
+        }
+
+        private bool ValidateForm()
+        {
+            if (string.IsNullOrWhiteSpace(txtRoleName.Text))
+            {
+                MessageBox.Show(
+                    lang.Translate("Role Name Required"),
+                    lang.Translate("Validation Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return false;
+            }
+            if (clbPermissions.CheckedItems.Count == 0)
+            {
+                MessageBox.Show(
+                    lang.Translate("At Least One Permission Required"),
+                    lang.Translate("Validation Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
+        }
+
+        private void ClearForm()
+        {
+            txtRoleName.Text = "";
+            for (int i = 0; i < clbPermissions.Items.Count; i++)
+            {
+                clbPermissions.SetItemChecked(i, false);
+            }
+        }
+    }
+}
