@@ -68,6 +68,7 @@
             btnModifyRole.TabIndex = 3;
             btnModifyRole.Text = "Modify";
             btnModifyRole.UseVisualStyleBackColor = true;
+            btnModifyRole.Click += btnModifyRole_Click;
             // 
             // btnDeleteRole
             // 
@@ -77,6 +78,7 @@
             btnDeleteRole.TabIndex = 4;
             btnDeleteRole.Text = "Delete";
             btnDeleteRole.UseVisualStyleBackColor = true;
+            btnDeleteRole.Click += btnDeleteRole_Click;
             // 
             // btnClose
             // 

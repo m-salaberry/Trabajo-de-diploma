@@ -19,6 +19,12 @@
     <Compile Update="Implementations\TranslatableUserControls.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="secondaryForms\deleteRoleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\modRoleForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="secondaryForms\modUserForm.cs">
       <SubType>Form</SubType>
     </Compile>

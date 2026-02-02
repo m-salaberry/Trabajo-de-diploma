@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Transactions;
 
 namespace Services.Implementations
 {
@@ -106,6 +107,27 @@ namespace Services.Implementations
 
             return _cachedFamilies;
         }
+        /// <summary>
+        /// Retrieves a family entity with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the family to retrieve. Cannot be null, empty, or consist only of white-space characters.</param>
+        /// <returns>A <see cref="Family"/> object that matches the specified name, or <see langword="null"/> if no such family
+        /// exists.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="name"/> is null, empty, or consists only of white-space characters.</exception>
+        public Family GetFamilyByName(string name)
+        {
+            // Check if name is valid
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Family name cannot be null or empty", nameof(name));
+            }
+            return _familyRepository.GetByName(name);
+        }
+
+        public IEnumerable<Patent> GetFamilyPatents(Guid familyId)
+        {
+            return _familyRepository.GetFamilyPatents(familyId);
+        }
 
         /// <summary>
         /// Refreshes the cache by loading data from repositories.
@@ -165,7 +187,7 @@ namespace Services.Implementations
             }
             else if (entity is Family family)
             {
-                _familyRepository.Create(family);
+                this.InsertNewFamily(family);
             }
             else
             {
@@ -183,8 +205,26 @@ namespace Services.Implementations
                 _patentRepository.Update(patent);
             }
             else if (entity is Family family)
-            {
-                _familyRepository.Update(family);
+                { 
+                List<Guid> currentPatentsId = _familyRepository.GetById(family.Id).Children.Select(c => c.Id).ToList();
+                List<Guid> newPatentsId = family.Children.Select(c => c.Id).ToList();
+
+                List<Guid> toAdd = newPatentsId.Except(currentPatentsId).ToList();
+                List<Guid> toRemove = currentPatentsId.Except(newPatentsId).ToList();
+
+                using(TransactionScope scope = new TransactionScope())
+                {
+                    foreach(var patentToAdd in toAdd)
+                    {
+                        _familyRepository.AssignPatentToFamily(patentToAdd, family.Id);
+                    }
+                    foreach(var patentToRemove in toRemove)
+                    {
+                        _familyRepository.RemovePatentFromFamily(patentToRemove, family.Id);
+                    }
+                    _familyRepository.Update(family);
+                    scope.Complete();
+                }
             }
             else
             {
@@ -197,25 +237,31 @@ namespace Services.Implementations
 
         public void Delete(Guid id)
         {
-            // Try to delete as patent first
-            var patent = _patentRepository.GetById(id);
-            if (patent != null)
-            {
-                _patentRepository.Delete(id);
-                InvalidateCache();
-                return;
-            }
-
-            // Then try as family
             var family = _familyRepository.GetById(id);
-            if (family != null)
+            // Verify family exists
+            if (family == null)
             {
+                throw new KeyNotFoundException($"Component with ID {id} not found");
+            }
+            // Check if any user is assigned to this family
+            List<User> usersWithFemilyAssigned = this.IsUserAssignedToFamily(family.Name);
+            if (usersWithFemilyAssigned.Count != 0)
+            {
+                string userNames = string.Join("\n - ", usersWithFemilyAssigned.Select(u => u.Name));
+                throw new MySystemException($"Cannot delete family {family.Name} assigned to user/s:\n" + userNames, "BLL");
+            }
+            using(TransactionScope trx = new TransactionScope())
+            {
+                
+                foreach (var child in family.Children)
+                {
+                    _familyRepository.RemovePatentFromFamily(child.Id, family.Id);
+                }
                 _familyRepository.Delete(id);
-                InvalidateCache();
-                return;
+                trx.Complete();
             }
 
-            throw new KeyNotFoundException($"Component with ID {id} not found");
+            InvalidateCache();
         }
 
         public bool Exists(Guid id)
@@ -224,6 +270,11 @@ namespace Services.Implementations
             return component != null;
         }
 
+        /// <summary>
+        /// Inserts a new family into the system and associates its children with the family.
+        /// </summary>
+        /// <param name="family">The family to insert. The object must not be null and must contain valid child references.</param>
+        /// <exception cref="MySystemException">Thrown if the family is null or if any child referenced by the family does not exist in the system.</exception>
         public void InsertNewFamily(Family family)
         {
             if (family == null)
@@ -231,8 +282,36 @@ namespace Services.Implementations
                 throw new MySystemException(nameof(family) + ": Family cannot be null", "BLL");
             }
             family.Id = GenerateUniqueGuid();
+
             _familyRepository.Create(family);
-            InvalidateCache();
+
+            foreach (var child in family.Children)
+            {
+                if (!Exists(child.Id))
+                {
+                    throw new MySystemException("Child patent with ID " + child.Id + " does not exist", "BLL");
+                }
+                _familyRepository.AssignPatentToFamily(child.Id, family.Id);
+            }
+        }
+
+        /// <summary>
+        /// Determines whether any user is assigned to the specified family.
+        /// </summary>
+        /// <param name="familyName">The .</param>
+        /// <returns>true if at least one user is assigned to the specified family; otherwise, false.</returns>
+        private List<User> IsUserAssignedToFamily(string familyName)
+        {
+            List<User> users = UserService.Instance().GetAll();
+            List<User> usersWithFamilyAssigned = new List<User>();
+            foreach (var user in users)
+            {
+                if (user.Role == familyName)
+                {
+                    usersWithFamilyAssigned.Add(user);
+                }
+            }
+            return usersWithFamilyAssigned;
         }
 
         /// <summary>

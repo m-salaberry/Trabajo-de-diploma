@@ -46,11 +46,11 @@ namespace UI.secondaryForms
                     var perm = permissions.FirstOrDefault(p => p.Name == checkedItem.ToString());
                     if (perm != null)
                     {
-                        newRole.Children.Add(perm);
+                        newRole.AddChild(perm);
                     }
                 }
 
-                _permissionService.InsertNewFamily(newRole);
+                _permissionService.Insert(newRole);
                 
                 MessageBox.Show(
                     string.Format(lang.Translate("The role '{0}' was created successfully"), newRole.Name),

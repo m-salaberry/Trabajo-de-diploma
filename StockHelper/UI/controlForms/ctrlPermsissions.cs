@@ -19,7 +19,7 @@ namespace UI.secondaryForms
         List<Family> roles = null;
         PermissionService _permissionService = PermissionService.Instance();
         LanguageService lang = LanguageService.GetInstance;
-        
+
         public ctrlPermsissions()
         {
             InitializeComponent();
@@ -78,15 +78,48 @@ namespace UI.secondaryForms
             btnNewRole.Text = lang.Translate("New Role");
             btnModifyRole.Text = lang.Translate("Modify Role");
             btnDeleteRole.Text = lang.Translate("Delete Role");
-            
+
             // Translate labels
             lbRoles.Text = lang.Translate("Roles:");
-            
+
             // Refresh grid to apply translations to column headers
             if (roles != null)
             {
                 LoadRolesToGrid();
             }
         }
+
+        private void btnModifyRole_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                modRoleForm modRoleForm = new modRoleForm();
+                // Subscribe to the RolModded event
+                modRoleForm.RoleModded += (s, ev) => RefreshRoleList();
+                modRoleForm.ShowDialog();
+                modRoleForm.BringToFront();
+            }
+            catch (Exception ex)
+            {
+                throw new MySystemException(ex.Message, "");
+            }
+        }
+
+        private void btnDeleteRole_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                deleteRoleForm deleteRoleForm = new deleteRoleForm();
+                // Subscribe to the RoleDeleted event
+                deleteRoleForm.RoleDeleted += (s, ev) => RefreshRoleList();
+                deleteRoleForm.ShowDialog();
+                deleteRoleForm.BringToFront();
+            }
+            catch (Exception ex)
+            {
+                throw new MySystemException(ex.Message, "");
+            }
+        }
+
     }
 }

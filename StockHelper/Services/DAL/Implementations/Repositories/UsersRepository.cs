@@ -6,6 +6,8 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Linq;
 using Services.Domain;
+using Services.Contracts.Logs;
+using Services.Contracts.CustomsException;
 
 namespace Services.DAL.Implementations.Repositories
 {
@@ -237,7 +239,13 @@ namespace Services.DAL.Implementations.Repositories
                 new SqlParameter("@UserId", user.Id),
                 new SqlParameter("@FamilyId", family.Id)
             };
-            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            if (result < 0)
+            {
+                throw new MySystemException("Failed to create relation between user and family.", "DAL");
+            }
+
+            Logger.Current.Info($"Created relation between User (Id: {user.Id}) and Family (Id: {family.Id}).");
         }
 
         /// <summary>
@@ -253,7 +261,13 @@ namespace Services.DAL.Implementations.Repositories
                 new SqlParameter("@UserId", user.Id),
                 new SqlParameter("@FamilyId", family.Id)
             };
-            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            if (result < 0)
+            {
+                throw new MySystemException("No relation found to delete between user and family.", "DAL");
+            }
+
+            Logger.Current.Info($"Deleted relation between User (Id: {user.Id}) and Family (Id: {family.Id}).");
         }
     }
 }

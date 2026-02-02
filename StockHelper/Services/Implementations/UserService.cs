@@ -32,6 +32,11 @@ namespace Services.Implementations
         public void Delete(Guid id)
         {
             User userToDelete = _userRepository.GetById<User>(id);
+            if (userToDelete == null)
+            {
+                throw new MySystemException("User not found", "BLL");
+            }
+            _userRepository.DeleteRelationBetweenUserAndFamily(userToDelete, PermissionService.Instance().GetFamilyByName(userToDelete.Role));
             _userRepository.Delete(userToDelete);
         }
 
@@ -82,6 +87,8 @@ namespace Services.Implementations
             }
             entity.Id = GenerateUniqueGuid();
             _userRepository.Create(entity);
+            Family family = PermissionService.Instance().GetFamilyByName(entity.Role);
+            _userRepository.SaveRelatedFamilyOfUser(entity, family);
         }
 
         public void Update(User entity)

@@ -149,14 +149,22 @@ namespace Services.DAL.Implementations.Repositories
         /// <param name="family">Family to create</param>
         public void Create(Family family)
         {
-            string command = "INSERT INTO FAMILIES (Id, Name, Description) VALUES (@Id, @Name, @Description)";
+            string command = "INSERT INTO FAMILIES (Id, Name, Description, CreatedDate) VALUES (@Id, @Name, @Description, @CreatedDate)";
             var parameters = new[]
             {
                 new SqlParameter("@Id", family.Id),
                 new SqlParameter("@Name", family.Name),
-                new SqlParameter("@Description", DBNull.Value)
+                new SqlParameter("@Description", DBNull.Value),
+                new SqlParameter("@CreatedDate", DateTime.UtcNow)
             };
-            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            
+            if (result == -1)
+            {
+                Logger.Current.Error($"Failed to create family '{family.Name}' with ID {family.Id}");
+                throw new Exception($"Failed to create family '{family.Name}'.");
+            }
+            
             Logger.Current.Info($"Family '{family.Name}' created with ID {family.Id}");
         }
 
@@ -170,9 +178,17 @@ namespace Services.DAL.Implementations.Repositories
             var parameters = new[]
             {
                 new SqlParameter("@Id", family.Id),
-                new SqlParameter("@Name", family.Name)
+                new SqlParameter("@Name", family.Name),
+                new SqlParameter("@ModifiedDate", DateTime.UtcNow)
             };
-            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            
+            if (result == -1)
+            {
+                Logger.Current.Error($"Failed to update family '{family.Name}' with ID {family.Id}");
+                throw new Exception($"Failed to update family '{family.Name}'.");
+            }
+            
             Logger.Current.Info($"Family '{family.Name}' updated");
         }
 
@@ -184,7 +200,14 @@ namespace Services.DAL.Implementations.Repositories
         {
             string command = "DELETE FROM FAMILIES WHERE Id = @Id";
             var parameters = new[] { new SqlParameter("@Id", id) };
-            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            
+            if (result == -1)
+            {
+                Logger.Current.Error($"Failed to delete family with ID {id}");
+                throw new Exception($"Failed to delete family with ID {id}.");
+            }
+            
             Logger.Current.Info($"Family with ID {id} deleted");
         }
 
@@ -214,13 +237,21 @@ namespace Services.DAL.Implementations.Repositories
             }
 
             // Insert new relationship
-            string command = "INSERT INTO PATENTS_FAMILIES (PatentId, FamilyId) VALUES (@PatentId, @FamilyId)";
+            string command = "INSERT INTO PATENTS_FAMILIES (PatentId, FamilyId, AssignedDate) VALUES (@PatentId, @FamilyId, @AssignedDate)";
             var parameters = new[]
             {
                 new SqlParameter("@PatentId", patentId),
-                new SqlParameter("@FamilyId", familyId)
+                new SqlParameter("@FamilyId", familyId),
+                new SqlParameter("@AssignedDate", DateTime.UtcNow)
             };
-            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            
+            if (result == -1)
+            {
+                Logger.Current.Error($"Failed to assign patent {patentId} to family {familyId}");
+                throw new Exception("Failed to assign patent to family.");
+            }
+
             Logger.Current.Info($"Patent {patentId} assigned to family {familyId}");
         }
 
@@ -238,7 +269,14 @@ namespace Services.DAL.Implementations.Repositories
                 new SqlParameter("@PatentId", patentId),
                 new SqlParameter("@FamilyId", familyId)
             };
-            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+            
+            if (result == -1)
+            {
+                Logger.Current.Error($"Failed to remove patent {patentId} from family {familyId}");
+                throw new Exception($"Failed to remove patent from family.");
+            }
+            
             Logger.Current.Info($"Patent {patentId} removed from family {familyId}");
         }
 
