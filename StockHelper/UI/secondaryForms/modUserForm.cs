@@ -65,7 +65,7 @@ namespace UI.secondaryForms
                     lang.Translate("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                return;
+                ex.Handler();
             }
             catch (Exception ex)
             {
@@ -105,6 +105,28 @@ namespace UI.secondaryForms
             {
                 MessageBox.Show(
                     lang.Translate("Password is required"),
+                    lang.Translate("Validation Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtPassword.Focus();
+                return false;
+            }
+
+            if (txtPassword.Text != txtRepeatedPassword.Text)
+            {
+                MessageBox.Show(
+                    lang.Translate("Passwords do not match"),
+                    lang.Translate("Validation Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtRepeatedPassword.Focus();
+                return false;
+            }
+
+            if (txtPassword.Text.Length < 4)
+            {
+                MessageBox.Show(
+                    lang.Translate("Password must be at least 4 characters"),
                     lang.Translate("Validation Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);

@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Interfaces
+{
+    public interface IGenericService
+    {
+        /// <summary>
+        /// Adds the specified entity to the collection.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity">The entity to add to the collection. Cannot be null.</param>
+        void Add<T>(T entity) where T : class;
+
+        /// <summary>
+        /// Updates the specified entity in the data store.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity">The entity to update. Cannot be null. The entity must already exist in the data store.</param>
+        void Update<T>(T entity) where T : class;
+
+        /// <summary>
+        /// Deletes the entity identified by the specified unique identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the entity to delete.</param>
+        void Delete(Guid id);
+
+        /// <summary>
+        /// Retrieves all entities of type T from the data source.
+        /// </summary>
+        /// <returns>An enumerable collection containing all entities of type T. The collection will be empty if no entities are
+        /// found.</returns>
+        IEnumerable<T> GetAll<T>() where T : class;
+
+        /// <summary>
+        /// Retrieves an entity by its unique identifier.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id">The unique identifier of the entity to retrieve.</param>
+        /// <returns>The entity that matches the specified identifier, or the default value of <typeparamref name="T"/> if no
+        /// entity is found.</returns>
+        T GetById<T>(Guid id) where T : class;
+    }
+}

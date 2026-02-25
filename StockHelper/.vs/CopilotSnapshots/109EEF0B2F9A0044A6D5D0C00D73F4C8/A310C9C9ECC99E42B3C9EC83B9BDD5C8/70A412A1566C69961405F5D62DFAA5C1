@@ -1,0 +1,290 @@
+﻿-- ==================================================
+-- EJEMPLO DE DATOS COMPLETO - SISTEMA DE INVENTARIO
+-- Casos de uso reales con datos de ejemplo
+-- ==================================================
+
+USE iam_db;
+GO
+
+PRINT '========================================';
+PRINT 'INSERTANDO DATOS DE EJEMPLO';
+PRINT '========================================';
+PRINT '';
+
+BEGIN TRANSACTION;
+
+BEGIN TRY
+    -- ==================================================
+    -- CATEGORÍAS
+    -- ==================================================
+    
+    PRINT 'Insertando categorías...';
+    
+    DECLARE @CatMateriaPrima INT, @CatProductoFinal INT, @CatInsumo INT, @CatHerramienta INT;
+    
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Materias Primas');
+    SET @CatMateriaPrima = SCOPE_IDENTITY();
+    
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Productos Terminados');
+    SET @CatProductoFinal = SCOPE_IDENTITY();
+    
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Insumos');
+    SET @CatInsumo = SCOPE_IDENTITY();
+    
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Herramientas');
+    SET @CatHerramienta = SCOPE_IDENTITY();
+    
+    PRINT '✓ 4 categorías insertadas';
+    PRINT '';
+    
+    -- ==================================================
+    -- PROVEEDORES
+    -- ==================================================
+    
+    PRINT 'Insertando proveedores...';
+    
+    DECLARE @Prov1 UNIQUEIDENTIFIER = NEWID();
+    DECLARE @Prov2 UNIQUEIDENTIFIER = NEWID();
+    DECLARE @Prov3 UNIQUEIDENTIFIER = NEWID();
+    
+    -- Proveedores especializados por categoría
+    INSERT INTO PROVEEDORES (Id, CUIT, Nombre, RazonSocial, CategoriaItemId, TelefonoContacto, Email, Direccion) VALUES
+        (@Prov1, 30712345678, 'Molinos La Estrella', 'Molinos La Estrella S.A.', @CatMateriaPrima, 1145678901, 'ventas@molinos.com.ar', 'Av. Corrientes 1234, CABA'),
+        (@Prov2, 20556789012, 'Lácteos del Sur', 'Lácteos del Sur S.R.L.', @CatMateriaPrima, 2214567890, 'pedidos@lacteosur.com.ar', 'Ruta 2 Km 45, La Plata'),
+        (@Prov3, 33789012345, 'Distribuidora Universal', 'Universal Distribuciones S.A.', @CatInsumo, 1156789012, 'contacto@universal.com', 'Av. San Juan 5678, CABA');
+    
+    PRINT '✓ 3 proveedores insertados (especializados por categoría)';
+    PRINT '';
+    
+    -- ==================================================
+    -- ITEMS SIMPLES (Componentes/Materias Primas)
+    -- ==================================================
+    
+    PRINT 'Insertando items simples...';
+    
+    DECLARE @HarinaId UNIQUEIDENTIFIER = NEWID();
+    DECLARE @QuesoId UNIQUEIDENTIFIER = NEWID();
+    DECLARE @TomateId UNIQUEIDENTIFIER = NEWID();
+    DECLARE @LevaduraId UNIQUEIDENTIFIER = NEWID();
+    DECLARE @SalId UNIQUEIDENTIFIER = NEWID();
+    DECLARE @AceiteId UNIQUEIDENTIFIER = NEWID();
+    
+    INSERT INTO ITEMS (Id, Nombre, Unidad, UnidadEntera, CategoriaId, CodigoBarras, Descripcion, PrecioUnitario) VALUES
+        (@HarinaId, 'Harina 0000 x 1kg', 1.0, 0, @CatMateriaPrima, '7790001234567', 'Harina de trigo 0000 de primera calidad', 450.00),
+        (@QuesoId, 'Queso Mozzarella x 1kg', 1.0, 0, @CatMateriaPrima, '7790002345678', 'Queso mozzarella fundente', 2800.00),
+        (@TomateId, 'Salsa de Tomate x 500g', 0.5, 0, @CatMateriaPrima, '7790003456789', 'Salsa de tomate natural', 350.00),
+        (@LevaduraId, 'Levadura Fresca x 50g', 0.05, 0, @CatInsumo, '7790004567890', 'Levadura fresca de panadería', 180.00),
+        (@SalId, 'Sal Fina x 1kg', 1.0, 0, @CatInsumo, '7790005678901', 'Sal fina de mesa', 120.00),
+        (@AceiteId, 'Aceite de Oliva x 500ml', 0.5, 0, @CatInsumo, '7790006789012', 'Aceite de oliva extra virgen', 950.00);
+    
+    -- El trigger automáticamente crea registros en STOCK
+    
+    PRINT '✓ 6 items simples insertados';
+    PRINT '';
+    
+    -- ==================================================
+    -- ASIGNAR PROVEEDORES A ITEMS
+    -- ==================================================
+    
+    PRINT 'Asignando proveedores a items...';
+    
+    INSERT INTO ITEMS_PROVEEDORES (ItemId, ProveedorId, PrecioCompra, EsProveedorPrincipal) VALUES
+        (@HarinaId, @Prov1, 380.00, 1),        -- Molinos La Estrella es proveedor principal de harina
+        (@HarinaId, @Prov3, 400.00, 0),        -- Universal también vende harina (más caro)
+        (@QuesoId, @Prov2, 2500.00, 1),        -- Lácteos del Sur es proveedor principal de queso
+        (@TomateId, @Prov3, 300.00, 1),        -- Universal provee salsa de tomate
+        (@LevaduraId, @Prov1, 150.00, 1),      -- Molinos provee levadura
+        (@SalId, @Prov3, 95.00, 1),            -- Universal provee sal
+        (@AceiteId, @Prov3, 850.00, 1);        -- Universal provee aceite
+    
+    PRINT '✓ Proveedores asignados (algunos items tienen múltiples proveedores)';
+    PRINT '';
+    
+    -- ==================================================
+    -- ACTUALIZAR STOCK INICIAL
+    -- ==================================================
+    
+    PRINT 'Actualizando stock inicial...';
+    
+    UPDATE STOCK SET Cantidad = 5000, StockMinimo = 500, StockMaximo = 10000, Ubicacion = 'Estante A1' WHERE ItemId = @HarinaId;
+    UPDATE STOCK SET Cantidad = 800, StockMinimo = 100, StockMaximo = 1500, Ubicacion = 'Cámara Fría 1' WHERE ItemId = @QuesoId;
+    UPDATE STOCK SET Cantidad = 1200, StockMinimo = 200, StockMaximo = 2000, Ubicacion = 'Estante B3' WHERE ItemId = @TomateId;
+    UPDATE STOCK SET Cantidad = 300, StockMinimo = 50, StockMaximo = 500, Ubicacion = 'Cámara Fría 2' WHERE ItemId = @LevaduraId;
+    UPDATE STOCK SET Cantidad = 2000, StockMinimo = 200, StockMaximo = 3000, Ubicacion = 'Depósito General' WHERE ItemId = @SalId;
+    UPDATE STOCK SET Cantidad = 450, StockMinimo = 80, StockMaximo = 800, Ubicacion = 'Estante C2' WHERE ItemId = @AceiteId;
+    
+    PRINT '✓ Stock inicial actualizado';
+    PRINT '';
+    
+    -- ==================================================
+    -- PRODUCTOS COMPUESTOS
+    -- ==================================================
+    
+    PRINT 'Creando productos compuestos...';
+    
+    -- Producto 1: Pizza Margarita
+    DECLARE @PizzaMargaritaId UNIQUEIDENTIFIER = NEWID();
+    INSERT INTO ITEMS (Id, Nombre, Unidad, UnidadEntera, CategoriaId, CodigoBarras, Descripcion, PrecioUnitario) VALUES
+        (@PizzaMargaritaId, 'Pizza Margarita (Mediana)', 1.0, 1, @CatProductoFinal, '7790100000001', 'Pizza margarita con mozzarella y tomate', 2500.00);
+    
+    -- Composición de Pizza Margarita
+    INSERT INTO DETALLE_PRODUCTO (ItemPadreId, ItemComponenteId, CantidadConsumida, Orden) VALUES
+        (@PizzaMargaritaId, @HarinaId, 250, 1),      -- 250g de harina
+        (@PizzaMargaritaId, @QuesoId, 200, 2),       -- 200g de queso
+        (@PizzaMargaritaId, @TomateId, 150, 3),      -- 150g de salsa
+        (@PizzaMargaritaId, @LevaduraId, 10, 4),     -- 10g de levadura
+        (@PizzaMargaritaId, @SalId, 5, 5),           -- 5g de sal
+        (@PizzaMargaritaId, @AceiteId, 20, 6);       -- 20ml de aceite
+    
+    PRINT '✓ Pizza Margarita creada con 6 componentes';
+    
+    -- Producto 2: Empanadas (pack de 12)
+    DECLARE @EmpanadasId UNIQUEIDENTIFIER = NEWID();
+    INSERT INTO ITEMS (Id, Nombre, Unidad, UnidadEntera, CategoriaId, CodigoBarras, Descripcion, PrecioUnitario) VALUES
+        (@EmpanadasId, 'Empanadas de Carne (x12 unidades)', 1.0, 1, @CatProductoFinal, '7790100000002', 'Docena de empanadas de carne', 1800.00);
+    
+    -- Composición de Empanadas
+    INSERT INTO DETALLE_PRODUCTO (ItemPadreId, ItemComponenteId, CantidadConsumida, Orden) VALUES
+        (@EmpanadasId, @HarinaId, 400, 1),           -- 400g de harina
+        (@EmpanadasId, @SalId, 8, 2),                -- 8g de sal
+        (@EmpanadasId, @AceiteId, 50, 3);            -- 50ml de aceite
+    
+    PRINT '✓ Empanadas (x12) creadas con 3 componentes';
+    
+    -- Actualizar stock de productos terminados
+    UPDATE STOCK SET Cantidad = 0, StockMinimo = 5, StockMaximo = 50, Ubicacion = 'Vidriera' WHERE ItemId = @PizzaMargaritaId;
+    UPDATE STOCK SET Cantidad = 0, StockMinimo = 3, StockMaximo = 30, Ubicacion = 'Vidriera' WHERE ItemId = @EmpanadasId;
+    
+    PRINT '';
+    
+    -- ==================================================
+    -- VERIFICACIÓN DE DATOS
+    -- ==================================================
+    
+    PRINT '========================================';
+    PRINT 'VERIFICACIÓN DE DATOS INSERTADOS';
+    PRINT '========================================';
+    PRINT '';
+    
+    PRINT 'Categorías:';
+    SELECT Id, Nombre FROM CATEGORIA_ITEMS;
+    PRINT '';
+    
+    PRINT 'Proveedores:';
+    SELECT Nombre, CUIT, TelefonoContacto FROM PROVEEDORES;
+    PRINT '';
+    
+    PRINT 'Items con Stock:';
+    SELECT 
+        i.Nombre AS Item,
+        c.Nombre AS Categoria,
+        s.Cantidad AS Stock,
+        s.StockMinimo AS Min,
+        s.Ubicacion
+    FROM ITEMS i
+    INNER JOIN CATEGORIA_ITEMS c ON i.CategoriaId = c.Id
+    INNER JOIN STOCK s ON i.Id = s.ItemId
+    ORDER BY c.Nombre, i.Nombre;
+    PRINT '';
+    
+    PRINT 'Composición de Productos:';
+    SELECT 
+        iPadre.Nombre AS Producto,
+        iComp.Nombre AS Componente,
+        dp.CantidadConsumida AS CantidadNecesaria,
+        s.Cantidad AS StockDisponible
+    FROM DETALLE_PRODUCTO dp
+    INNER JOIN ITEMS iPadre ON dp.ItemPadreId = iPadre.Id
+    INNER JOIN ITEMS iComp ON dp.ItemComponenteId = iComp.Id
+    INNER JOIN STOCK s ON iComp.Id = s.ItemId
+    ORDER BY iPadre.Nombre, dp.Orden;
+    PRINT '';
+    
+    PRINT 'Items con Proveedores:';
+    SELECT 
+        i.Nombre AS Item,
+        p.Nombre AS Proveedor,
+        ip.PrecioCompra,
+        CASE WHEN ip.EsProveedorPrincipal = 1 THEN '⭐ Principal' ELSE '' END AS Estado
+    FROM ITEMS_PROVEEDORES ip
+    INNER JOIN ITEMS i ON ip.ItemId = i.Id
+    INNER JOIN PROVEEDORES p ON ip.ProveedorId = p.Id
+    ORDER BY i.Nombre, ip.EsProveedorPrincipal DESC;
+    
+    COMMIT TRANSACTION;
+    
+    PRINT '';
+    PRINT '========================================';
+    PRINT '✓ DATOS DE EJEMPLO INSERTADOS';
+    PRINT '========================================';
+    PRINT '';
+    PRINT 'RESUMEN:';
+    PRINT '  • 4 Categorías';
+    PRINT '  • 3 Proveedores';
+    PRINT '  • 8 Items (6 simples + 2 compuestos)';
+    PRINT '  • 8 Registros de Stock (auto-generados)';
+    PRINT '  • 7 Relaciones Items-Proveedores';
+    PRINT '  • 9 Relaciones de Composición';
+    PRINT '';
+    PRINT '🎯 ¡Base de datos lista para pruebas!';
+    
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT '';
+    PRINT '❌ ERROR AL INSERTAR DATOS';
+    PRINT 'Mensaje: ' + ERROR_MESSAGE();
+    PRINT 'Línea: ' + CAST(ERROR_LINE() AS VARCHAR(10));
+END CATCH
+
+GO
+
+-- ==================================================
+-- QUERIES DE PRUEBA
+-- ==================================================
+
+PRINT '';
+PRINT '========================================';
+PRINT 'EJECUTANDO QUERIES DE PRUEBA';
+PRINT '========================================';
+PRINT '';
+
+-- Test 1: Ver items con stock bajo
+PRINT '--- Test 1: Items con Stock Bajo ---';
+SELECT * FROM vw_ItemsStockBajo;
+PRINT '';
+
+-- Test 2: Ver composición de Pizza
+PRINT '--- Test 2: Composición de Pizza Margarita ---';
+SELECT 
+    ProductoNombre AS Producto,
+    ComponenteNombre AS Componente,
+    CantidadConsumida AS Cantidad,
+    Orden
+FROM vw_ComposicionProductos
+WHERE ProductoNombre LIKE '%Pizza%'
+ORDER BY Orden;
+PRINT '';
+
+-- Test 3: Simular actualización de stock
+PRINT '--- Test 3: Actualizar Stock (Restar 100g de Harina) ---';
+DECLARE @ItemIdTest UNIQUEIDENTIFIER;
+SELECT @ItemIdTest = Id FROM ITEMS WHERE Nombre LIKE 'Harina%';
+EXEC sp_UpdateStock @ItemId = @ItemIdTest, @CantidadCambio = 100, @Operacion = 'SUBTRACT';
+PRINT '';
+
+-- Test 4: Ver proveedores con mejor precio
+PRINT '--- Test 4: Proveedores por Item con Mejor Precio ---';
+SELECT 
+    ItemNombre AS Item,
+    ProveedorNombre AS Proveedor,
+    PrecioCompra AS Precio,
+    CASE WHEN EsProveedorPrincipal = 1 THEN '⭐' ELSE '' END AS Principal
+FROM vw_ItemsConProveedores
+ORDER BY ItemNombre, PrecioCompra ASC;
+PRINT '';
+
+PRINT '========================================';
+PRINT '✅ TODOS LOS TESTS COMPLETADOS';
+PRINT '========================================';
+GO

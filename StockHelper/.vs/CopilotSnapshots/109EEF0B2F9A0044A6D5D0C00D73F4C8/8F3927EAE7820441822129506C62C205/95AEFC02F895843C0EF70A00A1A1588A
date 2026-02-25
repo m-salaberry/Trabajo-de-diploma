@@ -1,0 +1,188 @@
+﻿using Services.DAL.Contracts;
+using Services.Domain;
+using Services.Contracts.Logs;
+using DAL.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Linq;
+
+namespace Services.DAL.Implementations.Repositories
+{
+    /// <summary>
+    /// Repository for managing ItemCategory entities.
+    /// Implements generic repository pattern with type-safe operations for categories.
+    /// </summary>
+    public class CategoryRepository : IRepository<ItemCategory>
+    {
+        /// <summary>
+        /// Creates a new category in the database.
+        /// </summary>
+        /// <param name="entity">The category to create.</param>
+        public void Create(ItemCategory entity)
+        {
+            try
+            {
+                string command = "INSERT INTO CATEGORIA_ITEMS (Id, Nombre) VALUES (@Id, @Nombre)";
+                var parameters = new[]
+                {
+                    new SqlParameter("@Id", entity.Id),
+                    new SqlParameter("@Nombre", entity.Nombre)
+                };
+                
+                SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+                Logger.Current.Info($"Category '{entity.Nombre}' created with ID {entity.Id}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    $"Error creating category '{entity.Nombre}'", ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing category in the database.
+        /// </summary>
+        /// <param name="entity">The category with updated information.</param>
+        public void Update(ItemCategory entity)
+        {
+            try
+            {
+                string command = "UPDATE CATEGORIA_ITEMS SET Nombre = @Nombre WHERE Id = @Id";
+                var parameters = new[]
+                {
+                    new SqlParameter("@Id", entity.Id),
+                    new SqlParameter("@Nombre", entity.Nombre)
+                };
+                
+                int rowsAffected = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+                
+                if (rowsAffected == 0)
+                {
+                    Logger.Current.Warning($"No category found with ID {entity.Id} to update");
+                }
+                else
+                {
+                    Logger.Current.Info($"Category '{entity.Nombre}' updated successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    $"Error updating category with ID {entity.Id}", ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a category from the database.
+        /// </summary>
+        /// <param name="entity">The category to delete.</param>
+        public void Delete(ItemCategory entity)
+        {
+            try
+            {
+                string command = "DELETE FROM CATEGORIA_ITEMS WHERE Id = @Id";
+                var parameters = new[] { new SqlParameter("@Id", entity.Id) };
+                
+                int rowsAffected = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+                
+                if (rowsAffected == 0)
+                {
+                    Logger.Current.Warning($"No category found with ID {entity.Id} to delete");
+                }
+                else
+                {
+                    Logger.Current.Info($"Category '{entity.Nombre}' deleted successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    $"Error deleting category with ID {entity.Id}", ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves a category by its unique identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the category.</param>
+        /// <returns>The category if found, null otherwise.</returns>
+        public ItemCategory GetById(Guid id)
+        {
+            try
+            {
+                string command = "SELECT Id, Nombre FROM CATEGORIA_ITEMS WHERE Id = @Id";
+                var parameters = new[] { new SqlParameter("@Id", id) };
+                
+                using (var reader = SqlHelper.ExecuteReader(command, CommandType.Text, parameters))
+                {
+                    if (reader != null && reader.Read())
+                    {
+                        var category = new ItemCategory
+                        {
+                            Id = (Guid)reader["Id"],
+                            Nombre = (string)reader["Nombre"]
+                        };
+                        
+                        Logger.Current.Debug($"Category with ID {id} retrieved successfully");
+                        return category;
+                    }
+                }
+                
+                Logger.Current.Warning($"Category with ID {id} not found");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    $"Error retrieving category with ID {id}", ex);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Retrieves all categories from the database.
+        /// </summary>
+        /// <returns>An enumerable collection of all categories.</returns>
+        public IEnumerable<ItemCategory> GetAll()
+        {
+            try
+            {
+                string command = "SELECT Id, Nombre FROM CATEGORIA_ITEMS ORDER BY Nombre";
+                var categories = new List<ItemCategory>();
+                
+                using (var reader = SqlHelper.ExecuteReader(command, CommandType.Text))
+                {
+                    if (reader == null)
+                    {
+                        Logger.Current.Warning("ExecuteReader returned null in CategoryRepository.GetAll");
+                        return Enumerable.Empty<ItemCategory>();
+                    }
+
+                    while (reader.Read())
+                    {
+                        var category = new ItemCategory
+                        {
+                            Id = (int)reader["Id"],
+                            Nombre = (string)reader["Nombre"]
+                        };
+                        categories.Add(category);
+                    }
+                }
+                
+                Logger.Current.Debug($"Retrieved {categories.Count} categories from database");
+                return categories;
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Error, 
+                    "Error retrieving all categories", ex);
+                throw;
+            }
+        }
+    }
+}

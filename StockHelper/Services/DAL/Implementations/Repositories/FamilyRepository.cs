@@ -13,8 +13,9 @@ namespace Services.DAL.Implementations.Repositories
     /// <summary>
     /// Repository for managing Family (roles) entities.
     /// Families represent groups of patents (permissions) that form roles.
+    /// Implements generic repository pattern with type-safe operations.
     /// </summary>
-    public class FamilyRepository : IRepository
+    public class FamilyRepository : IRepository<Family>
     {
         /// <summary>
         /// Gets all families (roles) from the database.
@@ -195,20 +196,20 @@ namespace Services.DAL.Implementations.Repositories
         /// <summary>
         /// Deletes a family from the database.
         /// </summary>
-        /// <param name="id">ID of the family to delete</param>
-        public void Delete(Guid id)
+        /// <param name="entity">The family entity to delete.</param>
+        public void Delete(Family entity)
         {
             string command = "DELETE FROM FAMILIES WHERE Id = @Id";
-            var parameters = new[] { new SqlParameter("@Id", id) };
+            var parameters = new[] { new SqlParameter("@Id", entity.Id) };
             int result = SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
             
             if (result == -1)
             {
-                Logger.Current.Error($"Failed to delete family with ID {id}");
-                throw new Exception($"Failed to delete family with ID {id}.");
+                Logger.Current.Error($"Failed to delete family '{entity.Name}' with ID {entity.Id}");
+                throw new Exception($"Failed to delete family '{entity.Name}'.");
             }
             
-            Logger.Current.Info($"Family with ID {id} deleted");
+            Logger.Current.Info($"Family '{entity.Name}' with ID {entity.Id} deleted");
         }
 
         /// <summary>
@@ -310,56 +311,6 @@ namespace Services.DAL.Implementations.Repositories
             }
             
             return patents;
-        }
-
-        // ============================================
-        // IRepository Generic Interface Implementation
-        // ============================================
-
-        IEnumerable<T> IRepository.GetAll<T>()
-        {
-            return GetAll() as IEnumerable<T>;
-        }
-
-        T IRepository.GetById<T>(Guid id)
-        {
-            return GetById(id) as T;
-        }
-
-        void IRepository.Create<T>(T entity)
-        {
-            if (entity is Family family)
-            {
-                Create(family);
-            }
-            else
-            {
-                throw new ArgumentException($"Entity must be of type Family, but was {entity.GetType().Name}");
-            }
-        }
-
-        void IRepository.Update<T>(T entity)
-        {
-            if (entity is Family family)
-            {
-                Update(family);
-            }
-            else
-            {
-                throw new ArgumentException($"Entity must be of type Family, but was {entity.GetType().Name}");
-            }
-        }
-
-        void IRepository.Delete<T>(T entity)
-        {
-            if (entity is Family family)
-            {
-                Delete(family.Id);
-            }
-            else
-            {
-                throw new ArgumentException($"Entity must be of type Family, but was {entity.GetType().Name}");
-            }
         }
     }
 }

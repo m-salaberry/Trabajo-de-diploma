@@ -57,17 +57,6 @@ namespace UI.secondaryForms
                     IsActive = ckbActiveUser.Checked,
                     Role = cbRoleSelector.Text,
                 };
-
-                // Same password validation
-                if (txtPassword.Text != txtRepeatedPassword.Text)
-                {
-                    MessageBox.Show(
-                        lang.Translate("Both passwords must be identical"), 
-                        lang.Translate("Validation Error"), 
-                        MessageBoxButtons.OK, 
-                        MessageBoxIcon.Warning);
-                    return;
-                }
                 
                 userService.Insert(user);
 
@@ -84,6 +73,11 @@ namespace UI.secondaryForms
             }
             catch (MySystemException ex)
             {
+                MessageBox.Show(
+                    lang.Translate("An error occurred while creating the user: ") + ex.Message, 
+                    lang.Translate("Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
                 ex.Handler();
             }
             catch (Exception ex)
@@ -130,7 +124,29 @@ namespace UI.secondaryForms
                 txtPassword.Focus();
                 return false;
             }
-            
+
+            if (txtPassword.Text.Length < 4)
+            {
+                MessageBox.Show(
+                    lang.Translate("Password must be at least 4 characters"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtPassword.Focus();
+                return false;
+            }
+
+            if (txtPassword.Text != txtRepeatedPassword.Text)
+            {
+                MessageBox.Show(
+                    lang.Translate("Both passwords must be identical"), 
+                    lang.Translate("Validation Error"), 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                txtRepeatedPassword.Focus();
+                return false;
+            }
+
             if (string.IsNullOrWhiteSpace(cbRoleSelector.Text))
             {
                 MessageBox.Show(

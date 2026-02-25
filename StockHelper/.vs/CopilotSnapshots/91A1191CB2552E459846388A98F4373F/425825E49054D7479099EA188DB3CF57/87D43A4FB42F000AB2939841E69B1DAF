@@ -1,0 +1,20 @@
+﻿using BLL.Interfaces;
+using DAL.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Implementations
+{
+    public class GenericBllService<T>: IGenericBllService<T> where T : class
+    {
+        private readonly IRepository<T> _repository;
+        
+        public GenericBllService(IRepository<T> repository)
+        {
+            _repository = repository ?? throw new ArgumentException()
+        }
+    }
+}

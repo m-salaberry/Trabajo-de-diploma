@@ -1,0 +1,79 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Domain
+{
+    /// <summary>
+    /// Represents a category of items in the inventory system.
+    /// Categories are used to organize and classify items.
+    /// </summary>
+    public class ItemCategory
+    {
+        /// <summary>
+        /// Gets or sets the unique identifier of the category.
+        /// Note: In database this is INT IDENTITY, not GUID.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the category.
+        /// Must be unique and cannot be null or empty.
+        /// Maximum length: 100 characters.
+        /// </summary>
+        public string Nombre { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the ItemCategory class.
+        /// </summary>
+        public ItemCategory()
+        {
+            Nombre = string.Empty;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ItemCategory class with specified values.
+        /// </summary>
+        /// <param name="id">The category ID.</param>
+        /// <param name="nombre">The category name.</param>
+        public ItemCategory(int id, string nombre)
+        {
+            Id = id;
+            Nombre = nombre ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Returns a string representation of the category.
+        /// </summary>
+        /// <returns>The category name.</returns>
+        public override string ToString()
+        {
+            return Nombre;
+        }
+
+        /// <summary>
+        /// Determines whether the specified object is equal to the current category.
+        /// </summary>
+        /// <param name="obj">The object to compare.</param>
+        /// <returns>True if the objects are equal, false otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is ItemCategory other)
+            {
+                return Id == other.Id;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the hash code for this category.
+        /// </summary>
+        /// <returns>A hash code for the current category.</returns>
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+    }
+}

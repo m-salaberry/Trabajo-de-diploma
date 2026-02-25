@@ -17,7 +17,7 @@ namespace DAL.Helpers
 
         static SqlHelper()
         {
-            conString = ConfigurationManager.ConnectionStrings["sqlDb"].ConnectionString;
+            conString = ConfigurationManager.ConnectionStrings["coreDb"].ConnectionString;
             conString = conString.Replace("{sqlUser}", ConfigurationManager.AppSettings["sqlUser"]);
             conString = conString.Replace("{sqlPassword}", ConfigurationManager.AppSettings["sqlPassword"]);
         }

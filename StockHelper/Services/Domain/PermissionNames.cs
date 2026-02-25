@@ -26,48 +26,42 @@ namespace Services.Domain
         public const string PermissionManagement = "PermissionManagement";
 
         // ============================================
-        // INVENTORY/STOCK MODULES
+        // CATALOG MANAGMENT MODULES
         // ============================================
 
         /// <summary>
-        /// Permission to access the Inventory Management module.
-        /// Grants full access to manage products and stock levels.
+        /// Permission to access the Item and Category Management module.
+        /// Grants access to manage product categories and item details.
         /// </summary>
-        public const string InventoryManagement = "InventoryManagement";
+        public const string ItemCategoryManagment = "ItemCategoryManagment";
 
         /// <summary>
-        /// Permission to access the Product Catalog module.
-        /// Grants access to view and manage product information.
+        /// Permission to access the Supplier Management module.
+        /// Grants access to manage supplier information and contacts.
         /// </summary>
-        public const string ProductCatalog = "ProductCatalog";
+        public const string SupplierManagment = "SupplierManagment";
 
         /// <summary>
-        /// Permission to access the Stock Control module.
-        /// Grants access to adjust stock levels and transfers.
+        /// Permission to access the Product Builder module.
+        /// Grants access to create and manage products.
         /// </summary>
-        public const string StockControl = "StockControl";
+        public const string ProductBuilder = "ProductBuilder";
 
         // ============================================
-        // SALES & PURCHASES MODULES
+        // INVENTORY & PURCHASING MODULES
         // ============================================
 
         /// <summary>
-        /// Permission to access the Sales module.
-        /// Grants full access to create and manage sales transactions.
+        /// Permission to access the Stock Management module.
+        /// Grants full access to manage stock levels.
         /// </summary>
-        public const string SalesManagement = "SalesManagement";
+        public const string StockManagment = "StockManagment";
 
         /// <summary>
         /// Permission to access the Purchase module.
         /// Grants full access to create and manage purchase orders.
         /// </summary>
         public const string PurchaseManagement = "PurchaseManagement";
-
-        /// <summary>
-        /// Permission to access the Point of Sale (POS) module.
-        /// Grants access to the cashier/sales terminal.
-        /// </summary>
-        public const string PointOfSale = "PointOfSale";
 
         // ============================================
         // REPORTS & ANALYTICS MODULES
@@ -80,38 +74,10 @@ namespace Services.Domain
         public const string Reports = "Reports";
 
         /// <summary>
-        /// Permission to access the Sales Reports module.
-        /// Grants access to sales analysis and reports.
-        /// </summary>
-        public const string SalesReports = "SalesReports";
-
-        /// <summary>
         /// Permission to access the Inventory Reports module.
         /// Grants access to stock and inventory reports.
         /// </summary>
         public const string InventoryReports = "InventoryReports";
-
-        /// <summary>
-        /// Permission to access the Financial Reports module.
-        /// Grants access to financial analysis and reports.
-        /// </summary>
-        public const string FinancialReports = "FinancialReports";
-
-        // ============================================
-        // CUSTOMER & SUPPLIER MODULES
-        // ============================================
-
-        /// <summary>
-        /// Permission to access the Customer Management module.
-        /// Grants full access to manage customer information.
-        /// </summary>
-        public const string CustomerManagement = "CustomerManagement";
-
-        /// <summary>
-        /// Permission to access the Supplier Management module.
-        /// Grants full access to manage supplier information.
-        /// </summary>
-        public const string SupplierManagement = "SupplierManagement";
 
         // ============================================
         // SYSTEM CONFIGURATION MODULES
@@ -135,27 +101,6 @@ namespace Services.Domain
         /// </summary>
         public const string DatabaseBackup = "DatabaseBackup";
 
-        // ============================================
-        // ADDITIONAL MODULES (Add as needed)
-        // ============================================
-
-        /// <summary>
-        /// Permission to access the Dashboard module.
-        /// Grants access to the main dashboard with overview information.
-        /// </summary>
-        public const string Dashboard = "Dashboard";
-
-        /// <summary>
-        /// Permission to access the Pricing Management module.
-        /// Grants access to manage product prices and discounts.
-        /// </summary>
-        public const string PricingManagement = "PricingManagement";
-
-        /// <summary>
-        /// Permission to access the Warehouse Management module.
-        /// Grants access to manage warehouses and locations.
-        /// </summary>
-        public const string WarehouseManagement = "WarehouseManagement";
     }
 
     /// <summary>

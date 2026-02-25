@@ -69,6 +69,8 @@
             // 
             dgvActiveUsers.AllowUserToAddRows = false;
             dgvActiveUsers.AllowUserToDeleteRows = false;
+            dgvActiveUsers.AllowUserToResizeColumns = false;
+            dgvActiveUsers.AllowUserToResizeRows = false;
             dgvActiveUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvActiveUsers.Columns.AddRange(new DataGridViewColumn[] { UserName, Password, Role });
             dgvActiveUsers.Location = new Point(15, 51);
@@ -79,6 +81,7 @@
             dgvActiveUsers.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvActiveUsers.Size = new Size(343, 314);
             dgvActiveUsers.TabIndex = 5;
+            dgvActiveUsers.TabStop = false;
             // 
             // UserName
             // 
@@ -112,6 +115,8 @@
             // 
             dgvDisabledUsers.AllowUserToAddRows = false;
             dgvDisabledUsers.AllowUserToDeleteRows = false;
+            dgvDisabledUsers.AllowUserToResizeColumns = false;
+            dgvDisabledUsers.AllowUserToResizeRows = false;
             dgvDisabledUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDisabledUsers.Columns.AddRange(new DataGridViewColumn[] { DisableUserName, DisableUserPassword, DisableUserRole });
             dgvDisabledUsers.Location = new Point(364, 50);
@@ -122,6 +127,7 @@
             dgvDisabledUsers.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dgvDisabledUsers.Size = new Size(343, 314);
             dgvDisabledUsers.TabIndex = 8;
+            dgvDisabledUsers.TabStop = false;
             // 
             // DisableUserName
             // 

@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.secondaryForms;
+
+using UI.Implementations;
+
+namespace UI.controlForms
+{
+    public partial class ctrlItemsAndCategories : TranslatableUserControls
+    {
+        public ctrlItemsAndCategories()
+        {
+            InitializeComponent();
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void btnAddCategory_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                newCategoryForm newCategoryForm = new newCategoryForm();
+                // Susbcribe to the CategoryAdded event
+                newCategoryForm.CategoryAdded += (s, ev) => RefreshCategoryList();
+            }
+        }
+
+        private void RefreshCategoryList()
+        {
+           
+        }
+
+        private void LoadCategories()
+        {
+            lstbxCategories.Items.Clear();
+        }
+    }
+}

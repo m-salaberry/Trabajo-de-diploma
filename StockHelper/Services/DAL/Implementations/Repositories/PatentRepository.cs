@@ -13,8 +13,9 @@ namespace Services.DAL.Implementations.Repositories
     /// <summary>
     /// Repository for managing Patent (atomic permissions) entities.
     /// Patents represent individual permissions that cannot be subdivided.
+    /// Implements generic repository pattern with type-safe operations.
     /// </summary>
-    public class PatentRepository : IRepository
+    public class PatentRepository : IRepository<Patent>
     {
         /// <summary>
         /// Gets all patents from the database.
@@ -136,63 +137,13 @@ namespace Services.DAL.Implementations.Repositories
         /// <summary>
         /// Deletes a patent from the database.
         /// </summary>
-        /// <param name="id">ID of the patent to delete</param>
-        public void Delete(Guid id)
+        /// <param name="entity">The patent entity to delete.</param>
+        public void Delete(Patent entity)
         {
             string command = "DELETE FROM PATENTS WHERE Id = @Id";
-            var parameters = new[] { new SqlParameter("@Id", id) };
+            var parameters = new[] { new SqlParameter("@Id", entity.Id) };
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
-            Logger.Current.Info($"Patent with ID {id} deleted");
-        }
-
-        // ============================================
-        // IRepository Generic Interface Implementation
-        // ============================================
-
-        IEnumerable<T> IRepository.GetAll<T>()
-        {
-            return GetAll() as IEnumerable<T>;
-        }
-
-        T IRepository.GetById<T>(Guid id)
-        {
-            return GetById(id) as T;
-        }
-
-        void IRepository.Create<T>(T entity)
-        {
-            if (entity is Patent patent)
-            {
-                Create(patent);
-            }
-            else
-            {
-                throw new ArgumentException($"Entity must be of type Patent, but was {entity.GetType().Name}");
-            }
-        }
-
-        void IRepository.Update<T>(T entity)
-        {
-            if (entity is Patent patent)
-            {
-                Update(patent);
-            }
-            else
-            {
-                throw new ArgumentException($"Entity must be of type Patent, but was {entity.GetType().Name}");
-            }
-        }
-
-        void IRepository.Delete<T>(T entity)
-        {
-            if (entity is Patent patent)
-            {
-                Delete(patent.Id);
-            }
-            else
-            {
-                throw new ArgumentException($"Entity must be of type Patent, but was {entity.GetType().Name}");
-            }
+            Logger.Current.Info($"Patent '{entity.Name}' with ID {entity.Id} deleted");
         }
     }
 }

@@ -1,0 +1,583 @@
+﻿-- ==================================================
+-- SCRIPT DE CREACIÓN DE TABLAS DE INVENTARIO
+-- Sistema de Gestión de Stock - STOCKHELPER
+-- Base de datos: iam_db
+-- Servidor: MATI\SQLEXPRESS
+-- ==================================================
+
+USE iam_db;
+GO
+
+PRINT '========================================';
+PRINT 'CREANDO TABLAS DE INVENTARIO';
+PRINT '========================================';
+PRINT '';
+
+-- ==================================================
+-- TABLA 1: CATEGORIA_ITEMS (CategoriaItem)
+-- ==================================================
+
+PRINT 'Creando tabla CATEGORIA_ITEMS...';
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'CATEGORIA_ITEMS')
+BEGIN
+    CREATE TABLE CATEGORIA_ITEMS (
+        Id INT IDENTITY(1,1) NOT NULL,
+        Nombre NVARCHAR(100) NOT NULL,
+        
+        CONSTRAINT PK_CATEGORIA_ITEMS PRIMARY KEY (Id),
+        CONSTRAINT UQ_CATEGORIA_ITEMS_Nombre UNIQUE (Nombre)
+    );
+    
+    -- Índice para búsquedas por nombre
+    CREATE INDEX IX_CATEGORIA_ITEMS_Nombre ON CATEGORIA_ITEMS(Nombre);
+    
+    PRINT '✓ Tabla CATEGORIA_ITEMS creada exitosamente';
+END
+ELSE
+BEGIN
+    PRINT '⚠ Tabla CATEGORIA_ITEMS ya existe, omitiendo creación';
+END
+PRINT '';
+
+-- ==================================================
+-- TABLA 2: PROVEEDORES (Proveedor)
+-- ==================================================
+
+PRINT 'Creando tabla PROVEEDORES...';
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PROVEEDORES')
+BEGIN
+    CREATE TABLE PROVEEDORES (
+        Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+        CUIT BIGINT NOT NULL,
+        Nombre NVARCHAR(200) NOT NULL,
+        RazonSocial NVARCHAR(300) NOT NULL,
+        CategoriaItemId INT NOT NULL,
+        TelefonoContacto BIGINT NULL,
+        Email NVARCHAR(200) NULL,
+        Direccion NVARCHAR(500) NULL,
+        IsActive BIT NOT NULL DEFAULT 1,
+        CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),
+        ModifiedDate DATETIME NULL,
+        
+        CONSTRAINT PK_PROVEEDORES PRIMARY KEY (Id),
+        CONSTRAINT FK_PROVEEDORES_CategoriaItemId FOREIGN KEY (CategoriaItemId) 
+            REFERENCES CATEGORIA_ITEMS(Id),
+        CONSTRAINT UQ_PROVEEDORES_CUIT UNIQUE (CUIT),
+        CONSTRAINT CK_PROVEEDORES_CUIT CHECK (CUIT > 0)
+    );
+    
+    -- Índices para búsquedas comunes
+    CREATE INDEX IX_PROVEEDORES_Nombre ON PROVEEDORES(Nombre);
+    CREATE INDEX IX_PROVEEDORES_CUIT ON PROVEEDORES(CUIT);
+    CREATE INDEX IX_PROVEEDORES_CategoriaItemId ON PROVEEDORES(CategoriaItemId);
+    CREATE INDEX IX_PROVEEDORES_IsActive ON PROVEEDORES(IsActive);
+    
+    PRINT '✓ Tabla PROVEEDORES creada exitosamente';
+END
+ELSE
+BEGIN
+    PRINT '⚠ Tabla PROVEEDORES ya existe, omitiendo creación';
+END
+PRINT '';
+
+-- ==================================================
+-- TABLA 3: ITEMS (Item)
+-- ==================================================
+
+PRINT 'Creando tabla ITEMS...';
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ITEMS')
+BEGIN
+    CREATE TABLE ITEMS (
+        Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+        Nombre NVARCHAR(200) NOT NULL,
+        Unidad DECIMAL(18,4) NOT NULL DEFAULT 1.0,
+        UnidadEntera BIT NOT NULL DEFAULT 1,
+        CategoriaId INT NOT NULL,
+        CodigoBarras NVARCHAR(50) NULL,
+        Descripcion NVARCHAR(MAX) NULL,
+        PrecioUnitario DECIMAL(18,2) NULL,
+        IsActive BIT NOT NULL DEFAULT 1,
+        CreatedDate DATETIME NOT NULL DEFAULT GETDATE(),
+        ModifiedDate DATETIME NULL,
+        
+        CONSTRAINT PK_ITEMS PRIMARY KEY (Id),
+        CONSTRAINT FK_ITEMS_CategoriaId FOREIGN KEY (CategoriaId) 
+            REFERENCES CATEGORIA_ITEMS(Id) ON DELETE CASCADE,
+        CONSTRAINT UQ_ITEMS_Nombre UNIQUE (Nombre),
+        CONSTRAINT CK_ITEMS_Unidad CHECK (Unidad > 0),
+        CONSTRAINT CK_ITEMS_PrecioUnitario CHECK (PrecioUnitario IS NULL OR PrecioUnitario >= 0)
+    );
+    
+    -- Índices para búsquedas comunes
+    CREATE INDEX IX_ITEMS_Nombre ON ITEMS(Nombre);
+    CREATE INDEX IX_ITEMS_CategoriaId ON ITEMS(CategoriaId);
+    CREATE INDEX IX_ITEMS_CodigoBarras ON ITEMS(CodigoBarras);
+    CREATE INDEX IX_ITEMS_IsActive ON ITEMS(IsActive);
+    
+    PRINT '✓ Tabla ITEMS creada exitosamente';
+END
+ELSE
+BEGIN
+    PRINT '⚠ Tabla ITEMS ya existe, omitiendo creación';
+END
+PRINT '';
+
+-- ==================================================
+-- TABLA 4: STOCK (Stock)
+-- ==================================================
+
+PRINT 'Creando tabla STOCK...';
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'STOCK')
+BEGIN
+    CREATE TABLE STOCK (
+        Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+        ItemId UNIQUEIDENTIFIER NOT NULL,
+        Cantidad INT NOT NULL DEFAULT 0,
+        StockMinimo INT NULL DEFAULT 0,
+        StockMaximo INT NULL,
+        Ubicacion NVARCHAR(100) NULL,
+        LastUpdated DATETIME NOT NULL DEFAULT GETDATE(),
+        
+        CONSTRAINT PK_STOCK PRIMARY KEY (Id),
+        CONSTRAINT FK_STOCK_ItemId FOREIGN KEY (ItemId) 
+            REFERENCES ITEMS(Id) ON DELETE CASCADE,
+        CONSTRAINT UQ_STOCK_ItemId UNIQUE (ItemId),
+        CONSTRAINT CK_STOCK_Cantidad CHECK (Cantidad >= 0),
+        CONSTRAINT CK_STOCK_StockMinimo CHECK (StockMinimo IS NULL OR StockMinimo >= 0),
+        CONSTRAINT CK_STOCK_StockMaximo CHECK (StockMaximo IS NULL OR StockMaximo >= StockMinimo)
+    );
+    
+    -- Índices para búsquedas comunes
+    CREATE INDEX IX_STOCK_ItemId ON STOCK(ItemId);
+    CREATE INDEX IX_STOCK_Cantidad ON STOCK(Cantidad);
+    CREATE INDEX IX_STOCK_StockBajo ON STOCK(Cantidad, StockMinimo) 
+        WHERE Cantidad <= StockMinimo;
+    
+    PRINT '✓ Tabla STOCK creada exitosamente';
+END
+ELSE
+BEGIN
+    PRINT '⚠ Tabla STOCK ya existe, omitiendo creación';
+END
+PRINT '';
+
+-- ==================================================
+-- TABLA 5: ITEMS_PROVEEDORES (Relación N:M)
+-- ==================================================
+
+PRINT 'Creando tabla ITEMS_PROVEEDORES...';
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ITEMS_PROVEEDORES')
+BEGIN
+    CREATE TABLE ITEMS_PROVEEDORES (
+        ItemId UNIQUEIDENTIFIER NOT NULL,
+        ProveedorId UNIQUEIDENTIFIER NOT NULL,
+        PrecioCompra DECIMAL(18,2) NULL,
+        EsProveedorPrincipal BIT NOT NULL DEFAULT 0,
+        FechaAsignacion DATETIME NOT NULL DEFAULT GETDATE(),
+        
+        CONSTRAINT PK_ITEMS_PROVEEDORES PRIMARY KEY (ItemId, ProveedorId),
+        CONSTRAINT FK_ITEMS_PROVEEDORES_ItemId FOREIGN KEY (ItemId) 
+            REFERENCES ITEMS(Id) ON DELETE CASCADE,
+        CONSTRAINT FK_ITEMS_PROVEEDORES_ProveedorId FOREIGN KEY (ProveedorId) 
+            REFERENCES PROVEEDORES(Id) ON DELETE CASCADE,
+        CONSTRAINT CK_ITEMS_PROVEEDORES_PrecioCompra CHECK (PrecioCompra IS NULL OR PrecioCompra >= 0)
+    );
+    
+    -- Índices para búsquedas comunes
+    CREATE INDEX IX_ITEMS_PROVEEDORES_ItemId ON ITEMS_PROVEEDORES(ItemId);
+    CREATE INDEX IX_ITEMS_PROVEEDORES_ProveedorId ON ITEMS_PROVEEDORES(ProveedorId);
+    CREATE INDEX IX_ITEMS_PROVEEDORES_Principal ON ITEMS_PROVEEDORES(EsProveedorPrincipal) 
+        WHERE EsProveedorPrincipal = 1;
+    
+    PRINT '✓ Tabla ITEMS_PROVEEDORES creada exitosamente';
+END
+ELSE
+BEGIN
+    PRINT '⚠ Tabla ITEMS_PROVEEDORES ya existe, omitiendo creación';
+END
+PRINT '';
+
+-- ==================================================
+-- TABLA 6: DETALLE_PRODUCTO (DetalleProducto)
+-- ==================================================
+
+PRINT 'Creando tabla DETALLE_PRODUCTO...';
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'DETALLE_PRODUCTO')
+BEGIN
+    CREATE TABLE DETALLE_PRODUCTO (
+        Id UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+        ItemPadreId UNIQUEIDENTIFIER NOT NULL,
+        ItemComponenteId UNIQUEIDENTIFIER NOT NULL,
+        CantidadConsumida INT NOT NULL,
+        Orden INT NULL,
+        
+        CONSTRAINT PK_DETALLE_PRODUCTO PRIMARY KEY (Id),
+        CONSTRAINT FK_DETALLE_PRODUCTO_ItemPadreId FOREIGN KEY (ItemPadreId) 
+            REFERENCES ITEMS(Id) ON DELETE NO ACTION,
+        CONSTRAINT FK_DETALLE_PRODUCTO_ItemComponenteId FOREIGN KEY (ItemComponenteId) 
+            REFERENCES ITEMS(Id) ON DELETE NO ACTION,
+        CONSTRAINT UQ_DETALLE_PRODUCTO UNIQUE (ItemPadreId, ItemComponenteId),
+        CONSTRAINT CK_DETALLE_PRODUCTO_CantidadConsumida CHECK (CantidadConsumida > 0),
+        CONSTRAINT CK_DETALLE_PRODUCTO_NoSelfReference CHECK (ItemPadreId <> ItemComponenteId)
+    );
+    
+    -- Índices para búsquedas comunes
+    CREATE INDEX IX_DETALLE_PRODUCTO_ItemPadreId ON DETALLE_PRODUCTO(ItemPadreId);
+    CREATE INDEX IX_DETALLE_PRODUCTO_ItemComponenteId ON DETALLE_PRODUCTO(ItemComponenteId);
+    
+    PRINT '✓ Tabla DETALLE_PRODUCTO creada exitosamente';
+END
+ELSE
+BEGIN
+    PRINT '⚠ Tabla DETALLE_PRODUCTO ya existe, omitiendo creación';
+END
+PRINT '';
+
+-- ==================================================
+-- VISTAS ÚTILES
+-- ==================================================
+
+PRINT 'Creando vistas auxiliares...';
+
+-- Vista: Items con Stock Bajo
+IF OBJECT_ID('vw_ItemsStockBajo', 'V') IS NULL
+BEGIN
+    EXEC('
+    CREATE VIEW vw_ItemsStockBajo AS
+    SELECT 
+        i.Id,
+        i.Nombre,
+        i.CodigoBarras,
+        c.Nombre AS Categoria,
+        s.Cantidad AS CantidadActual,
+        s.StockMinimo,
+        s.Ubicacion
+    FROM ITEMS i
+    INNER JOIN STOCK s ON i.Id = s.ItemId
+    INNER JOIN CATEGORIA_ITEMS c ON i.CategoriaId = c.Id
+    WHERE s.Cantidad <= s.StockMinimo AND i.IsActive = 1
+    ');
+    PRINT '✓ Vista vw_ItemsStockBajo creada';
+END
+
+-- Vista: Items con sus Proveedores
+IF OBJECT_ID('vw_ItemsConProveedores', 'V') IS NULL
+BEGIN
+    EXEC('
+    CREATE VIEW vw_ItemsConProveedores AS
+    SELECT 
+        i.Id AS ItemId,
+        i.Nombre AS ItemNombre,
+        ci.Nombre AS ItemCategoria,
+        p.Id AS ProveedorId,
+        p.Nombre AS ProveedorNombre,
+        p.CUIT AS ProveedorCUIT,
+        cp.Nombre AS ProveedorCategoria,
+        p.TelefonoContacto AS ProveedorTelefono,
+        p.Email AS ProveedorEmail,
+        ip.PrecioCompra,
+        ip.EsProveedorPrincipal,
+        CASE 
+            WHEN p.CategoriaItemId = i.CategoriaId THEN ''Compatible''
+            ELSE ''Incompatible''
+        END AS CompatibilidadCategoria
+    FROM ITEMS i
+    INNER JOIN ITEMS_PROVEEDORES ip ON i.Id = ip.ItemId
+    INNER JOIN PROVEEDORES p ON ip.ProveedorId = p.Id
+    INNER JOIN CATEGORIA_ITEMS ci ON i.CategoriaId = ci.Id
+    INNER JOIN CATEGORIA_ITEMS cp ON p.CategoriaItemId = cp.Id
+    WHERE i.IsActive = 1 AND p.IsActive = 1
+    ');
+    PRINT '✓ Vista vw_ItemsConProveedores creada';
+END
+
+-- Vista: Proveedores por Categoría
+IF OBJECT_ID('vw_ProveedoresPorCategoria', 'V') IS NULL
+BEGIN
+    EXEC('
+    CREATE VIEW vw_ProveedoresPorCategoria AS
+    SELECT 
+        c.Id AS CategoriaId,
+        c.Nombre AS Categoria,
+        p.Id AS ProveedorId,
+        p.Nombre AS ProveedorNombre,
+        p.CUIT AS ProveedorCUIT,
+        p.TelefonoContacto,
+        p.Email,
+        COUNT(DISTINCT ip.ItemId) AS ItemsSuministrados
+    FROM CATEGORIA_ITEMS c
+    INNER JOIN PROVEEDORES p ON c.Id = p.CategoriaItemId
+    LEFT JOIN ITEMS_PROVEEDORES ip ON p.Id = ip.ProveedorId
+    WHERE p.IsActive = 1
+    GROUP BY c.Id, c.Nombre, p.Id, p.Nombre, p.CUIT, p.TelefonoContacto, p.Email
+    ');
+    PRINT '✓ Vista vw_ProveedoresPorCategoria creada';
+END
+
+-- Vista: Composición de Productos
+IF OBJECT_ID('vw_ComposicionProductos', 'V') IS NULL
+BEGIN
+    EXEC('
+    CREATE VIEW vw_ComposicionProductos AS
+    SELECT 
+        iPadre.Id AS ProductoId,
+        iPadre.Nombre AS ProductoNombre,
+        iComponente.Id AS ComponenteId,
+        iComponente.Nombre AS ComponenteNombre,
+        dp.CantidadConsumida,
+        dp.Orden
+    FROM DETALLE_PRODUCTO dp
+    INNER JOIN ITEMS iPadre ON dp.ItemPadreId = iPadre.Id
+    INNER JOIN ITEMS iComponente ON dp.ItemComponenteId = iComponente.Id
+    WHERE iPadre.IsActive = 1 AND iComponente.IsActive = 1
+    ');
+    PRINT '✓ Vista vw_ComposicionProductos creada';
+END
+
+PRINT '';
+
+-- ==================================================
+-- STORED PROCEDURES ÚTILES
+-- ==================================================
+
+PRINT 'Creando stored procedures...';
+
+-- SP: Obtener Stock Actual de un Item
+IF OBJECT_ID('sp_GetStockByItem', 'P') IS NOT NULL
+    DROP PROCEDURE sp_GetStockByItem;
+GO
+
+CREATE PROCEDURE sp_GetStockByItem
+    @ItemId UNIQUEIDENTIFIER
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT 
+        i.Id AS ItemId,
+        i.Nombre AS ItemNombre,
+        s.Cantidad AS CantidadActual,
+        s.StockMinimo,
+        s.StockMaximo,
+        s.Ubicacion,
+        s.LastUpdated,
+        CASE 
+            WHEN s.Cantidad <= 0 THEN 'Sin Stock'
+            WHEN s.Cantidad <= s.StockMinimo THEN 'Stock Bajo'
+            WHEN s.Cantidad >= s.StockMaximo THEN 'Stock Alto'
+            ELSE 'Stock Normal'
+        END AS EstadoStock
+    FROM ITEMS i
+    INNER JOIN STOCK s ON i.Id = s.ItemId
+    WHERE i.Id = @ItemId;
+END
+GO
+
+PRINT '✓ Stored Procedure sp_GetStockByItem creado';
+
+-- SP: Actualizar Stock de un Item
+IF OBJECT_ID('sp_UpdateStock', 'P') IS NOT NULL
+    DROP PROCEDURE sp_UpdateStock;
+GO
+
+CREATE PROCEDURE sp_UpdateStock
+    @ItemId UNIQUEIDENTIFIER,
+    @CantidadCambio INT,
+    @Operacion VARCHAR(10) = 'ADD' -- 'ADD' o 'SUBTRACT'
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+    
+    BEGIN TRY
+        DECLARE @CantidadActual INT;
+        
+        -- Obtener cantidad actual
+        SELECT @CantidadActual = Cantidad 
+        FROM STOCK 
+        WHERE ItemId = @ItemId;
+        
+        -- Validar que existe el registro
+        IF @CantidadActual IS NULL
+        BEGIN
+            RAISERROR('Stock record not found for the specified item', 16, 1);
+            RETURN;
+        END
+        
+        -- Calcular nueva cantidad
+        DECLARE @NuevaCantidad INT;
+        IF @Operacion = 'ADD'
+            SET @NuevaCantidad = @CantidadActual + @CantidadCambio;
+        ELSE IF @Operacion = 'SUBTRACT'
+            SET @NuevaCantidad = @CantidadActual - @CantidadCambio;
+        ELSE
+        BEGIN
+            RAISERROR('Invalid operation. Use ADD or SUBTRACT', 16, 1);
+            RETURN;
+        END
+        
+        -- Validar que no quede negativo
+        IF @NuevaCantidad < 0
+        BEGIN
+            RAISERROR('Insufficient stock. Current: %d, Requested: %d', 16, 1, @CantidadActual, @CantidadCambio);
+            RETURN;
+        END
+        
+        -- Actualizar stock
+        UPDATE STOCK 
+        SET Cantidad = @NuevaCantidad,
+            LastUpdated = GETDATE()
+        WHERE ItemId = @ItemId;
+        
+        COMMIT TRANSACTION;
+        
+        -- Retornar nuevo estado
+        SELECT 
+            ItemId,
+            Cantidad AS NuevaCantidad,
+            LastUpdated
+        FROM STOCK 
+        WHERE ItemId = @ItemId;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END
+GO
+
+PRINT '✓ Stored Procedure sp_UpdateStock creado';
+PRINT '';
+
+-- ==================================================
+-- DATOS INICIALES (SEED DATA)
+-- ==================================================
+
+PRINT 'Insertando datos iniciales...';
+PRINT '';
+
+-- Categorías por defecto
+PRINT 'Insertando categorías por defecto...';
+
+IF NOT EXISTS (SELECT 1 FROM CATEGORIA_ITEMS WHERE Nombre = 'Materias Primas')
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Materias Primas');
+
+IF NOT EXISTS (SELECT 1 FROM CATEGORIA_ITEMS WHERE Nombre = 'Productos Terminados')
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Productos Terminados');
+
+IF NOT EXISTS (SELECT 1 FROM CATEGORIA_ITEMS WHERE Nombre = 'Insumos')
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Insumos');
+
+IF NOT EXISTS (SELECT 1 FROM CATEGORIA_ITEMS WHERE Nombre = 'Herramientas')
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Herramientas');
+
+IF NOT EXISTS (SELECT 1 FROM CATEGORIA_ITEMS WHERE Nombre = 'Embalaje')
+    INSERT INTO CATEGORIA_ITEMS (Nombre) VALUES ('Embalaje');
+
+PRINT '✓ Categorías iniciales insertadas';
+PRINT '';
+
+-- ==================================================
+-- TRIGGERS ÚTILES
+-- ==================================================
+
+PRINT 'Creando triggers...';
+
+-- Trigger: Auto-crear registro de Stock al crear Item
+IF OBJECT_ID('trg_Items_CreateStock', 'TR') IS NOT NULL
+    DROP TRIGGER trg_Items_CreateStock;
+GO
+
+CREATE TRIGGER trg_Items_CreateStock
+ON ITEMS
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    INSERT INTO STOCK (Id, ItemId, Cantidad, StockMinimo, LastUpdated)
+    SELECT NEWID(), i.Id, 0, 10, GETDATE()
+    FROM inserted i
+    WHERE NOT EXISTS (
+        SELECT 1 FROM STOCK s WHERE s.ItemId = i.Id
+    );
+END
+GO
+
+PRINT '✓ Trigger trg_Items_CreateStock creado';
+
+-- Trigger: Actualizar ModifiedDate en Items
+IF OBJECT_ID('trg_Items_UpdateModifiedDate', 'TR') IS NOT NULL
+    DROP TRIGGER trg_Items_UpdateModifiedDate;
+GO
+
+CREATE TRIGGER trg_Items_UpdateModifiedDate
+ON ITEMS
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE ITEMS
+    SET ModifiedDate = GETDATE()
+    FROM ITEMS i
+    INNER JOIN inserted ins ON i.Id = ins.Id;
+END
+GO
+
+PRINT '✓ Trigger trg_Items_UpdateModifiedDate creado';
+PRINT '';
+
+-- ==================================================
+-- VERIFICACIÓN FINAL
+-- ==================================================
+
+PRINT '========================================';
+PRINT 'VERIFICANDO TABLAS CREADAS';
+PRINT '========================================';
+PRINT '';
+
+SELECT 
+    TABLE_NAME AS 'Tabla Creada',
+    (SELECT COUNT(*) FROM sys.columns c 
+     WHERE c.object_id = OBJECT_ID(TABLE_SCHEMA + '.' + TABLE_NAME)) AS 'Columnas'
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_NAME IN ('CATEGORIA_ITEMS', 'PROVEEDORES', 'ITEMS', 'STOCK', 'ITEMS_PROVEEDORES', 'DETALLE_PRODUCTO')
+ORDER BY TABLE_NAME;
+
+PRINT '';
+PRINT '========================================';
+PRINT 'SCRIPT COMPLETADO EXITOSAMENTE';
+PRINT '========================================';
+PRINT '';
+PRINT 'TABLAS CREADAS:';
+PRINT '  1. CATEGORIA_ITEMS';
+PRINT '  2. PROVEEDORES';
+PRINT '  3. ITEMS';
+PRINT '  4. STOCK';
+PRINT '  5. ITEMS_PROVEEDORES (N:M)';
+PRINT '  6. DETALLE_PRODUCTO';
+PRINT '';
+PRINT 'VISTAS CREADAS:';
+PRINT '  1. vw_ItemsStockBajo';
+PRINT '  2. vw_ItemsConProveedores (con validación de categoría)';
+PRINT '  3. vw_ComposicionProductos';
+PRINT '  4. vw_ProveedoresPorCategoria';
+PRINT '';
+PRINT 'STORED PROCEDURES CREADOS:';
+PRINT '  1. sp_GetStockByItem';
+PRINT '  2. sp_UpdateStock';
+PRINT '';
+PRINT 'TRIGGERS CREADOS:';
+PRINT '  1. trg_Items_CreateStock (auto-crear stock)';
+PRINT '  2. trg_Items_UpdateModifiedDate';
+PRINT '';
+PRINT '? ¡Base de datos lista para usar!';
+
+GO

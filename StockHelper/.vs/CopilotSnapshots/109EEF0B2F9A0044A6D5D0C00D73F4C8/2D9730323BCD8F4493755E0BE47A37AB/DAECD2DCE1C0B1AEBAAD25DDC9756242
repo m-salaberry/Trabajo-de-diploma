@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class newCategoryForm : TranslatableForm
+    {
+        public event EventHandler CategoryAdded;
+
+        public newCategoryForm()
+        {
+            InitializeComponent();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            // TODO: Implement save logic
+            
+            // Raise event after successful save
+            CategoryAdded?.Invoke(this, EventArgs.Empty);
+            this.Close();
+        }
+    }
+}

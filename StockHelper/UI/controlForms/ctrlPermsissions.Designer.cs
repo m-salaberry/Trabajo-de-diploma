@@ -39,6 +39,10 @@
             // 
             // dgvRoles
             // 
+            dgvRoles.AllowUserToAddRows = false;
+            dgvRoles.AllowUserToDeleteRows = false;
+            dgvRoles.AllowUserToResizeColumns = false;
+            dgvRoles.AllowUserToResizeRows = false;
             dgvRoles.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvRoles.Location = new Point(31, 39);
             dgvRoles.MultiSelect = false;
@@ -49,6 +53,7 @@
             dgvRoles.ShowCellToolTips = false;
             dgvRoles.Size = new Size(375, 265);
             dgvRoles.TabIndex = 1;
+            dgvRoles.TabStop = false;
             // 
             // btnNewRole
             // 

@@ -1,0 +1,144 @@
+﻿using Services.Contracts;
+using Services.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Services.DAL.Implementations.Repositories;
+using Services.Contracts.CustomsException;
+
+namespace Services.Implementations
+{
+    public class UserService : IUserService
+    {
+        private UsersRepository _userRepository;
+        private static UserService _instance = null;
+
+        private UserService()
+        {
+            _userRepository = new UsersRepository();
+        }
+
+        public static UserService Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new UserService();
+            }
+            return _instance;
+        }
+
+        public void Delete(Guid id)
+        {
+            User userToDelete = _userRepository.GetById<User>(id);
+            if (userToDelete == null)
+            {
+                throw new MySystemException("User not found", "BLL");
+            }
+            _userRepository.DeleteRelationBetweenUserAndFamily(userToDelete, PermissionService.Instance().GetFamilyByName(userToDelete.Role));
+            _userRepository.Delete(userToDelete);
+        }
+
+        public bool Exists(Guid id)
+        {
+            if (_userRepository.GetById<User>(id) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Determines whether a user with the specified name exists.
+        /// </summary>
+        /// <param name="name">The name of the user to locate. Cannot be null.</param>
+        /// <returns><see langword="true"/> if a user with the specified name exists; otherwise, <see langword="false"/>.</returns>
+        public bool ExistsByName(string name)
+        {
+            if (_userRepository.GetByName(name) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public List<User> GetAll()
+        {
+            return _userRepository.GetAll<User>().ToList();
+        }
+        /// <summary>
+        /// Retrieves a list of all active users.
+        /// </summary>
+        /// <returns>A list of <see cref="User"/> objects representing users who are currently active. The list is empty if no
+        /// active users are found.</returns>
+        public List<User> GetAllActive()
+        {
+            return _userRepository.GetAllActive<User>().ToList();
+        }
+
+        public User GetById(Guid id)
+        {
+            return _userRepository.GetById<User>(id);
+        }
+
+        public User GetByName(string name)
+        {
+            return _userRepository.GetByName(name);
+        }
+
+        public void Insert(User entity)
+        {
+            if (ExistsByName(entity.Name))
+            {
+                throw new MySystemException("User already exists", "BLL");
+                
+            }
+            
+            // Validate password length before hashing
+            if (string.IsNullOrEmpty(entity.Password) || entity.Password.Length < 4)
+            {
+                throw new MySystemException("Password must be at least 4 characters long", "BLL");
+            }
+            
+            entity.Id = GenerateUniqueGuid();
+            entity.Password = CryptographyService.HashMd5(entity.Password);
+            _userRepository.Create(entity);
+            Family family = PermissionService.Instance().GetFamilyByName(entity.Role);
+            _userRepository.SaveRelatedFamilyOfUser(entity, family);
+        }
+
+        public void Update(User entity)
+        {
+            entity.Password = CryptographyService.HashMd5(entity.Password);
+            _userRepository.Update(entity);
+        }
+
+        /// <summary>
+        /// Generates a unique GUID that doesn't exist in the database.
+        /// While GUID collisions are extremely rare, this ensures database integrity.
+        /// </summary>
+        /// <returns>A unique GUID</returns>
+        private Guid GenerateUniqueGuid()
+        {
+            Guid newGuid;
+            int maxAttempts = 10; // Límite de intentos por seguridad
+            int attempts = 0;
+
+            do
+            {
+                newGuid = Guid.NewGuid();
+                attempts++;
+
+                if (attempts >= maxAttempts)
+                {
+                    throw new MySystemException(
+                        "Unable to generate unique GUID after multiple attempts",
+                        "BLL");
+                }
+            }
+            while (Exists(newGuid));
+
+            return newGuid;
+        }
+    }
+}
