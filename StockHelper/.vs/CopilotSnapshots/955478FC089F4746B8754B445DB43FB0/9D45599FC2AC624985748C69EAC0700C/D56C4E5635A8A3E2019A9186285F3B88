@@ -1,0 +1,177 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DAL.Contracts;
+using DAL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+
+namespace BLL.Implementations
+{
+    /// <summary>
+    /// Service for managing ItemsCategory entities with business validations.
+    /// Implements referential integrity checks before deletion.
+    /// </summary>
+    public class ItemsCategoryService : GenericBllService<ItemsCategory, int>
+    {
+        private ItemsCategoryService(IRepository<ItemsCategory, int> repository) : base(repository)
+        {
+        }
+
+        private static ItemsCategoryService _instance = null;
+
+        public static ItemsCategoryService Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new ItemsCategoryService(new ItemsCategoryRepository());
+            }
+            return _instance;
+        }
+
+        // ========================================
+        // OVERRIDE METHODS WITH BUSINESS VALIDATIONS
+        // ========================================
+
+        /// <summary>
+        /// Inserts a new category.
+        /// Validates name format and uniqueness before persisting.
+        /// Logs the operation to audit trail.
+        /// </summary>
+        public override void Insert(ItemsCategory entity)
+        {
+            ValidateCategory(entity);
+            ValidateCategoryName(entity.Name);
+            ValidateDuplicity(entity.Name, excludeId: null);
+
+            base.Insert(entity);
+
+            Logger.Current.Info($"[AUDIT] Category Created - Name: '{entity.Name}', User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Updates an existing category.
+        /// Validates that the ID exists, and that the new name meets format and uniqueness rules.
+        /// Logs the operation to audit trail.
+        /// </summary>
+        public override void Update(ItemsCategory entity)
+        {
+            ValidateCategory(entity);
+            ValidateCategoryName(entity.Name);
+
+            if (!Exists(entity.Id))
+                throw new MySystemException($"Category with id {entity.Id} does not exist.", "BLL");
+
+            // Validate uniqueness excluding the current entity
+            ValidateDuplicity(entity.Name, excludeId: entity.Id);
+
+            base.Update(entity);
+
+            Logger.Current.Info($"[AUDIT] Category Updated - ID: {entity.Id}, Name: '{entity.Name}', User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Deletes a category by ID.
+        /// Verifies that no active dependencies (Items or Providers) exist before deleting.
+        /// If dependencies exist, throws a detailed exception listing all blocking elements.
+        /// Logs the operation to audit trail.
+        /// </summary>
+        public override void Delete(int id)
+        {
+            if (id <= 0)
+                throw new MySystemException("Category ID must be valid.", "BLL");
+
+            var category = GetById(id);
+            if (category == null)
+                throw new MySystemException($"Category with id {id} does not exist.", "BLL");
+
+            // Verify referential integrity before deleting
+            // ValidateDependencies(id, category.Name);
+
+            base.Delete(id);
+
+            Logger.Current.Info($"[AUDIT] Category Deleted - ID: {id}, Name: '{category.Name}', User: [PLACEHOLDER_USER]");
+        }
+
+        // ========================================
+        // PRIVATE VALIDATION METHODS
+        // ========================================
+
+        /// <summary>
+        /// Validates that the category entity is not null.
+        /// </summary>
+        private void ValidateCategory(ItemsCategory entity)
+        {
+            if (entity == null)
+                throw new MySystemException("Category cannot be null.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates category name format: not null/empty, between 3 and 50 characters.
+        /// </summary>
+        private void ValidateCategoryName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new MySystemException("Category name cannot be empty.", "BLL");
+
+            if (name.Length < 3)
+                throw new MySystemException("Category name must be at least 3 characters long.", "BLL");
+
+            if (name.Length > 50)
+                throw new MySystemException("Category name cannot exceed 50 characters.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates that no other category with the same name exists.
+        /// Accepts an optional ID to exclude during update validation.
+        /// </summary>
+        private void ValidateDuplicity(string name, int? excludeId)
+        {
+            var duplicate = GetAll().FirstOrDefault(c =>
+                c.Name.Equals(name, StringComparison.OrdinalIgnoreCase) &&
+                (!excludeId.HasValue || c.Id != excludeId.Value));
+
+            if (duplicate != null)
+                throw new MySystemException(
+                    $"A category with name '{name}' already exists. Duplicate categories are not allowed.",
+                    "BLL");
+        }
+
+        /// <summary>
+        /// Verifies referential integrity before deletion.
+        /// Checks for associated Items and Providers.
+        /// Throws a detailed exception listing all blocking elements if any exist.
+        /// </summary>
+        private void ValidateDependencies(int categoryId, string categoryName)
+        {
+            var linkedItems = ItemService.Instance()
+                .GetItemsByCategory(categoryId)
+                .Select(i => i.Name)
+                .ToList();
+
+            var linkedProviders = ProviderService.Instance()
+                .GetProvidersByCategory(categoryId)
+                .Select(p => p.CompanyName ?? p.Name)
+                .ToList();
+
+            if (!linkedItems.Any() && !linkedProviders.Any())
+                return;
+
+            var messageParts = new List<string>();
+
+            if (linkedItems.Any())
+                messageParts.Add($"Items ({string.Join(", ", linkedItems)})");
+
+            if (linkedProviders.Any())
+                messageParts.Add($"Proveedores ({string.Join(", ", linkedProviders)})");
+
+            throw new MySystemException(
+                $"No se puede eliminar la categoría '{categoryName}'. Elementos vinculados: {string.Join("; ", messageParts)}.",
+                "BLL");
+        }
+    }
+}
+

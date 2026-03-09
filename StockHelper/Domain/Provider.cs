@@ -8,7 +8,7 @@ namespace Domain
 {
     public class Provider
     {
-        public Guid Id { get; }
+        public Guid Id { get; private set; }
         public long CUIT { get; set; }
         public string Name { get; set; }
         public ItemsCategory Category { get; set; }

@@ -192,5 +192,92 @@ namespace UI.controlForms
             }
             LoadItems();
         }
+
+        private void btnModItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                modItemForm modItemForm = new modItemForm(categories, items);
+                // Subscribe to the ItemModified event
+                modItemForm.ItemModified += (s, ev) => LoadItems();
+                modItemForm.ShowDialog();
+                modItemForm.Dispose();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCreateItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                newItemForm newItemForm = new newItemForm(categories);
+                // Subscribe to the ItemAdded event
+                newItemForm.ItemAdded += (s, ev) => LoadItems();
+                newItemForm.ShowDialog();
+                newItemForm.Dispose();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDeteleItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                deleteItemForm deleteItemForm = new deleteItemForm(categories, items);
+                // Subscribe to the ItemDeleted event
+                deleteItemForm.ItemDeleted += (s, ev) => LoadItems();
+                deleteItemForm.ShowDialog();
+                deleteItemForm.Dispose();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
     }
 }

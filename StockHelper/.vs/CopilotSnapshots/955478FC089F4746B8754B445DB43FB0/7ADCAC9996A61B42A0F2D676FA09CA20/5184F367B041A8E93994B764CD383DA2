@@ -1,0 +1,60 @@
+﻿using DAL.Contracts;
+using Domain;
+using System;
+using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Implementations
+{
+    public class ProviderRepository : IRepository<Provider, Guid>
+    {
+        public void Create(Provider entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Provider entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Provider> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Provider GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Provider entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Provider MapToEntity(SqlDataReader reader)
+        {
+            var provider = new Provider
+            { 
+                CUIT = reader.GetInt64(reader.GetOrdinal("CUIT")),
+                Name = reader.GetString(reader.GetOrdinal("Name")),
+                CompanyName = reader.GetString(reader.GetOrdinal("CompanyName")),
+                ContactTel = reader.GetString(reader.GetOrdinal("ContactTel")),
+                Email = reader.GetString(reader.GetOrdinal("Email"))
+            };
+            typeof(Item).GetProperty("Id")?.SetValue(provider, reader.GetGuid(reader.GetOrdinal("Id")));
+
+            provider.Category = new ItemsCategory
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                Name = reader.GetString(reader.GetOrdinal("CategoryName"))
+            };
+
+            return provider;
+        }
+    }
+}

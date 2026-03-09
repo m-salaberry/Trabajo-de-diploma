@@ -106,6 +106,7 @@
             lstbxCategories.Name = "lstbxCategories";
             lstbxCategories.Size = new Size(254, 310);
             lstbxCategories.TabIndex = 4;
+            lstbxCategories.TabStop = false;
             // 
             // deleteCategory
             // 
@@ -145,6 +146,7 @@
             btnDeteleItem.TabIndex = 9;
             btnDeteleItem.Text = "Delete Item";
             btnDeteleItem.UseVisualStyleBackColor = true;
+            btnDeteleItem.Click += btnDeteleItem_Click;
             // 
             // btnModItem
             // 
@@ -154,6 +156,7 @@
             btnModItem.TabIndex = 8;
             btnModItem.Text = "Modify Item";
             btnModItem.UseVisualStyleBackColor = true;
+            btnModItem.Click += btnModItem_Click;
             // 
             // btnCreateItem
             // 
@@ -163,6 +166,7 @@
             btnCreateItem.TabIndex = 7;
             btnCreateItem.Text = "Create new Item";
             btnCreateItem.UseVisualStyleBackColor = true;
+            btnCreateItem.Click += btnCreateItem_Click;
             // 
             // btnClose
             // 

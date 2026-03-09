@@ -1,0 +1,85 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class newItemForm : TranslatableForm
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        List<ItemsCategory> categories = null;
+        ItemService itemService = ItemService.Instance();
+        public event EventHandler ItemAdded;
+        public newItemForm(List<ItemsCategory> categories)
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            this.categories = categories;
+            LoadCategories();
+        }
+
+        private void btnSaveItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Item newItem = new Item
+                {
+                    Name = txtItemName.Text,
+                    Category = categories.FirstOrDefault().Id ,
+                    Unit = new Dictionary<string, object>
+                    {
+                        { "Name", txtUnit.Text },
+                        { "IsInteger", ckIntegerUnit.Checked }
+                    },
+                    Stock = 0
+                };
+                itemService.Insert(newItem);
+                MessageBox.Show(
+                    lang.Translate("Item added successfully!"),
+                    lang.Translate("Success"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                ItemAdded?.Invoke(this, EventArgs.Empty);
+                this.Close();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error saving new item: {ex.Message}");
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadCategories()
+        {
+            cmbCategories.DataSource = null;
+            cmbCategories.DataSource = categories;
+            cmbCategories.DisplayMember = "Name";
+            cmbCategories.ValueMember = "Id";
+        }
+    }
+}

@@ -198,3 +198,7 @@ D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.second
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlItemsAndCategories.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.deleteCategoryForm.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.newCategoryForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.modItemForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.newItemForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlProviders.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.deleteItemForm.resources

@@ -48,7 +48,6 @@ namespace BLL.Implementations
         {
             ValidateItem(entity);
             ValidateItemName(entity.Name);
-            ValidateStock(entity.Stock);
             ValidateCategory(entity.Category);
             ValidateUnit(entity.Unit);
             
@@ -59,7 +58,7 @@ namespace BLL.Implementations
             base.Insert(entity);
             
             // Log operation to audit trail
-            Logger.Current.Info($"[BITÁCORA] Alta de Ítem - ID: {entity.Id}, Nombre: '{entity.Name}', Categoría: '{entity.Category.Name}', Usuario: [PLACEHOLDER_USER]");
+            Logger.Current.Info($"[AUDIT] Item Created - ID: {entity.Id}, Name: '{entity.Name}', Category: '{entity.Category.Name}', User: [PLACEHOLDER_USER]");
         }
 
         /// <summary>
@@ -71,7 +70,6 @@ namespace BLL.Implementations
         {
             ValidateItem(entity);
             ValidateItemName(entity.Name);
-            ValidateStock(entity.Stock);
             ValidateCategory(entity.Category);
             ValidateUnit(entity.Unit);
             
@@ -90,7 +88,7 @@ namespace BLL.Implementations
             base.Update(entity);
             
             // Log operation to audit trail
-            Logger.Current.Info($"[BITÁCORA] Modificación de Ítem - ID: {entity.Id}, Nombre: '{entity.Name}', Categoría: '{entity.Category.Name}', Usuario: [PLACEHOLDER_USER]");
+            Logger.Current.Info($"[AUDIT] Item Updated - ID: {entity.Id}, Name: '{entity.Name}', Category: '{entity.Category.Name}', User: [PLACEHOLDER_USER]");
         }
 
         /// <summary>
@@ -117,7 +115,7 @@ namespace BLL.Implementations
             base.Delete(id);
             
             // Log operation to audit trail
-            Logger.Current.Info($"[BITÁCORA] Baja de Ítem - ID: {id}, Nombre: '{item.Name}', Categoría: '{item.Category.Name}', Stock al momento: {item.Stock}, Usuario: [PLACEHOLDER_USER]");
+            Logger.Current.Info($"[AUDIT] Item Deleted - ID: {id}, Name: '{item.Name}', Category: '{item.Category.Name}', Stock at time of deletion: {item.Stock}, User: [PLACEHOLDER_USER]");
         }
 
         // ========================================

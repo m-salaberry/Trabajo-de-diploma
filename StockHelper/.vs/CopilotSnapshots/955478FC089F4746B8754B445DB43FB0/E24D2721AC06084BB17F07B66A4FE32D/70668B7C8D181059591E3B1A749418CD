@@ -1,0 +1,136 @@
+﻿using DAL.Contracts;
+using DAL.Helpers;
+using Domain;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Implementations
+{
+    public class ItemRepository : IRepository<Item, Guid>
+    {
+        public void Create(Item entity)
+        {
+            string command = @"
+                INSERT INTO ITEMS (Name, Unit, IntegerUnit, ItemsCategoryId, CurrentStock) 
+                OUTPUT INSERTED.Id
+                VALUES (@Name, @Unit, @IntegerUnit, @ItemsCategoryId, @CurrentStock)";
+            
+            var parameters = new[]
+            {
+                new SqlParameter("@Name", entity.Name),
+                new SqlParameter("@Unit", entity.Unit.TryGetValue("Name", out var unitName) ? unitName : DBNull.Value),
+                new SqlParameter("@IntegerUnit", entity.IsUnitInteger()),
+                new SqlParameter("@ItemsCategoryId", entity.Category.Id),
+                new SqlParameter("@CurrentStock", entity.Stock)
+            };
+
+            var result = SqlHelper.ExecuteScalar(command, CommandType.Text, parameters);
+            if (result != null)
+            {
+                typeof(Item).GetProperty("Id")?.SetValue(entity, (Guid)result);
+            }
+        }
+
+        public void Update(Item entity)
+        {
+            string command = "UPDATE ITEMS SET Name = @Name, Unit = @Unit, IntegerUnit = @IntegerUnit, ItemsCategoryId = @ItemsCategoryId, CurrentStock = @CurrentStock WHERE Id = @Id";
+            var parameters = new[]
+            {
+                new SqlParameter("@Id", entity.Id),
+                new SqlParameter("@Name", entity.Name),
+                new SqlParameter("@Unit", entity.Unit.TryGetValue("Name", out var unitName) ? unitName : DBNull.Value),
+                new SqlParameter("@IntegerUnit", entity.IsUnitInteger()),
+                new SqlParameter("@ItemsCategoryId", entity.Category.Id),
+                new SqlParameter("@CurrentStock", entity.Stock)
+            };
+            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+        }
+
+        public void Delete(Item entity)
+        {
+            string command = "DELETE FROM ITEMS WHERE Id = @Id";
+            var parameters = new[] { new SqlParameter("@Id", entity.Id) };
+            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+        }
+
+        public Item GetById(Guid id)
+        {
+            string command = @"
+                SELECT i.Id, i.Name, i.Unit, i.IntegerUnit, i.CurrentStock, 
+                       c.Id AS CategoryId, c.Name AS CategoryName
+                FROM ITEMS i
+                INNER JOIN ITEMS_CATEGORY c ON i.ItemsCategoryId = c.Id
+                WHERE i.Id = @Id";
+            
+            var parameters = new[] { new SqlParameter("@Id", id) };
+            
+            using (SqlDataReader reader = SqlHelper.ExecuteReader(command, CommandType.Text, parameters))
+            {
+                if (reader != null && reader.Read())
+                {
+                    return MapToEntity(reader);
+                }
+            }
+            return null;
+        }
+
+        public IEnumerable<Item> GetAll()
+        {
+            string command = @"
+                SELECT i.Id, i.Name, i.Unit, i.IntegerUnit, i.CurrentStock, 
+                       c.Id AS CategoryId, c.Name AS CategoryName
+                FROM ITEMS i
+                INNER JOIN ITEMS_CATEGORY c ON i.ItemsCategoryId = c.Id";
+            
+            var items = new List<Item>();
+            
+            using (SqlDataReader reader = SqlHelper.ExecuteReader(command, CommandType.Text))
+            {
+                if (reader != null)
+                {
+                    while (reader.Read())
+                    {
+                        items.Add(MapToEntity(reader));
+                    }
+                }
+            }
+            return items;
+        }
+
+        private Item MapToEntity(SqlDataReader reader)
+        {
+            // Create instance using private constructor
+            var item = (Item)Activator.CreateInstance(typeof(Item), true);
+            
+            // Set Id using reflection since it's read-only
+            typeof(Item).GetProperty("Id")?.SetValue(item, reader.GetGuid(reader.GetOrdinal("Id")));
+            
+            item.Name = reader.GetString(reader.GetOrdinal("Name"));
+            
+            // Map Unit as Dictionary
+            item.Unit = new Dictionary<string, object>
+            {
+                { "Name", reader.IsDBNull(reader.GetOrdinal("Unit")) ? string.Empty : reader.GetString(reader.GetOrdinal("Unit")) },
+                { "IsInteger", reader.GetBoolean(reader.GetOrdinal("IntegerUnit")) }
+            };
+            
+            item.Stock = reader.GetDecimal(reader.GetOrdinal("CurrentStock"));
+            
+            // Create and populate the Category
+            item.Category = new ItemsCategory
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                Name = reader.GetString(reader.GetOrdinal("CategoryName"))
+            };
+            
+            return item;
+        }
+    }
+}
+
+
