@@ -1,0 +1,59 @@
+﻿using BLL.Implementations;
+using Domain;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class deleteCategoryForm : TranslatableForm
+    {
+        ItemsCategoryService categoryService = ItemsCategoryService.Instance();
+        List<ItemsCategory> categories = null;
+        public event EventHandler CategoryDeleted;
+        public deleteCategoryForm()
+        {
+            InitializeComponent();
+            LoadCategories();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ItemsCategory catToDelete = lstbxCategoriesToDelete.SelectedItem as ItemsCategory;
+                if (lstbxCategoriesToDelete.SelectedItem == null)
+                {
+                    MessageBox.Show("Please select a category to delete.");
+                    return;
+                }
+                categoryService.Delete(catToDelete.Id);
+
+                MessageBox.Show("Category deleted successfully.");
+
+                CategoryDeleted?.Invoke(this, EventArgs.Empty);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        }
+
+        private void LoadCategories()
+        {
+            categories = categoryService.GetAll().ToList();
+            lstbxCategoriesToDelete.DataSource = null;
+            lstbxCategoriesToDelete.DataSource = categories;
+            lstbxCategoriesToDelete.DisplayMember = "Name";
+        }
+    }
+}

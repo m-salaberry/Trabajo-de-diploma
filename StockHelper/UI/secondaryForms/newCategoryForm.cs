@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using UI.Implementations;
 using BLL.Implementations;
 using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
 
 namespace UI.secondaryForms
 {
@@ -17,33 +19,18 @@ namespace UI.secondaryForms
     {
         public event EventHandler CategoryAdded;
         private ItemsCategoryService _categoryService = ItemsCategoryService.Instance();
+        LanguageService lang = LanguageService.GetInstance;
 
         public newCategoryForm()
         {
             InitializeComponent();
+            this.CenterToScreen();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
-
-                if (string.IsNullOrWhiteSpace(txtCategoryName.Text))
-                {
-                    MessageBox.Show("Please enter a category name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                if (_categoryService.GetAll().Any(c => c.Name.Equals(txtCategoryName.Text.Trim(), StringComparison.OrdinalIgnoreCase)))
-                {
-                    MessageBox.Show("A category with this name already exists.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                if (txtCategoryName.Text.Trim().Length > 100)
-                {
-                    MessageBox.Show("Category name cannot exceed 100 characters.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 ItemsCategory newCategory = new ItemsCategory
                 {
                     Name = txtCategoryName.Text.Trim()
@@ -51,16 +38,47 @@ namespace UI.secondaryForms
 
                 _categoryService.Insert(newCategory);
 
+                MessageBox.Show(
+                    lang.Translate("Category created successfully."),
+                    lang.Translate("Success"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
                 CategoryAdded?.Invoke(this, EventArgs.Empty);
                 this.Close();
-
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Validation Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                ex.Handler();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
-            
+        }
+
+        public override void ApplyTranslations()
+        {
+            // Translate form title
+            this.Text = lang.Translate("New Category");
+
+            // Translate labels
+            label1.Text = lang.Translate("New Category");
+
+            // Translate buttons
+            btnSave.Text = lang.Translate("Save");
+
+            // Translate placeholder
+            txtCategoryName.PlaceholderText = lang.Translate("Category name");
         }
     }
 }

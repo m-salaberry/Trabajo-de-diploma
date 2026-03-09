@@ -3,31 +3,19 @@
   "WorkspaceRootPath": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B2341959-F113-40BE-87A5-4E1EEE3676D5}|Domain\\Domain.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\domain\\providers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B2341959-F113-40BE-87A5-4E1EEE3676D5}|Domain\\Domain.csproj|solutionrelative:domain\\providers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\secondaryforms\\newitemform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\newitemform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B2341959-F113-40BE-87A5-4E1EEE3676D5}|Domain\\Domain.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\domain\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B2341959-F113-40BE-87A5-4E1EEE3676D5}|Domain\\Domain.csproj|solutionrelative:domain\\item.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{378F08C8-A5D0-424B-9FEA-888D30302BEE}|DAL\\DAL.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\dal\\implementations\\itemscategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{378F08C8-A5D0-424B-9FEA-888D30302BEE}|DAL\\DAL.csproj|solutionrelative:dal\\implementations\\itemscategoryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3D8988A4-013A-4660-AE45-BA8564A3CDBC}|BLL\\BLL.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\bll\\implementations\\itemscategoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3D8988A4-013A-4660-AE45-BA8564A3CDBC}|BLL\\BLL.csproj|solutionrelative:bll\\implementations\\itemscategoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\ui\\secondaryforms\\newcategoryform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\newcategoryform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\secondaryforms\\newitemform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\newitemform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\controlforms\\ctrlitemsandcategories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\controlforms\\ctrlitemsandcategories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\ui\\controlforms\\ctrlitemsandcategories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\controlforms\\ctrlitemsandcategories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\controlforms\\ctrlitemsandcategories.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
@@ -35,20 +23,12 @@
       "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\frmmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{3D8988A4-013A-4660-AE45-BA8564A3CDBC}|BLL\\BLL.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\bll\\implementations\\itemservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3D8988A4-013A-4660-AE45-BA8564A3CDBC}|BLL\\BLL.csproj|solutionrelative:bll\\implementations\\itemservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\secondaryforms\\newcategoryform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\secondaryforms\\newcategoryform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|d:\\facultad\\trabajo-de-diploma\\stockhelper\\ui\\i18n\\translations.es-es||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{99CAE3CB-9FF1-4968-8B69-5F8D8C921BA2}|UI\\UI.csproj|solutionrelative:ui\\i18n\\translations.es-es||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -58,11 +38,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\Program.cs",
               "RelativeDocumentMoniker": "UI\\Program.cs",
@@ -71,25 +51,11 @@
               "ViewState": "AgIAABQAAAAAAAAAAAAowCsAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-13T22:21:01.61Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "frmMain.cs [Dise\u00F1o]",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs",
-              "RelativeDocumentMoniker": "UI\\frmMain.cs",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs [Dise\u00F1o]",
-              "RelativeToolTip": "UI\\frmMain.cs [Dise\u00F1o]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T01:33:05.902Z",
-              "IsPinned": true,
-              "EditorCaption": " [Dise\u00F1o]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 4,
               "Title": "frmMain.cs",
               "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\frmMain.cs",
               "RelativeDocumentMoniker": "UI\\frmMain.cs",
@@ -103,26 +69,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "ctrlItemsAndCategories.cs [Dise\u00F1o]",
               "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\controlForms\\ctrlItemsAndCategories.cs",
               "RelativeDocumentMoniker": "UI\\controlForms\\ctrlItemsAndCategories.cs",
               "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\controlForms\\ctrlItemsAndCategories.cs [Dise\u00F1o]",
               "RelativeToolTip": "UI\\controlForms\\ctrlItemsAndCategories.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T03:15:50.785Z",
+              "WhenOpened": "2026-03-08T20:28:26.149Z",
               "IsPinned": true,
               "EditorCaption": " [Dise\u00F1o]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "ctrlItemsAndCategories.cs",
               "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\controlForms\\ctrlItemsAndCategories.cs",
               "RelativeDocumentMoniker": "UI\\controlForms\\ctrlItemsAndCategories.cs",
               "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\controlForms\\ctrlItemsAndCategories.cs",
               "RelativeToolTip": "UI\\controlForms\\ctrlItemsAndCategories.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAE4AAAAAAAAAAAArwGMAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-23T03:13:22.466Z",
               "IsPinned": true,
@@ -130,30 +96,29 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "newCategoryForm.cs",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newCategoryForm.cs",
-              "RelativeDocumentMoniker": "UI\\secondaryForms\\newCategoryForm.cs",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newCategoryForm.cs",
-              "RelativeToolTip": "UI\\secondaryForms\\newCategoryForm.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAowDMAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "newItemForm.cs [Dise\u00F1o]",
+              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newItemForm.cs",
+              "RelativeDocumentMoniker": "UI\\secondaryForms\\newItemForm.cs",
+              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newItemForm.cs [Dise\u00F1o]",
+              "RelativeToolTip": "UI\\secondaryForms\\newItemForm.cs [Dise\u00F1o]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T03:55:47.65Z",
+              "WhenOpened": "2026-03-08T20:41:13.921Z",
               "IsPinned": true,
-              "EditorCaption": ""
+              "EditorCaption": " [Dise\u00F1o]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "newCategoryForm.cs [Dise\u00F1o]",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newCategoryForm.cs",
-              "RelativeDocumentMoniker": "UI\\secondaryForms\\newCategoryForm.cs",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newCategoryForm.cs [Dise\u00F1o]",
-              "RelativeToolTip": "UI\\secondaryForms\\newCategoryForm.cs [Dise\u00F1o]",
+              "DocumentIndex": 0,
+              "Title": "newItemForm.cs",
+              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newItemForm.cs",
+              "RelativeDocumentMoniker": "UI\\secondaryForms\\newItemForm.cs",
+              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\secondaryForms\\newItemForm.cs",
+              "RelativeToolTip": "UI\\secondaryForms\\newItemForm.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAowDwAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-23T03:53:21.636Z",
-              "IsPinned": true,
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2026-03-08T20:50:16.377Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -161,68 +126,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "translations.es-ES",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\I18n\\translations.es-ES",
-              "RelativeDocumentMoniker": "UI\\I18n\\translations.es-ES",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\UI\\I18n\\translations.es-ES",
-              "RelativeToolTip": "UI\\I18n\\translations.es-ES",
-              "ViewState": "AgIAAOAAAAAAAAAAAAAAwBAAAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-02-25T04:42:40.325Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ItemsCategoryService.cs",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\Implementations\\ItemsCategoryService.cs",
-              "RelativeDocumentMoniker": "BLL\\Implementations\\ItemsCategoryService.cs",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\Implementations\\ItemsCategoryService.cs",
-              "RelativeToolTip": "BLL\\Implementations\\ItemsCategoryService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "ItemService.cs",
+              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\Implementations\\ItemService.cs",
+              "RelativeDocumentMoniker": "BLL\\Implementations\\ItemService.cs",
+              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\BLL\\Implementations\\ItemService.cs",
+              "RelativeToolTip": "BLL\\Implementations\\ItemService.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAgwGcAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T02:00:54.371Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ItemsCategoryRepository.cs",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\Implementations\\ItemsCategoryRepository.cs",
-              "RelativeDocumentMoniker": "DAL\\Implementations\\ItemsCategoryRepository.cs",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\DAL\\Implementations\\ItemsCategoryRepository.cs",
-              "RelativeToolTip": "DAL\\Implementations\\ItemsCategoryRepository.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAAkwAsAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T04:00:40.283Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Item.cs",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Item.cs",
-              "RelativeDocumentMoniker": "Domain\\Item.cs",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Item.cs",
-              "RelativeToolTip": "Domain\\Item.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T00:26:24.552Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Providers.cs",
-              "DocumentMoniker": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Providers.cs",
-              "RelativeDocumentMoniker": "Domain\\Providers.cs",
-              "ToolTip": "D:\\Facultad\\Trabajo-de-diploma\\StockHelper\\Domain\\Providers.cs",
-              "RelativeToolTip": "Domain\\Providers.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-25T00:28:50.736Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-07T19:56:03.721Z"
             }
           ]
         }

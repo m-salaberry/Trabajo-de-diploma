@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Interfaces
+{
+        /// <summary>
+        /// Generic service interface for business logic operations.
+        /// Provides CRUD operations and business logic for entities of type T.
+        /// Implements the Service Layer pattern with type-safe operations.
+        /// </summary>
+        /// <typeparam name="T">The entity type. Must be a reference type.</typeparam>
+        public interface IGenericBllService<T> where T : class
+        {
+            /// <summary>
+            /// Retrieves all entities of type T from the data source.
+            /// </summary>
+            /// <returns>A list containing all entities of type T. The list will be empty if no entities are found.</returns>
+            IEnumerable<T> GetAll();
+
+            /// <summary>
+            /// Retrieves an entity by its unique identifier.
+            /// </summary>
+            /// <param name="id">The unique identifier (GUID) of the entity to retrieve.</param>
+            /// <returns>The entity that matches the specified identifier, or null if no entity is found.</returns>
+            T GetById(Guid id);
+
+            /// <summary>
+            /// Inserts a new entity into the data source.
+            /// </summary>
+            /// <param name="entity">The entity to insert. Cannot be null.</param>
+            /// <exception cref="ArgumentNullException">Thrown when entity is null.</exception>
+            /// <exception cref="InvalidOperationException">Thrown when entity already exists or validation fails.</exception>
+            void Insert(T entity);
+
+            /// <summary>
+            /// Updates an existing entity in the data source.
+            /// </summary>
+            /// <param name="entity">The entity with updated values. Cannot be null. Must already exist in the data source.</param>
+            /// <exception cref="ArgumentNullException">Thrown when entity is null.</exception>
+            /// <exception cref="InvalidOperationException">Thrown when entity does not exist or validation fails.</exception>
+            void Update(T entity);
+
+            /// <summary>
+            /// Deletes an entity from the data source by its unique identifier.
+            /// </summary>
+            /// <param name="id">The unique identifier (GUID) of the entity to delete.</param>
+            /// <exception cref="InvalidOperationException">Thrown when entity does not exist or cannot be deleted due to constraints.</exception>
+            void Delete(Guid id);
+
+            /// <summary>
+            /// Checks whether an entity with the specified identifier exists in the data source.
+            /// </summary>
+            /// <param name="id">The unique identifier (GUID) to check.</param>
+            /// <returns>True if an entity with the specified identifier exists; otherwise, false.</returns>
+            bool Exists(Guid id);
+        }
+}

@@ -8,7 +8,7 @@ using System.Data;
 
 namespace DAL.Implementations
 {
-    public class ItemsCategoryRepository : IRepository<ItemsCategory>
+    public class ItemsCategoryRepository : IRepository<ItemsCategory, int>
     {
         public void Create(ItemsCategory entity)
         {
@@ -43,7 +43,7 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
-        public ItemsCategory GetById(Guid id)
+        public ItemsCategory GetById(int id)
         {
             string command = "SELECT Id, Name FROM ITEMS_CATEGORY WHERE Id = @Id";
             var parameters = new[] { new SqlParameter("@Id", id) };

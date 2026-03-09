@@ -1,0 +1,83 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class newCategoryForm : TranslatableForm
+    {
+        public event EventHandler CategoryAdded;
+        private ItemsCategoryService _categoryService = ItemsCategoryService.Instance();
+        LanguageService lang = LanguageService.GetInstance;
+
+        public newCategoryForm()
+        {
+            InitializeComponent();
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ItemsCategory newCategory = new ItemsCategory
+                {
+                    Name = txtCategoryName.Text.Trim()
+                };
+
+                _categoryService.Insert(newCategory);
+
+                MessageBox.Show(
+                    lang.Translate("Category created successfully."),
+                    lang.Translate("Success"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                CategoryAdded?.Invoke(this, EventArgs.Empty);
+                this.Close();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Validation Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        public override void ApplyTranslations()
+        {
+            // Translate form title
+            this.Text = lang.Translate("New Category");
+
+            // Translate labels
+            label1.Text = lang.Translate("New Category");
+
+            // Translate buttons
+            btnSave.Text = lang.Translate("Save");
+
+            // Translate placeholder
+            txtCategoryName.PlaceholderText = lang.Translate("Category name");
+        }
+    }
+}

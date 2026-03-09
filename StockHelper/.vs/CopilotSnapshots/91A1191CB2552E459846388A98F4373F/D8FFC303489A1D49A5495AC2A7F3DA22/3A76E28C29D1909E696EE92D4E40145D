@@ -1,0 +1,29 @@
+﻿using Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DAL.Contracts;
+using DAL.Implementations;
+
+namespace BLL.Implementations
+{
+    public class ItemService : GenericBllService<Item, Guid>
+    {
+        private ItemService(IRepository<Item, Guid> repository) : base(repository)
+        {
+        }
+
+        private static ItemService _instance = null;
+
+        public static ItemService Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new ItemService(new ItemRepository());
+            }
+            return _instance;
+        }
+    }
+}

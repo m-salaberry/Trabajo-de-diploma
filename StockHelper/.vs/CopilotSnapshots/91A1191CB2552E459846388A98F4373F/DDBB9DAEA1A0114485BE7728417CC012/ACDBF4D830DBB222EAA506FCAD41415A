@@ -1,0 +1,47 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Contracts
+{
+    /// <summary>
+    /// Generic repository interface for data access operations.
+    /// Provides CRUD operations for entities of type T.
+    /// </summary>
+    /// <typeparam name="T">The entity type. Must be a reference type.</typeparam>
+    public interface IRepository<T> where T : class
+    {
+        /// <summary>
+        /// Creates a new entity in the database.
+        /// </summary>
+        /// <param name="entity">The entity to create. Cannot be null.</param>
+        void Create(T entity);
+
+        /// <summary>
+        /// Updates an existing entity in the database.
+        /// </summary>
+        /// <param name="entity">The entity to update. Cannot be null. Must already exist in the database.</param>
+        void Update(T entity);
+
+        /// <summary>
+        /// Deletes an entity from the database.
+        /// </summary>
+        /// <param name="entity">The entity to delete. Cannot be null.</param>
+        void Delete(T entity);
+
+        /// <summary>
+        /// Retrieves an entity by its unique identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the entity.</param>
+        /// <returns>The entity that matches the specified ID, or null if not found.</returns>
+        T GetById(Guid id);
+
+        /// <summary>
+        /// Retrieves all entities of type T from the database.
+        /// </summary>
+        /// <returns>An enumerable collection of all entities. Empty if no entities are found.</returns>
+        IEnumerable<T> GetAll();
+    }
+}

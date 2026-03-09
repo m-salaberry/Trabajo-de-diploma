@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BLL.Implementations;
+using Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,14 +9,89 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.Implementations;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
 
 namespace UI.secondaryForms
 {
-    public partial class deleteCategoryForm : Form
+    public partial class deleteCategoryForm : TranslatableForm
     {
-        public deleteCategoryForm()
+        ItemsCategoryService categoryService = ItemsCategoryService.Instance();
+        List<ItemsCategory> categories = null;
+        public event EventHandler CategoryDeleted;
+        LanguageService lang = LanguageService.GetInstance;
+
+        public deleteCategoryForm(List<ItemsCategory> currentCategories)
         {
             InitializeComponent();
+            this.CenterToScreen();
+            categories = currentCategories;
+            LoadCategories();
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lstbxCategoriesToDelete.SelectedItem == null)
+                {
+                    MessageBox.Show(
+                        lang.Translate("Please select a category to delete."),
+                        lang.Translate("Validation Error"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                ItemsCategory catToDelete = lstbxCategoriesToDelete.SelectedItem as ItemsCategory;
+                categoryService.Delete(catToDelete.Id);
+
+                MessageBox.Show(
+                    lang.Translate("Category deleted successfully."),
+                    lang.Translate("Success"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                CategoryDeleted?.Invoke(this, EventArgs.Empty);
+                this.Close();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadCategories()
+        {
+            lstbxCategoriesToDelete.DataSource = null;
+            lstbxCategoriesToDelete.DataSource = categories;
+            lstbxCategoriesToDelete.DisplayMember = "Name";
+        }
+
+        public override void ApplyTranslations()
+        {
+            // Translate form title
+            this.Text = lang.Translate("Delete Category");
+
+            // Translate labels
+            label1.Text = lang.Translate("Delete Category");
+
+            // Translate buttons
+            btnDelete.Text = lang.Translate("Delete");
         }
     }
 }

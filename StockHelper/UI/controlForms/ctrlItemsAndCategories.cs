@@ -12,16 +12,24 @@ using Services.Contracts.Logs;
 using Services.Contracts.CustomsException;
 using Services.Implementations;
 using UI.Implementations;
+using Domain;
+using BLL.Implementations;
 
 namespace UI.controlForms
 {
     public partial class ctrlItemsAndCategories : TranslatableUserControls
     {
         LanguageService lang = LanguageService.GetInstance;
+        List<ItemsCategory> categories = null;
+        List<Item> items = null;
+        ItemsCategoryService categoryService = ItemsCategoryService.Instance();
+        ItemService itemService = ItemService.Instance();
 
         public ctrlItemsAndCategories()
         {
             InitializeComponent();
+            LoadCategories();
+            LoadItems();
         }
 
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
@@ -67,12 +75,31 @@ namespace UI.controlForms
 
         private void RefreshCategoryList()
         {
-           
+            LoadCategories();
         }
 
         private void LoadCategories()
         {
+            categories = categoryService.GetAll().ToList();
             lstbxCategories.Items.Clear();
+            lstbxCategories.Items.AddRange(categories.Select(c => c.Name).ToArray());
+
+
+            if (categories.Count > 0)
+            {
+                lstbxCategories.SelectedIndex = 0;
+            }
+        }
+
+        private void LoadItems()
+        {
+            items = itemService.GetAll().ToList();
+            dgvItems.Rows.Clear();
+            foreach (var item in items)
+            {
+                dgvItems.Rows.Add(item.Name, item.Category?.Name ?? "", item.Unit["Name"], item.Unit["IsInteger"]);
+            }
+
         }
 
         public override void ApplyTranslations()
@@ -80,7 +107,7 @@ namespace UI.controlForms
             // Translate buttons
             btnAddCategory.Text = lang.Translate("New Category");
             deleteCategory.Text = lang.Translate("Delete Category");
-            btnClose.Text = lang.Translate("Close");
+            // btnClose keeps its "X" text — must never be translated
 
             // Translate labels
             lbCategories.Text = lang.Translate("Categories");
@@ -98,6 +125,72 @@ namespace UI.controlForms
 
             // Refresh controls
             dgvItems.Refresh();
+        }
+
+        private void deleteCategory_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                deleteCategoryForm deleteForm = new deleteCategoryForm(categories);
+                // Subscribe to the CategoryDeleted event
+                deleteForm.CategoryDeleted += (s, ev) => RefreshCategoryList();
+                deleteForm.ShowDialog();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<ItemsCategory> categoriesToFilter = new List<ItemsCategory>();
+                if (lstbxCategories.CheckedItems.Count <= 0)
+                {
+                    throw new Exception(lang.Translate("Please select at least one category to filter by."));
+                }
+                var selectedCategories = lstbxCategories.SelectedItems.Cast<string>().ToList();
+                categoriesToFilter = categories.Where(c => selectedCategories.Contains(c.Name)).ToList();
+                var filteredItems = items.Where(i => i.Category != null && categoriesToFilter.Any(c => c.Id == i.Category.Id)).ToList();
+                dgvItems.Rows.Clear();
+                foreach (var item in filteredItems)
+                {
+                    dgvItems.Rows.Add(item.Name, item.Category?.Name ?? "", item.Unit["Name"], item.Unit["IsInteger"]);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+            }
+        }
+
+        private void btnClearFilter_Click(object sender, EventArgs e)
+        {
+            foreach (int i in lstbxCategories.CheckedIndices)
+            {
+                lstbxCategories.SetItemCheckState(i, CheckState.Unchecked);
+            }
+            LoadItems();
         }
     }
 }

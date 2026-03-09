@@ -37,6 +37,9 @@
     <Compile Update="secondaryForms\newCategoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="secondaryForms\newItemForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="secondaryForms\newRoleForm.cs">
       <SubType>Form</SubType>
     </Compile>

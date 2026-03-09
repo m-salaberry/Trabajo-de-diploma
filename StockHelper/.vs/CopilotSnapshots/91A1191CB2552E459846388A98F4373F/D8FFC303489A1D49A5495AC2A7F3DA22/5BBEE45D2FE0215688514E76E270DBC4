@@ -1,0 +1,157 @@
+﻿using Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DAL.Contracts;
+using DAL.Implementations;
+
+namespace BLL.Implementations
+{
+    public class ItemService : GenericBllService<Item, Guid>
+    {
+        private ItemService(IRepository<Item, Guid> repository) : base(repository)
+        {
+        }
+
+        private static ItemService _instance = null;
+
+        public static ItemService Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new ItemService(new ItemRepository());
+            }
+            return _instance;
+        }
+
+        // ========================================
+        // OVERRIDE METHODS WITH BUSINESS VALIDATIONS
+        // ========================================
+
+        public override void Insert(Item entity)
+        {
+            ValidateItem(entity);
+            ValidateItemName(entity.Name);
+            ValidateStock(entity.Stock);
+            ValidateCategory(entity.Category);
+            
+            base.Insert(entity);
+        }
+
+        public override void Update(Item entity)
+        {
+            ValidateItem(entity);
+            ValidateItemName(entity.Name);
+            ValidateStock(entity.Stock);
+            ValidateCategory(entity.Category);
+            
+            if (!Exists(entity.Id))
+                throw new InvalidOperationException($"Item with id {entity.Id} does not exist.");
+            
+            base.Update(entity);
+        }
+
+        public override void Delete(Guid id)
+        {
+            var item = GetById(id);
+            if (item != null && item.Stock > 0)
+                throw new InvalidOperationException("Cannot delete items with stock. Reduce stock to 0 first.");
+            
+            base.Delete(id);
+        }
+
+        // ========================================
+        // PRIVATE VALIDATION METHODS
+        // ========================================
+        
+        private void ValidateItem(Item entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity), "Item cannot be null.");
+        }
+
+        private void ValidateItemName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentException("Item name cannot be empty.");
+            
+            if (name.Length < 3)
+                throw new ArgumentException("Item name must be at least 3 characters long.");
+            
+            if (name.Length > 100)
+                throw new ArgumentException("Item name cannot exceed 100 characters.");
+        }
+
+        private void ValidateStock(long stock)
+        {
+            if (stock < 0)
+                throw new ArgumentException("Stock cannot be negative.");
+        }
+
+        private void ValidateCategory(ItemsCategory category)
+        {
+            if (category == null)
+                throw new ArgumentException("Item must have a category.");
+            
+            if (category.Id <= 0)
+                throw new ArgumentException("Category must be a valid existing category.");
+        }
+
+        // ========================================
+        // BUSINESS LOGIC METHODS
+        // ========================================
+        
+        /// <summary>
+        /// Adds stock to an item
+        /// </summary>
+        public void AddStock(Guid itemId, long quantity)
+        {
+            if (quantity <= 0)
+                throw new ArgumentException("Quantity must be positive.");
+            
+            var item = GetById(itemId);
+            if (item == null)
+                throw new InvalidOperationException($"Item with id {itemId} not found.");
+            
+            item.Stock += quantity;
+            Update(item);
+        }
+
+        /// <summary>
+        /// Reduces stock from an item
+        /// </summary>
+        public void ReduceStock(Guid itemId, long quantity)
+        {
+            if (quantity <= 0)
+                throw new ArgumentException("Quantity must be positive.");
+            
+            var item = GetById(itemId);
+            if (item == null)
+                throw new InvalidOperationException($"Item with id {itemId} not found.");
+            
+            if (item.Stock < quantity)
+                throw new InvalidOperationException($"Insufficient stock. Available: {item.Stock}, Requested: {quantity}");
+            
+            item.Stock -= quantity;
+            Update(item);
+        }
+
+        /// <summary>
+        /// Gets items by category
+        /// </summary>
+        public IEnumerable<Item> GetItemsByCategory(int categoryId)
+        {
+            return GetAll().Where(i => i.Category.Id == categoryId);
+        }
+
+        /// <summary>
+        /// Gets items with low stock (below threshold)
+        /// </summary>
+        public IEnumerable<Item> GetLowStockItems(long threshold = 10)
+        {
+            return GetAll().Where(i => i.Stock < threshold);
+        }
+    }
+}

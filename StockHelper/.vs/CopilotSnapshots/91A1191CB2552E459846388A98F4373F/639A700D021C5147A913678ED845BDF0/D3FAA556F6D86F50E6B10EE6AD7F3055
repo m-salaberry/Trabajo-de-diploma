@@ -1,0 +1,136 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.secondaryForms;
+using Services.Contracts.Logs;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+using UI.Implementations;
+using Domain;
+using BLL.Implementations;
+
+namespace UI.controlForms
+{
+    public partial class ctrlItemsAndCategories : TranslatableUserControls
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        List<ItemsCategory> categories = null;
+        ItemsCategoryService categoryService = ItemsCategoryService.Instance();
+
+        public ctrlItemsAndCategories()
+        {
+            InitializeComponent();
+            LoadCategories();
+        }
+
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void btnAddCategory_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                newCategoryForm newCategoryForm = new newCategoryForm();
+                // Subscribe to the CategoryAdded event
+                newCategoryForm.CategoryAdded += (s, ev) => RefreshCategoryList();
+                newCategoryForm.ShowDialog();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error opening new category form: {ex.Message}");
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void RefreshCategoryList()
+        {
+            LoadCategories();
+        }
+
+        private void LoadCategories()
+        {
+            categories = categoryService.GetAll().ToList();
+            lstbxCategories.Items.Clear();
+            lstbxCategories.Items.AddRange(categories.Select(c => c.Name).ToArray());
+            lstbxCategories.SelectedIndex = 0;
+        }
+
+        public override void ApplyTranslations()
+        {
+            // Translate buttons
+            btnAddCategory.Text = lang.Translate("New Category");
+            deleteCategory.Text = lang.Translate("Delete Category");
+            btnClose.Text = lang.Translate("Close");
+
+            // Translate labels
+            lbCategories.Text = lang.Translate("Categories");
+            lbItems.Text = lang.Translate("Items");
+
+            // Translate DataGridView columns
+            if (dgvItems.Columns["NameColumn"] != null)
+                dgvItems.Columns["NameColumn"].HeaderText = lang.Translate("Name");
+            if (dgvItems.Columns["CategoryColumn"] != null)
+                dgvItems.Columns["CategoryColumn"].HeaderText = lang.Translate("Category");
+            if (dgvItems.Columns["UnitColumn"] != null)
+                dgvItems.Columns["UnitColumn"].HeaderText = lang.Translate("Unit");
+            if (dgvItems.Columns["IntegerUnitColumn"] != null)
+                dgvItems.Columns["IntegerUnitColumn"].HeaderText = lang.Translate("Integer Unit");
+
+            // Refresh controls
+            dgvItems.Refresh();
+        }
+
+        private void deleteCategory_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    lang.Translate("An error occurred: ") + ex.Message,
+                    lang.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+    }
+}

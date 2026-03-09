@@ -29,10 +29,15 @@
         private void InitializeComponent()
         {
             splitContainer1 = new SplitContainer();
+            btnClearFilter = new Button();
+            btnFilter = new Button();
+            lstbxCategories = new CheckedListBox();
             deleteCategory = new Button();
             lbCategories = new Label();
-            lstbxCategories = new ListBox();
             btnAddCategory = new Button();
+            btnDeteleItem = new Button();
+            btnModItem = new Button();
+            btnCreateItem = new Button();
             btnClose = new Button();
             lbItems = new Label();
             dgvItems = new DataGridView();
@@ -55,19 +60,52 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(btnClearFilter);
+            splitContainer1.Panel1.Controls.Add(btnFilter);
+            splitContainer1.Panel1.Controls.Add(lstbxCategories);
             splitContainer1.Panel1.Controls.Add(deleteCategory);
             splitContainer1.Panel1.Controls.Add(lbCategories);
-            splitContainer1.Panel1.Controls.Add(lstbxCategories);
             splitContainer1.Panel1.Controls.Add(btnAddCategory);
             // 
             // splitContainer1.Panel2
             // 
+            splitContainer1.Panel2.Controls.Add(btnDeteleItem);
+            splitContainer1.Panel2.Controls.Add(btnModItem);
+            splitContainer1.Panel2.Controls.Add(btnCreateItem);
             splitContainer1.Panel2.Controls.Add(btnClose);
             splitContainer1.Panel2.Controls.Add(lbItems);
             splitContainer1.Panel2.Controls.Add(dgvItems);
             splitContainer1.Size = new Size(805, 455);
             splitContainer1.SplitterDistance = 260;
             splitContainer1.TabIndex = 0;
+            // 
+            // btnClearFilter
+            // 
+            btnClearFilter.Location = new Point(133, 352);
+            btnClearFilter.Name = "btnClearFilter";
+            btnClearFilter.Size = new Size(124, 26);
+            btnClearFilter.TabIndex = 6;
+            btnClearFilter.Text = "Clear Filter";
+            btnClearFilter.UseVisualStyleBackColor = true;
+            btnClearFilter.Click += btnClearFilter_Click;
+            // 
+            // btnFilter
+            // 
+            btnFilter.Location = new Point(3, 352);
+            btnFilter.Name = "btnFilter";
+            btnFilter.Size = new Size(124, 26);
+            btnFilter.TabIndex = 5;
+            btnFilter.Text = "Filter";
+            btnFilter.UseVisualStyleBackColor = true;
+            btnFilter.Click += btnFilter_Click;
+            // 
+            // lstbxCategories
+            // 
+            lstbxCategories.FormattingEnabled = true;
+            lstbxCategories.Location = new Point(3, 36);
+            lstbxCategories.Name = "lstbxCategories";
+            lstbxCategories.Size = new Size(254, 310);
+            lstbxCategories.TabIndex = 4;
             // 
             // deleteCategory
             // 
@@ -77,6 +115,7 @@
             deleteCategory.TabIndex = 3;
             deleteCategory.Text = "Delete Category";
             deleteCategory.UseVisualStyleBackColor = true;
+            deleteCategory.Click += deleteCategory_Click;
             // 
             // lbCategories
             // 
@@ -88,16 +127,6 @@
             lbCategories.TabIndex = 2;
             lbCategories.Text = "Categories";
             // 
-            // lstbxCategories
-            // 
-            lstbxCategories.FormattingEnabled = true;
-            lstbxCategories.ItemHeight = 15;
-            lstbxCategories.Location = new Point(3, 36);
-            lstbxCategories.Name = "lstbxCategories";
-            lstbxCategories.Size = new Size(254, 349);
-            lstbxCategories.TabIndex = 1;
-            lstbxCategories.UseTabStops = false;
-            // 
             // btnAddCategory
             // 
             btnAddCategory.Location = new Point(3, 391);
@@ -107,6 +136,33 @@
             btnAddCategory.Text = "New Category";
             btnAddCategory.UseVisualStyleBackColor = true;
             btnAddCategory.Click += btnAddCategory_Click;
+            // 
+            // btnDeteleItem
+            // 
+            btnDeteleItem.Location = new Point(387, 399);
+            btnDeteleItem.Name = "btnDeteleItem";
+            btnDeteleItem.Size = new Size(112, 42);
+            btnDeteleItem.TabIndex = 9;
+            btnDeteleItem.Text = "Delete Item";
+            btnDeteleItem.UseVisualStyleBackColor = true;
+            // 
+            // btnModItem
+            // 
+            btnModItem.Location = new Point(209, 399);
+            btnModItem.Name = "btnModItem";
+            btnModItem.Size = new Size(112, 42);
+            btnModItem.TabIndex = 8;
+            btnModItem.Text = "Modify Item";
+            btnModItem.UseVisualStyleBackColor = true;
+            // 
+            // btnCreateItem
+            // 
+            btnCreateItem.Location = new Point(30, 399);
+            btnCreateItem.Name = "btnCreateItem";
+            btnCreateItem.Size = new Size(112, 42);
+            btnCreateItem.TabIndex = 7;
+            btnCreateItem.Text = "Create new Item";
+            btnCreateItem.UseVisualStyleBackColor = true;
             // 
             // btnClose
             // 
@@ -176,6 +232,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
             Controls.Add(splitContainer1);
             Name = "ctrlItemsAndCategories";
             Size = new Size(805, 455);
@@ -193,7 +250,6 @@
 
         private SplitContainer splitContainer1;
         private Button btnAddCategory;
-        private ListBox lstbxCategories;
         private Button deleteCategory;
         private Label lbCategories;
         private Label lbItems;
@@ -203,5 +259,11 @@
         private DataGridViewTextBoxColumn UnitColumn;
         private DataGridViewTextBoxColumn IntegerUnitColumn;
         private Button btnClose;
+        private Button btnDeteleItem;
+        private Button btnModItem;
+        private Button btnCreateItem;
+        private CheckedListBox lstbxCategories;
+        private Button btnClearFilter;
+        private Button btnFilter;
     }
 }

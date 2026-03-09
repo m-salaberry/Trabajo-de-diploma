@@ -1,0 +1,57 @@
+﻿using DAL.Contracts;
+using DAL.Helpers;
+using Domain;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Implementations
+{
+    public class ItemRepository : IRepository<Item, Guid>
+    {
+        public void Create(Item entity)
+        {
+            string command = "INSERT INTO ITEMS (Name, Unit, IntegerUnit, ItemsCategoryId, CurrentStock) VALUES (@Name, @Unit, @IntegerUnit, @ItemsCategoryId, @CurrentStock); SELECT CAST(SCOPE_IDENTITY() AS UNIQUEIDENTIFIER)";
+            var parameters = new[]
+            {
+                new SqlParameter("@Name", entity.Name),
+                new SqlParameter("@Unit", entity.Unit),
+                new SqlParameter("@IntegerUnit", entity.Unit),
+                new SqlParameter("@ItemsCategoryId", (long)entity.Category),
+                new SqlParameter("@CurrentStock", entity.Stock)
+            };
+
+            var result = SqlHelper.ExecuteScalar(command, CommandType.Text, parameters);
+            if (result != null)
+            {
+                entity.Id = (Guid)result;
+            }
+        }
+
+        public void Delete(Item entity)
+        {
+            string command = "DELETE FROM ITEMS WHERE Id = @Id";
+            var parameters = new[] { new SqlParameter("@Id", entity.Id) };
+            SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
+        }
+
+        public IEnumerable<Item> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Item GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Item entity)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
