@@ -127,7 +127,6 @@ namespace UI.secondaryForms
             // Translate buttons
             btnAddNewUser.Text = lang.Translate("New User");
             btnModUser.Text = lang.Translate("Modify User");
-            btnClose.Text = lang.Translate("Close");
 
             // Translate labels or any other controls as needed
             // Example: lbActiveUsers.Text = lang.Translate("Active Users");

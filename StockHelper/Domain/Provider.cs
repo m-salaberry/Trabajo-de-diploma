@@ -9,7 +9,7 @@ namespace Domain
     public class Provider
     {
         public Guid Id { get; private set; }
-        public long CUIT { get; set; }
+        public string CUIT { get; set; }
         public string Name { get; set; }
         public ItemsCategory Category { get; set; }
         public string CompanyName { get; set; }

@@ -1,0 +1,109 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class deleteProviderForm : TranslatableForm
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ProviderService providerService = ProviderService.Instance();
+
+        List<ItemsCategory> categories;
+        List<Provider> providers;
+        public deleteProviderForm(List<ItemsCategory> categories, List<Provider> providers)
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            this.categories = categories;
+            this.providers = providers;
+            LoadProviders();
+            LoadCategories();
+        }
+
+        private void LoadProviders(List<Provider> source = null)
+        {
+            var list = source ?? providers;
+            lstbxProviders.DataSource = null;
+            lstbxProviders.DataSource = list;
+            lstbxProviders.DisplayMember = "Name";
+        }
+
+        private void LoadCategories()
+        {
+            var filterCategories = new List<ItemsCategory>
+            {
+                new ItemsCategory { Id = 0, Name = lang.Translate("All categories") }
+            };
+            filterCategories.AddRange(categories);
+
+            cmbChooseCategory.DataSource = null;
+            cmbChooseCategory.DataSource = filterCategories;
+            cmbChooseCategory.DisplayMember = "Name";
+            cmbChooseCategory.ValueMember = "Id";
+            cmbChooseCategory.SelectedIndex = 0;
+        }
+
+        private void cmbChooseCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbChooseCategory.SelectedIndex == 0)
+            {
+                LoadProviders();
+            }
+            else
+            {
+                int selectedCategoryId = (int)cmbChooseCategory.SelectedValue;
+                var filteredProviders = providers
+                    .Where(p => p.Category != null && p.Category.Id == selectedCategoryId)
+                    .ToList();
+                LoadProviders(filteredProviders);
+            }
+        }
+
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("Delete Provider");
+            btnDelete.Text = lang.Translate("Delete");
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Provider selectedProvider = (Provider)lstbxProviders.SelectedItem;
+                if (selectedProvider == null)
+                {
+                    MessageBox.Show(lang.Translate("Please select a provider to delete."));
+                    return;
+                }
+                var confirmResult = MessageBox.Show(lang.Translate($"Are you sure you want to delete provider '{selectedProvider.Name}'?"), lang.Translate("Confirm Delete"), MessageBoxButtons.YesNo);
+                if (confirmResult == DialogResult.Yes)
+                {
+                    providerService.Delete(selectedProvider.Id);
+                    MessageBox.Show(lang.Translate("Provider deleted successfully."));
+                    providers.Remove(selectedProvider);
+                    cmbChooseCategory_SelectedIndexChanged(null, null);
+                    this.Close();
+                }
+            }
+            catch (MySystemException ex)
+            {
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+    }
+}

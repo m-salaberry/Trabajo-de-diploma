@@ -1,0 +1,176 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+using UI.secondaryForms;
+
+namespace UI.controlForms
+{
+    public partial class ctrlProviders : TranslatableUserControls
+    {
+        LanguageService languageService = LanguageService.GetInstance;
+        ProviderService providerService = ProviderService.Instance();
+        ItemsCategoryService categoryService = ItemsCategoryService.Instance();
+        List<Provider> providers;
+        List<ItemsCategory> categories;
+        public ctrlProviders()
+        {
+            InitializeComponent();
+            LoadCategories();
+            LoadProviders();
+        }
+
+        private void LoadCategories()
+        {
+            categories = categoryService.GetAll().ToList();
+            lstbxCategories.Items.Clear();
+            lstbxCategories.Items.AddRange(categories.Select(c => c.Name).ToArray());
+
+
+            if (categories.Count > 0)
+            {
+                lstbxCategories.SelectedIndex = 0;
+            }
+        }
+
+        private void LoadProviders()
+        {
+            providers = providerService.GetAll().ToList();
+            dgvProviders.Rows.Clear();
+            foreach (Provider provider in providers)
+            {
+                dgvProviders.Rows.Add(provider.Name, provider.CompanyName, provider.Category?.Name, provider.ContactTel, provider.Email);
+            }
+        }
+
+        private void txtProviderName_TextChanged(object sender, EventArgs e)
+        {
+            string filter = txtProviderName.Text.Trim();
+            var filtered = string.IsNullOrEmpty(filter)
+                ? providers
+                : providers.Where(p => p.Name.Contains(filter, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            dgvProviders.Rows.Clear();
+            foreach (Provider provider in filtered)
+            {
+                dgvProviders.Rows.Add(provider.Name, provider.CompanyName, provider.Category?.Name, provider.ContactTel, provider.Email);
+            }
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lstbxCategories.CheckedItems.Count <= 0)
+                {
+                    throw new Exception(languageService.Translate("Please select at least one category to filter by."));
+                }
+
+                var selectedCategories = lstbxCategories.CheckedItems.Cast<string>().ToList();
+                var categoriesToFilter = categories.Where(c => selectedCategories.Contains(c.Name)).ToList();
+                var filteredProviders = providers.Where(p => p.Category != null && categoriesToFilter.Any(c => c.Id == p.Category.Id)).ToList();
+
+                dgvProviders.Rows.Clear();
+                foreach (Provider provider in filteredProviders)
+                {
+                    dgvProviders.Rows.Add(provider.Name, provider.CompanyName, provider.Category?.Name, provider.ContactTel, provider.Email);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    languageService.Translate("An error occurred: ") + ex.Message,
+                    languageService.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnClearFilter_Click(object sender, EventArgs e)
+        {
+            foreach (int i in lstbxCategories.CheckedIndices)
+            {
+                lstbxCategories.SetItemCheckState(i, CheckState.Unchecked);
+            }
+            LoadProviders();
+        }
+
+        private void btnCreateProvider_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                newProviderForm newProviderForm = new newProviderForm(categories);
+                // Subscribe to the ProviderCreated event to refresh the provider list after a new provider is created
+                newProviderForm.ProviderCreated += (s, args) => LoadProviders();
+                newProviderForm.ShowDialog();
+                newProviderForm.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    languageService.Translate("An error occurred: ") + ex.Message,
+                    languageService.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void btnModProvider_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                modProviderForm modProviderForm = new modProviderForm(categories, providers);
+                // Subscribe to the ProviderModded event to refresh the provider list after a provider is modified
+                modProviderForm.ProviderModded += (s, args) => LoadProviders();
+                modProviderForm.ShowDialog();
+                modProviderForm.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    languageService.Translate("An error occurred: ") + ex.Message,
+                    languageService.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDeleteProvider_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                modProviderForm modProviderForm = new modProviderForm(categories, providers);
+                // Subscribe to the ProviderModded event to refresh the provider list after a provider is modified
+                modProviderForm.ProviderModded += (s, args) => LoadProviders();
+                modProviderForm.ShowDialog();
+                modProviderForm.Dispose();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    languageService.Translate("An error occurred: ") + ex.Message,
+                    languageService.Translate("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+    }
+}

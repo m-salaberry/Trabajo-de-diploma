@@ -113,7 +113,7 @@ namespace DAL.Implementations
 
             typeof(Provider).GetProperty("Id")?.SetValue(provider, reader.GetGuid(reader.GetOrdinal("Id")));
 
-            provider.CUIT = reader.GetInt64(reader.GetOrdinal("CUIT"));
+            provider.CUIT = reader.GetString(reader.GetOrdinal("CUIT"));
             provider.Name = reader.GetString(reader.GetOrdinal("Name"));
             provider.CompanyName = reader.IsDBNull(reader.GetOrdinal("CompanyName")) ? null : reader.GetString(reader.GetOrdinal("CompanyName"));
             provider.ContactTel = reader.IsDBNull(reader.GetOrdinal("ContactTel")) ? null : reader.GetString(reader.GetOrdinal("ContactTel"));

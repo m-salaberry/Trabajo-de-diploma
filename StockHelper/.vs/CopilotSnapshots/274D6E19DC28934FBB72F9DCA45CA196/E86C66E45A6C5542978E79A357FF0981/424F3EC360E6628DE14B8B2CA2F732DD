@@ -1,0 +1,84 @@
+﻿using Domain;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class modProviderForm : TranslatableForm
+    {
+        LanguageService lang = LanguageService.GetInstance;
+
+        List<ItemsCategory> categories;
+        List<Provider> providers;
+        private int _lastValidProviderIndex = -1;
+        public modProviderForm(List<ItemsCategory> categories, List<Provider> providers)
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            this.providers = providers;
+            this.categories = categories;
+            LoadCategories();
+            LoadProviders();
+        }
+        private void LoadCategories()
+        {
+            cmbCategories.DataSource = null;
+            cmbCategories.DataSource = categories;
+            cmbCategories.DisplayMember = "Name";
+            cmbCategories.ValueMember = "Id";
+            cmbCategories.Enabled = false;
+
+            var filterCategories = new List<ItemsCategory>
+            {
+                new ItemsCategory { Id = 0, Name = "All categories" }
+            };
+            filterCategories.AddRange(categories);
+
+            cmbChooseCategory.DataSource = null;
+            cmbChooseCategory.DataSource = filterCategories;
+            cmbChooseCategory.DisplayMember = "Name";
+            cmbChooseCategory.ValueMember = "Id";
+            cmbChooseCategory.SelectedIndex = 0;
+        }
+
+        private void LoadProviders()
+        {
+            cmbChooseProvider.SelectedIndexChanged -= cmbChooseProvider_SelectedIndexChanged;
+
+            var sourceProviders = new List<Provider>
+            {
+                new Provider { Name = "Select a Provider" }
+            };
+            sourceProviders.AddRange(providers);
+
+            cmbChooseProvider.DataSource = null;
+            cmbChooseProvider.DataSource = sourceProviders;
+            cmbChooseProvider.DisplayMember = "Name";
+            cmbChooseProvider.ValueMember = "Id";
+            cmbChooseProvider.SelectedIndex = 0;
+
+            cmbChooseProvider.SelectedIndexChanged += cmbChooseProvider_SelectedIndexChanged;
+        }
+
+        private void cmbChooseProvider_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbChooseProvider.SelectedIndex == 0 && _lastValidProviderIndex >= 1)
+            {
+                cmbChooseProvider.SelectedIndex = _lastValidProviderIndex;
+                return;
+            }
+
+            if (cmbChooseProvider.SelectedIndex > 0)
+                _lastValidProviderIndex = cmbChooseProvider.SelectedIndex;
+        }
+    }
+}

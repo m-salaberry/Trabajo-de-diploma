@@ -1,0 +1,59 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.controlForms
+{
+    public partial class ctrlProviders : TranslatableUserControls
+    {
+        LanguageService languageService = LanguageService.GetInstance;
+        ProviderService providerService = ProviderService.Instance();
+        ItemsCategoryService categoryService = ItemsCategoryService.Instance();
+        List<Provider> providers;
+        List<ItemsCategory> categories;
+        public ctrlProviders()
+        {
+            InitializeComponent();
+            LoadCategories();
+            LoadProviders();
+        }
+
+        private void LoadCategories()
+        {
+            categories = categoryService.GetAll().ToList();
+            lstbxCategories.Items.Clear();
+            lstbxCategories.Items.AddRange(categories.Select(c => c.Name).ToArray());
+
+
+            if (categories.Count > 0)
+            {
+                lstbxCategories.SelectedIndex = 0;
+            }
+        }
+
+        private void LoadProviders()
+        {
+            providers = providerService.GetAll().ToList();
+            dgvProviders.Rows.Clear();
+            foreach (Provider provider in providers)
+            {
+                dgvProviders.Rows.Add(provider.Id, provider.Name, provider.Email, provider.ContactTel, provider.Email);
+            }
+        }
+
+        private void txtProviderName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

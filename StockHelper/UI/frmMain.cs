@@ -220,8 +220,8 @@ namespace UI
             }
             
             Logger.Current.Info($"User '{currentUser.Name}' opened Providers module");
-            // TODO: Implement ctrlProviders when ready
-            MessageBox.Show("Providers module coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ctrlProviders providers = new ctrlProviders();
+            showContent(providers);
         }
 
         private void tsmProductBuilder_Click(object sender, EventArgs e)

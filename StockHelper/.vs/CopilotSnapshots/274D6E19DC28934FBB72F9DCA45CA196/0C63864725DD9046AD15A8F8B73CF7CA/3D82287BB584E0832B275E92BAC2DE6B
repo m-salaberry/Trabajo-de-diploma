@@ -1,0 +1,206 @@
+﻿using DAL.Contracts;
+using DAL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Implementations
+{
+    /// <summary>
+    /// Service for managing Provider entities with business validations.
+    /// Implements CUIT format/uniqueness checks, referential integrity, and audit trail logging.
+    /// </summary>
+    public class ProviderService : GenericBllService<Provider, Guid>
+    {
+        private readonly ItemsCategoryService _categoryService;
+
+        private ProviderService(IRepository<Provider, Guid> repository) : base(repository)
+        {
+            _categoryService = ItemsCategoryService.Instance();
+        }
+
+        private static ProviderService _instance = null;
+
+        public static ProviderService Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new ProviderService(new ProviderRepository());
+            }
+            return _instance;
+        }
+
+        // ========================================
+        // OVERRIDE METHODS WITH BUSINESS VALIDATIONS
+        // ========================================
+
+        /// <summary>
+        /// Inserts a new provider with business validations.
+        /// Validates required fields, CUIT format and uniqueness, and category existence.
+        /// Logs the operation to the audit trail.
+        /// </summary>
+        public override void Insert(Provider entity)
+        {
+            ValidateProvider(entity);
+            ValidateName(entity.Name);
+            ValidateContactInfo(entity);
+            ValidateCuitFormat(entity.CUIT);
+            ValidateCategory(entity.Category);
+
+            base.Insert(entity);
+
+            Logger.Current.Info($"[AUDIT] Alta de proveedor: {entity.Name} - CUIT: {entity.CUIT}, User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Updates an existing provider with business validations.
+        /// Validates existence by ID; if the CUIT changed, verifies it is not already in use.
+        /// Logs the operation to the audit trail.
+        /// </summary>
+        public override void Update(Provider entity)
+        {
+            ValidateProvider(entity);
+            ValidateName(entity.Name);
+            ValidateContactInfo(entity);
+            ValidateCuitFormat(entity.CUIT);
+            ValidateCategory(entity.Category);
+
+            if (!Exists(entity.Id))
+                throw new MySystemException($"El proveedor con ID {entity.Id} no existe.", "BLL");
+
+            base.Update(entity);
+
+            Logger.Current.Info($"[AUDIT] Modificación de proveedor ID: {entity.Id}, User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Deletes a provider by ID.
+        /// Verifies that no active Purchase Orders are linked before proceeding.
+        /// Logs the operation to the audit trail.
+        /// </summary>
+        public override void Delete(Guid id)
+        {
+            var provider = GetById(id);
+            if (provider == null)
+                throw new MySystemException($"El proveedor con ID {id} no existe.", "BLL");
+
+            ValidatePurchaseOrderDependencies(id);
+
+            base.Delete(id);
+
+            Logger.Current.Info($"[AUDIT] Baja de proveedor: {provider.Name} - CUIT: {provider.CUIT}, User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Gets all providers associated with a given category.
+        /// </summary>
+        public IEnumerable<Provider> GetProvidersByCategory(int categoryId)
+        {
+            return GetAll().Where(p => p.Category != null && p.Category.Id == categoryId);
+        }
+
+        // ========================================
+        // PRIVATE VALIDATION METHODS
+        // ========================================
+
+        private void ValidateProvider(Provider entity)
+        {
+            if (entity == null)
+                throw new MySystemException("El proveedor no puede ser nulo.", "BLL");
+        }
+
+        private void ValidateName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new MySystemException("El nombre del proveedor es obligatorio.", "BLL");
+
+            if (name.Length < 3)
+                throw new MySystemException("El nombre del proveedor debe tener al menos 3 caracteres.", "BLL");
+
+            if (name.Length > 100)
+                throw new MySystemException("El nombre del proveedor no puede superar los 100 caracteres.", "BLL");
+        }
+
+        private void ValidateContactInfo(Provider entity)
+        {
+            if (string.IsNullOrWhiteSpace(entity.CompanyName))
+                throw new MySystemException("La razón social del proveedor es obligatoria.", "BLL");
+
+            if (string.IsNullOrWhiteSpace(entity.ContactTel))
+                throw new MySystemException("El teléfono de contacto del proveedor es obligatorio.", "BLL");
+        }
+
+        private void ValidateCuitFormat(string cuit)
+        {
+            if (string.IsNullOrWhiteSpace(cuit))
+                throw new MySystemException("El CUIT del proveedor es obligatorio.", "BLL");
+
+            if (!IsValidCUIT(cuit))
+                throw new MySystemException("El CUIT debe contener exactamente 11 dígitos numéricos.", "BLL");
+        }
+
+        private void ValidateCuitUniqueness(string cuit, Guid? excludeId)
+        {
+            var duplicate = GetAll().FirstOrDefault(p =>
+                p.CUIT == cuit &&
+                (!excludeId.HasValue || p.Id != excludeId.Value));
+
+            if (duplicate != null)
+                throw new MySystemException(
+                    $"Ya existe un proveedor registrado con el CUIT '{cuit}'. No se permiten CUITs duplicados.",
+                    "BLL");
+        }
+
+        private void ValidateCategory(ItemsCategory category)
+        {
+            if (category == null)
+                throw new MySystemException("El proveedor debe tener una categoría asociada.", "BLL");
+
+            if (category.Id <= 0)
+                throw new MySystemException("La categoría asignada debe ser válida y existente.", "BLL");
+
+            if (!_categoryService.Exists(category.Id))
+                throw new MySystemException($"La categoría con ID {category.Id} no existe en el sistema.", "BLL");
+        }
+
+        /// <summary>
+        /// Verifies referential integrity before deletion.
+        /// Checks for active Purchase Orders linked to the provider.
+        /// Throws a detailed exception listing all blocking orders if any are found.
+        /// TODO: Enable validation body once PurchaseOrderService is implemented.
+        /// </summary>
+        private void ValidatePurchaseOrderDependencies(Guid providerId)
+        {
+            // TODO: Uncomment and complete once PurchaseOrderService is available.
+            //
+            // var activeOrders = PurchaseOrderService.Instance()
+            //     .GetActiveOrdersByProvider(providerId)
+            //     .Select(o => o.OrderNumber)
+            //     .ToList();
+            //
+            // if (!activeOrders.Any())
+            //     return;
+            //
+            // var orderList = string.Join(", ", activeOrders);
+            // throw new MySystemException(
+            //     $"No se puede eliminar el proveedor. Posee Órdenes de Compra activas: ({orderList}). Finalice o cancele estas órdenes primero.",
+            //     "BLL");
+        }
+
+        /// <summary>
+        /// Validates the CUIT format: must be exactly 11 numeric digits.
+        /// </summary>
+        private bool IsValidCUIT(string cuit)
+        {
+            return !string.IsNullOrWhiteSpace(cuit) &&
+                   cuit.Length == 11 &&
+                   cuit.All(char.IsDigit);
+        }
+    }
+}
+

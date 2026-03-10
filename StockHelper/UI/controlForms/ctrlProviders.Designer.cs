@@ -34,16 +34,15 @@
             lbCategories = new Label();
             btnClose = new Button();
             dgvProviders = new DataGridView();
-            txtProviderName = new TextBox();
-            btnSearch = new Button();
             ProviderName = new DataGridViewTextBoxColumn();
             ProviderCompanyName = new DataGridViewTextBoxColumn();
             ProviderCategory = new DataGridViewTextBoxColumn();
             ProviderContactTel = new DataGridViewTextBoxColumn();
             ProviderEmail = new DataGridViewTextBoxColumn();
+            txtProviderName = new TextBox();
             btnCreateProvider = new Button();
-            button1 = new Button();
-            button2 = new Button();
+            btnModProvider = new Button();
+            btnDeleteProvider = new Button();
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvProviders).BeginInit();
             SuspendLayout();
@@ -56,6 +55,7 @@
             btnClearFilter.TabIndex = 10;
             btnClearFilter.Text = "Clear Filter";
             btnClearFilter.UseVisualStyleBackColor = true;
+            btnClearFilter.Click += btnClearFilter_Click;
             // 
             // btnFilter
             // 
@@ -65,6 +65,7 @@
             btnFilter.TabIndex = 9;
             btnFilter.Text = "Filter";
             btnFilter.UseVisualStyleBackColor = true;
+            btnFilter.Click += btnFilter_Click;
             // 
             // lstbxCategories
             // 
@@ -93,6 +94,7 @@
             btnClose.TabIndex = 11;
             btnClose.Text = "X";
             btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
             // 
             // dgvProviders
             // 
@@ -109,23 +111,6 @@
             dgvProviders.Size = new Size(743, 310);
             dgvProviders.TabIndex = 12;
             dgvProviders.TabStop = false;
-            // 
-            // txtProviderName
-            // 
-            txtProviderName.Location = new Point(3, 40);
-            txtProviderName.Name = "txtProviderName";
-            txtProviderName.PlaceholderText = "Provider Name";
-            txtProviderName.Size = new Size(100, 23);
-            txtProviderName.TabIndex = 13;
-            // 
-            // btnSearch
-            // 
-            btnSearch.Location = new Point(109, 39);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(75, 23);
-            btnSearch.TabIndex = 14;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = true;
             // 
             // ProviderName
             // 
@@ -160,6 +145,15 @@
             ProviderEmail.ReadOnly = true;
             ProviderEmail.Width = 150;
             // 
+            // txtProviderName
+            // 
+            txtProviderName.Location = new Point(3, 40);
+            txtProviderName.Name = "txtProviderName";
+            txtProviderName.PlaceholderText = "Search by name";
+            txtProviderName.Size = new Size(180, 23);
+            txtProviderName.TabIndex = 13;
+            txtProviderName.TextChanged += txtProviderName_TextChanged;
+            // 
             // btnCreateProvider
             // 
             btnCreateProvider.Location = new Point(314, 349);
@@ -168,24 +162,27 @@
             btnCreateProvider.TabIndex = 15;
             btnCreateProvider.Text = "Create new Provider";
             btnCreateProvider.UseVisualStyleBackColor = true;
+            btnCreateProvider.Click += btnCreateProvider_Click;
             // 
-            // button1
+            // btnModProvider
             // 
-            button1.Location = new Point(498, 349);
-            button1.Name = "button1";
-            button1.Size = new Size(124, 47);
-            button1.TabIndex = 16;
-            button1.Text = "Modify Provider";
-            button1.UseVisualStyleBackColor = true;
+            btnModProvider.Location = new Point(498, 349);
+            btnModProvider.Name = "btnModProvider";
+            btnModProvider.Size = new Size(124, 47);
+            btnModProvider.TabIndex = 16;
+            btnModProvider.Text = "Modify Provider";
+            btnModProvider.UseVisualStyleBackColor = true;
+            btnModProvider.Click += btnModProvider_Click;
             // 
-            // button2
+            // btnDeleteProvider
             // 
-            button2.Location = new Point(682, 349);
-            button2.Name = "button2";
-            button2.Size = new Size(124, 47);
-            button2.TabIndex = 17;
-            button2.Text = "Delete Provider";
-            button2.UseVisualStyleBackColor = true;
+            btnDeleteProvider.Location = new Point(682, 349);
+            btnDeleteProvider.Name = "btnDeleteProvider";
+            btnDeleteProvider.Size = new Size(124, 47);
+            btnDeleteProvider.TabIndex = 17;
+            btnDeleteProvider.Text = "Delete Provider";
+            btnDeleteProvider.UseVisualStyleBackColor = true;
+            btnDeleteProvider.Click += btnDeleteProvider_Click;
             // 
             // label1
             // 
@@ -201,11 +198,11 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
             Controls.Add(label1);
-            Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(btnDeleteProvider);
+            Controls.Add(btnModProvider);
             Controls.Add(btnCreateProvider);
-            Controls.Add(btnSearch);
             Controls.Add(txtProviderName);
             Controls.Add(dgvProviders);
             Controls.Add(btnClose);
@@ -229,15 +226,14 @@
         private Button btnClose;
         private DataGridView dgvProviders;
         private TextBox txtProviderName;
-        private Button btnSearch;
         private DataGridViewTextBoxColumn ProviderName;
         private DataGridViewTextBoxColumn ProviderCompanyName;
         private DataGridViewTextBoxColumn ProviderCategory;
         private DataGridViewTextBoxColumn ProviderContactTel;
         private DataGridViewTextBoxColumn ProviderEmail;
         private Button btnCreateProvider;
-        private Button button1;
-        private Button button2;
+        private Button btnModProvider;
+        private Button btnDeleteProvider;
         private Label label1;
     }
 }

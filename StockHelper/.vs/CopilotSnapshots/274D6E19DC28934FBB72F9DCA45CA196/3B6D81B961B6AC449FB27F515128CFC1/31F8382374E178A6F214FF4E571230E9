@@ -1,0 +1,56 @@
+﻿using Domain;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class modProviderForm : TranslatableForm
+    {
+        LanguageService lang = LanguageService.GetInstance;
+
+        List<ItemsCategory> categories;
+        List<Provider> providers;
+        public modProviderForm(List<ItemsCategory> categories, List<Provider> providers)
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            this.providers = providers;
+            this.categories = categories;
+            LoadCategories();
+            LoadProviders();
+        }
+        private void LoadCategories()
+        {
+            cmbCategories.DataSource = null;
+            cmbCategories.DataSource = categories;
+            cmbCategories.DisplayMember = "Name";
+            cmbCategories.ValueMember = "Id";
+            cmbCategories.Enabled = false;
+
+            cmbChooseCategory.DataSource = null;
+            cmbChooseCategory.DataSource = categories;
+            cmbChooseCategory.DisplayMember = "Name";
+            cmbChooseCategory.ValueMember = "Id";
+            cmbChooseCategory.Items.Add()
+            cmbChooseCategory.SelectedIndex = 0;
+        }
+
+        private void LoadProviders()
+        {
+            cmbChooseProvider.DataSource = null;
+            cmbChooseProvider.DataSource = providers;
+            cmbChooseProvider.DisplayMember = "Name";
+            cmbChooseProvider.ValueMember = "Id";
+            cmbChooseProvider.SelectedIndex = 0;
+        }
+    }
+}

@@ -1,0 +1,80 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class newProviderForm : TranslatableForm
+    {
+        LanguageService languageService = LanguageService.GetInstance;
+        ProviderService providerService = ProviderService.Instance();
+
+        List<ItemsCategory> categories;
+        public event EventHandler ProviderCreated;
+        public newProviderForm(List<ItemsCategory> categories)
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            this.categories = categories;
+            LoadCategories();
+        }
+
+        private void LoadCategories()
+        {
+            cmbCategories.Items.Clear();
+            cmbCategories.Items.AddRange(categories.Select(c => c.Name).ToArray());
+            if (categories.Count > 0)
+            {
+                cmbCategories.SelectedIndex = 0;
+            }
+        }
+
+        public void btnSaveProvider_Click(object sender, EventArgs e)
+        {
+            string name = txtName.Text.Trim();
+            string cuit = txtCUIT.Text.Trim();
+            string companyName = txtCompanyName.Text.Trim();
+            string contactTel = txtCellNumber.Text.Trim();
+            string email = txtEmail.Text.Trim();
+            ItemsCategory category = categories[cmbCategories.SelectedIndex];
+            if (string.IsNullOrEmpty(name))
+            {
+                MessageBox.Show(languageService.Translate("ProviderNameRequired"));
+                return;
+            }
+            Provider newProvider = new Provider
+            {
+                Name = name,
+                CUIT = cuit,
+                CompanyName = companyName,
+                ContactTel = contactTel,
+                Email = email,
+                Category = category
+            };
+            try
+            {
+                providerService.Insert(newProvider);
+                MessageBox.Show(languageService.Translate("ProviderCreatedSuccess"));
+                this.DialogResult = DialogResult.OK;
+                // Raise the ProviderCreated event to notify the main form
+                ProviderCreated?.Invoke(this, EventArgs.Empty);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(languageService.Translate("ErrorCreatingProvider") + ": " + ex.Message);
+            }
+
+        }
+    }
+}

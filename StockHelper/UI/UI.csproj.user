@@ -25,6 +25,15 @@
     <Compile Update="Implementations\TranslatableUserControls.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="secondaryForms\deleteProviderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\modProviderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\newProviderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="secondaryForms\deleteCategoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
