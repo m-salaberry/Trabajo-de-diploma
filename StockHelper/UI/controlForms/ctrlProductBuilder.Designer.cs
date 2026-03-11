@@ -1,0 +1,301 @@
+﻿namespace UI.controlForms
+{
+    partial class ctrlProductBuilder
+    {
+        /// <summary> 
+        /// Variable del diseñador necesaria.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Limpiar los recursos que se estén usando.
+        /// </summary>
+        /// <param name="disposing">true si los recursos administrados se deben desechar; false en caso contrario.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Código generado por el Diseñador de componentes
+
+        /// <summary> 
+        /// Método necesario para admitir el Diseñador. No se puede modificar
+        /// el contenido de este método con el editor de código.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            splitContainer1 = new SplitContainer();
+            btnDelete = new Button();
+            btnModProduct = new Button();
+            btnNewProduct = new Button();
+            lbCategories = new Label();
+            txtSearchProduct = new TextBox();
+            lstbxProducts = new ListBox();
+            btnClose = new Button();
+            btnSaveRecipe = new Button();
+            btnAddItem = new Button();
+            txtProductName = new TextBox();
+            nmCode = new NumericUpDown();
+            label3 = new Label();
+            label2 = new Label();
+            lbRecipeDetail = new Label();
+            dataGridView1 = new DataGridView();
+            ItemName = new DataGridViewTextBoxColumn();
+            QuantityToConsume = new DataGridViewTextBoxColumn();
+            ItemUnit = new DataGridViewTextBoxColumn();
+            ItemAction = new DataGridViewButtonColumn();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
+            splitContainer1.Panel2.SuspendLayout();
+            splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nmCode).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            SuspendLayout();
+            // 
+            // splitContainer1
+            // 
+            splitContainer1.Location = new Point(0, 0);
+            splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.BackColor = SystemColors.GradientInactiveCaption;
+            splitContainer1.Panel1.Controls.Add(btnDelete);
+            splitContainer1.Panel1.Controls.Add(btnModProduct);
+            splitContainer1.Panel1.Controls.Add(btnNewProduct);
+            splitContainer1.Panel1.Controls.Add(lbCategories);
+            splitContainer1.Panel1.Controls.Add(txtSearchProduct);
+            splitContainer1.Panel1.Controls.Add(lstbxProducts);
+            // 
+            // splitContainer1.Panel2
+            // 
+            splitContainer1.Panel2.BackColor = SystemColors.ActiveCaption;
+            splitContainer1.Panel2.Controls.Add(btnClose);
+            splitContainer1.Panel2.Controls.Add(btnSaveRecipe);
+            splitContainer1.Panel2.Controls.Add(btnAddItem);
+            splitContainer1.Panel2.Controls.Add(txtProductName);
+            splitContainer1.Panel2.Controls.Add(nmCode);
+            splitContainer1.Panel2.Controls.Add(label3);
+            splitContainer1.Panel2.Controls.Add(label2);
+            splitContainer1.Panel2.Controls.Add(lbRecipeDetail);
+            splitContainer1.Panel2.Controls.Add(dataGridView1);
+            splitContainer1.Size = new Size(754, 491);
+            splitContainer1.SplitterDistance = 228;
+            splitContainer1.TabIndex = 13;
+            // 
+            // btnDelete
+            // 
+            btnDelete.Location = new Point(119, 462);
+            btnDelete.Name = "btnDelete";
+            btnDelete.Size = new Size(100, 26);
+            btnDelete.TabIndex = 18;
+            btnDelete.Text = "Delete";
+            btnDelete.UseVisualStyleBackColor = true;
+            // 
+            // btnModProduct
+            // 
+            btnModProduct.Location = new Point(18, 462);
+            btnModProduct.Name = "btnModProduct";
+            btnModProduct.Size = new Size(100, 26);
+            btnModProduct.TabIndex = 17;
+            btnModProduct.Text = "Modify";
+            btnModProduct.UseVisualStyleBackColor = true;
+            // 
+            // btnNewProduct
+            // 
+            btnNewProduct.Location = new Point(18, 432);
+            btnNewProduct.Name = "btnNewProduct";
+            btnNewProduct.Size = new Size(201, 26);
+            btnNewProduct.TabIndex = 16;
+            btnNewProduct.Text = "New Product";
+            btnNewProduct.UseVisualStyleBackColor = true;
+            btnNewProduct.Click += btnNewProduct_Click;
+            // 
+            // lbCategories
+            // 
+            lbCategories.AutoSize = true;
+            lbCategories.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbCategories.Location = new Point(18, 0);
+            lbCategories.Name = "lbCategories";
+            lbCategories.Size = new Size(98, 30);
+            lbCategories.TabIndex = 15;
+            lbCategories.Text = "Products";
+            // 
+            // txtSearchProduct
+            // 
+            txtSearchProduct.Location = new Point(18, 33);
+            txtSearchProduct.Name = "txtSearchProduct";
+            txtSearchProduct.PlaceholderText = "Search";
+            txtSearchProduct.Size = new Size(201, 23);
+            txtSearchProduct.TabIndex = 14;
+            txtSearchProduct.TextChanged += txtSearchProduct_TextChanged;
+            // 
+            // lstbxProducts
+            // 
+            lstbxProducts.FormattingEnabled = true;
+            lstbxProducts.ItemHeight = 15;
+            lstbxProducts.Location = new Point(18, 62);
+            lstbxProducts.Name = "lstbxProducts";
+            lstbxProducts.Size = new Size(201, 364);
+            lstbxProducts.TabIndex = 13;
+            // 
+            // btnClose
+            // 
+            btnClose.Location = new Point(485, 0);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(37, 24);
+            btnClose.TabIndex = 23;
+            btnClose.Text = "X";
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
+            // 
+            // btnSaveRecipe
+            // 
+            btnSaveRecipe.Location = new Point(433, 441);
+            btnSaveRecipe.Name = "btnSaveRecipe";
+            btnSaveRecipe.Size = new Size(86, 38);
+            btnSaveRecipe.TabIndex = 22;
+            btnSaveRecipe.Text = "Save Recipe";
+            btnSaveRecipe.UseVisualStyleBackColor = true;
+            // 
+            // btnAddItem
+            // 
+            btnAddItem.Location = new Point(7, 441);
+            btnAddItem.Name = "btnAddItem";
+            btnAddItem.Size = new Size(120, 38);
+            btnAddItem.TabIndex = 19;
+            btnAddItem.Text = "Add Item to Recipe";
+            btnAddItem.UseVisualStyleBackColor = true;
+            // 
+            // txtProductName
+            // 
+            txtProductName.Location = new Point(120, 98);
+            txtProductName.Name = "txtProductName";
+            txtProductName.Size = new Size(389, 23);
+            txtProductName.TabIndex = 21;
+            txtProductName.TextChanged += txtProductName_TextChanged;
+            // 
+            // nmCode
+            // 
+            nmCode.Location = new Point(120, 69);
+            nmCode.Name = "nmCode";
+            nmCode.Size = new Size(102, 23);
+            nmCode.TabIndex = 20;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Location = new Point(7, 101);
+            label3.Name = "label3";
+            label3.Size = new Size(107, 20);
+            label3.TabIndex = 19;
+            label3.Text = "Product Name:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(12, 69);
+            label2.Name = "label2";
+            label2.Size = new Size(102, 20);
+            label2.TabIndex = 18;
+            label2.Text = "Product Code:";
+            // 
+            // lbRecipeDetail
+            // 
+            lbRecipeDetail.AutoSize = true;
+            lbRecipeDetail.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbRecipeDetail.Location = new Point(7, 33);
+            lbRecipeDetail.Name = "lbRecipeDetail";
+            lbRecipeDetail.Size = new Size(164, 30);
+            lbRecipeDetail.TabIndex = 17;
+            lbRecipeDetail.Text = "Recipe Details: -";
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToOrderColumns = true;
+            dataGridView1.AllowUserToResizeColumns = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ItemName, QuantityToConsume, ItemUnit, ItemAction });
+            dataGridView1.Location = new Point(7, 127);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(512, 299);
+            dataGridView1.TabIndex = 16;
+            // 
+            // ItemName
+            // 
+            ItemName.HeaderText = "Item Name";
+            ItemName.Name = "ItemName";
+            ItemName.ReadOnly = true;
+            ItemName.Width = 194;
+            // 
+            // QuantityToConsume
+            // 
+            QuantityToConsume.HeaderText = "Quantity to Consume";
+            QuantityToConsume.Name = "QuantityToConsume";
+            QuantityToConsume.ReadOnly = true;
+            QuantityToConsume.Width = 145;
+            // 
+            // ItemUnit
+            // 
+            ItemUnit.HeaderText = "Unit";
+            ItemUnit.Name = "ItemUnit";
+            ItemUnit.ReadOnly = true;
+            ItemUnit.Width = 60;
+            // 
+            // ItemAction
+            // 
+            ItemAction.HeaderText = "Action";
+            ItemAction.Name = "ItemAction";
+            ItemAction.Width = 70;
+            // 
+            // ctrlProductBuilder
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(splitContainer1);
+            Name = "ctrlProductBuilder";
+            Size = new Size(757, 491);
+            splitContainer1.Panel1.ResumeLayout(false);
+            splitContainer1.Panel1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+            splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)nmCode).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private SplitContainer splitContainer1;
+        private Button btnDelete;
+        private Button btnModProduct;
+        private Button btnNewProduct;
+        private Label lbCategories;
+        private TextBox txtSearchProduct;
+        private ListBox lstbxProducts;
+        private Label label3;
+        private Label label2;
+        private Label lbRecipeDetail;
+        private DataGridView dataGridView1;
+        private NumericUpDown nmCode;
+        private TextBox txtProductName;
+        private Button btnAddItem;
+        private Button btnSaveRecipe;
+        private DataGridViewTextBoxColumn ItemName;
+        private DataGridViewTextBoxColumn QuantityToConsume;
+        private DataGridViewTextBoxColumn ItemUnit;
+        private DataGridViewButtonColumn ItemAction;
+        private Button btnClose;
+    }
+}

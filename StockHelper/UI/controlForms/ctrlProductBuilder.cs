@@ -1,0 +1,94 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.controlForms
+{
+    public partial class ctrlProductBuilder : TranslatableUserControls
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ProductService productService = ProductService.Instance();
+        ItemService itemService = ItemService.Instance();
+        List<Product> products;
+        List<Item> items;
+        public ctrlProductBuilder()
+        {
+            InitializeComponent();
+            InitialConfig();
+            GetItems();
+            LoadProducts();
+        }
+
+        private void LoadProducts()
+        {
+            products = productService.GetAll().ToList();
+            foreach (var product in products)
+            {
+                lstbxProducts.Items.Add(product.Name);
+            }
+        }
+
+        private void GetItems()
+        {
+            items = itemService.GetAll().ToList();
+        }
+        private void InitialConfig()
+        {
+            txtProductName.Enabled = false;
+            nmCode.Enabled = false;
+            btnAddItem.Enabled = false;
+            btnSaveRecipe.Enabled = false;
+        }
+
+        private void EditConfig()
+        {
+            txtProductName.Enabled = true;
+            nmCode.Enabled = true;
+            btnAddItem.Enabled = true;
+            btnSaveRecipe.Enabled = true;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void txtSearchProduct_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtProductName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtProductName.Text != "")
+            {
+                lbRecipeDetail.Text = "Recipe Details:" + txtProductName.Text;
+            }
+        }
+
+        private void btnNewProduct_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EditConfig();
+            }
+            catch (MySystemException ex)
+            {
+
+            }
+        }
+    }
+}

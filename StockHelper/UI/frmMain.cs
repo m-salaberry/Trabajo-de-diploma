@@ -238,8 +238,8 @@ namespace UI
             }
             
             Logger.Current.Info($"User '{currentUser.Name}' opened Product Builder module");
-            // TODO: Implement ctrlProductBuilder when ready
-            MessageBox.Show("Product Builder module coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ctrlProductBuilder productBuilder = new ctrlProductBuilder();
+            showContent(productBuilder);
         }
 
         private void tsmStockManagment_Click(object sender, EventArgs e)
