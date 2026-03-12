@@ -1,0 +1,340 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+using UI.secondaryForms;
+
+namespace UI.controlForms
+{
+    public partial class ctrlProductBuilder : TranslatableUserControls
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ProductService productService = ProductService.Instance();
+        ItemService itemService = ItemService.Instance();
+        List<Product> products;
+        List<Item> items;
+
+        List<Item> selectedItems;
+        Product currentProduct;
+        public ctrlProductBuilder()
+        {
+            InitializeComponent();
+            InitialConfig();
+            GetItems();
+            LoadProducts();
+        }
+
+        private void LoadProducts()
+        {
+            products = productService.GetAll().ToList();
+            foreach (var product in products)
+            {
+                lstbxProducts.Items.Add(product.Name);
+            }
+        }
+
+        private void GetItems()
+        {
+            items = itemService.GetAll().ToList();
+        }
+        private void InitialConfig()
+        {
+            // Inputs
+            txtProductName.Enabled = false;
+            nmCode.Enabled = false;
+
+            // Buttons
+            btnAddItem.Enabled = false;
+            btnAddItem.BackColor = SystemColors.ControlLight;
+            btnAddItem.ForeColor = SystemColors.GrayText;
+
+            btnSaveRecipe.Enabled = false;
+            btnSaveRecipe.BackColor = SystemColors.ControlLight;
+            btnSaveRecipe.ForeColor = SystemColors.GrayText;
+
+            btnCancel.Enabled = false;
+            btnCancel.BackColor = SystemColors.ControlLight;
+            btnCancel.ForeColor = SystemColors.GrayText;
+
+            // DataGridView: disabled + explicit grey style so the state is clear
+            dgvDetailProduct.Enabled = false;
+            dgvDetailProduct.BackgroundColor = SystemColors.Control;
+            dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Control;
+            dgvDetailProduct.DefaultCellStyle.ForeColor = SystemColors.GrayText;
+            dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
+
+            // Action column: all rows show the same "Delete" label
+            ItemAction.Text = "Delete";
+            ItemAction.UseColumnTextForButtonValue = true;
+
+            // Labels: greyed text signals the section is inactive
+            label2.ForeColor = SystemColors.GrayText;
+            label3.ForeColor = SystemColors.GrayText;
+            lbRecipeDetail.ForeColor = SystemColors.GrayText;
+        }
+
+        private void EditConfig()
+        {
+            // Inputs
+            txtProductName.Enabled = true;
+            nmCode.Enabled = true;
+
+            // Buttons
+            btnAddItem.Enabled = true;
+            btnAddItem.UseVisualStyleBackColor = true;
+            btnAddItem.ForeColor = SystemColors.ControlText;
+
+            btnSaveRecipe.Enabled = true;
+            btnSaveRecipe.UseVisualStyleBackColor = true;
+            btnSaveRecipe.ForeColor = SystemColors.ControlText;
+
+            btnCancel.Enabled = true;
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.ForeColor = SystemColors.ControlText;
+
+            // DataGridView: restore active colours
+            dgvDetailProduct.Enabled = true;
+            dgvDetailProduct.BackgroundColor = SystemColors.Window;
+            dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Window;
+            dgvDetailProduct.DefaultCellStyle.ForeColor = SystemColors.ControlText;
+            dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
+
+            // Labels: restore normal text colour
+            label2.ForeColor = SystemColors.ControlText;
+            label3.ForeColor = SystemColors.ControlText;
+            lbRecipeDetail.ForeColor = SystemColors.ControlText;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void txtSearchProduct_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtProductName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtProductName.Text != "")
+            {
+                lbRecipeDetail.Text = "Recipe Details:" + txtProductName.Text;
+            }
+        }
+
+        private void btnNewProduct_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EditConfig();
+                currentProduct = new Product();
+            }
+            catch (MySystemException ex)
+            {
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void btnAddItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                addItemToProductForm addItemToProductForm = new addItemToProductForm(items);
+
+                // Subscribe BEFORE ShowDialog: the event fires inside the dialog while it is still open
+                addItemToProductForm.OnItemsAdded += (s, itemsToAdd) =>
+                {
+                    selectedItems = itemsToAdd;
+                };
+
+                addItemToProductForm.ShowDialog();
+                FillDetailProductGrid(selectedItems);
+            }
+            catch (MySystemException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void btnSaveRecipe_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                currentProduct.Code = (int)nmCode.Value;
+                currentProduct.Name = txtProductName.Text;
+                foreach (var item in selectedItems)
+                {
+                    currentProduct.DetailProducts.Add(new DetailProduct
+                    {
+                        Item = item,
+                        QuantityToConsume = dgvDetailProduct.Rows.Cast<DataGridViewRow>()
+                            .Where(r => r.Cells[nameof(ItemName)].Value?.ToString() == item.Name)
+                            .Select(r => Convert.ToDecimal(r.Cells[nameof(QuantityToConsume)].Value))
+                            .FirstOrDefault()
+                    });
+                }
+
+                if (currentProduct.Id == 0)
+                {
+                    productService.Insert(currentProduct);
+                    MessageBox.Show("Product created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    productService.Update(currentProduct);
+                    MessageBox.Show("Product updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                // Refresh the product list to reflect changes
+                LoadProducts();
+                ClearDetailProductGrid();
+                InitialConfig();
+            }
+            catch (MySystemException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to cancel? All unsaved changes will be lost.", "Confirm Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+
+                    if (currentProduct != null && currentProduct.Id != 0)
+                    {
+                        // If we were editing an existing product, reload its details to discard changes
+                        var originalProduct = productService.GetById(currentProduct.Id);
+                        txtProductName.Text = originalProduct.Name;
+                        nmCode.Value = originalProduct.Code;
+                        List<Item> originalItems = originalProduct.DetailProducts.Select(dp => dp.Item).ToList();
+                        FillDetailProductGrid(originalItems);
+                    }
+                    else
+                    {
+                        // If we were creating a new product, just clear the form
+                        txtProductName.Text = "";
+                        nmCode.Value = 0;
+                        dgvDetailProduct.Rows.Clear();
+                    }
+                    InitialConfig();
+                    ClearDetailProductGrid();
+                }
+            }
+            catch (MySystemException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void dgvDetailProduct_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || dgvDetailProduct.Columns[e.ColumnIndex].Name != nameof(ItemAction))
+                return;
+
+            string itemName = dgvDetailProduct.Rows[e.RowIndex].Cells[nameof(ItemName)].Value?.ToString();
+
+            if (selectedItems != null)
+            {
+                var toRemove = selectedItems.FirstOrDefault(i => i.Name == itemName);
+                if (toRemove != null)
+                    selectedItems.Remove(toRemove);
+            }
+
+            dgvDetailProduct.Rows.RemoveAt(e.RowIndex);
+        }
+
+        private void FillDetailProductGrid(List<Item> itemsOfProduct)
+        {
+            dgvDetailProduct.Rows.Clear();
+            if (itemsOfProduct != null)
+            {
+                foreach (var item in itemsOfProduct)
+                {
+                    string unitName = item.Unit.TryGetValue("Name", out var u) ? u?.ToString() : string.Empty;
+                    dgvDetailProduct.Rows.Add(item.Name, 0, unitName);
+                }
+            }
+            dgvDetailProduct.Refresh();
+        }
+
+        private void ClearDetailProductGrid()
+        {
+            dgvDetailProduct.Rows.Clear();
+            dgvDetailProduct.Refresh();
+        }
+
+        private void btnModProduct_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                currentProduct = products.FirstOrDefault(p => p.Name == lstbxProducts.SelectedItem?.ToString());
+                if (currentProduct != null)
+                {
+                    txtProductName.Text = currentProduct.Name;
+                    nmCode.Value = currentProduct.Code;
+                    List<Item> itemsOfProduct = currentProduct.DetailProducts.Select(dp => dp.Item).ToList();
+                    FillDetailProductGrid(itemsOfProduct);
+                    EditConfig();
+                }
+            }
+            catch (MySystemException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                currentProduct = products.FirstOrDefault(p => p.Name == lstbxProducts.SelectedItem?.ToString());
+                if (currentProduct != null)
+                {
+                    DialogResult result = MessageBox.Show($"Are you sure you want to delete the product '{currentProduct.Name}'?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        productService.Delete(currentProduct.Id);
+                        MessageBox.Show("Product deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadProducts();
+                        ClearDetailProductGrid();
+                        InitialConfig();
+                    }
+                }
+            }
+            catch (MySystemException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+    }
+}

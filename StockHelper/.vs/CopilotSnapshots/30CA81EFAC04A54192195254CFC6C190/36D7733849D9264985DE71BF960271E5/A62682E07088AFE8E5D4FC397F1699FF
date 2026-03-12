@@ -1,0 +1,151 @@
+﻿using DAL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace BLL.Implementations
+{
+    /// <summary>
+    /// Service for managing DetailProduct (recipe) entries with business validations.
+    /// Acts as the integrity guardian for Items: exposes IsItemInUse to block deletion
+    /// of any Item that is currently referenced by a product recipe.
+    /// </summary>
+    public class DetailProductService : GenericBllService<DetailProduct, int>
+    {
+        private readonly DetailProductRepository _detailRepository;
+        private readonly ProductRepository _productRepository;
+
+        private DetailProductService(
+            DetailProductRepository detailRepository,
+            ProductRepository productRepository) : base(detailRepository)
+        {
+            _detailRepository = detailRepository;
+            _productRepository = productRepository;
+        }
+
+        private static DetailProductService _instance = null;
+
+        public static DetailProductService Instance()
+        {
+            if (_instance == null)
+                _instance = new DetailProductService(
+                    new DetailProductRepository(),
+                    new ProductRepository());
+            return _instance;
+        }
+
+        // ========================================
+        // UNSUPPORTED GENERIC OPERATIONS
+        // ========================================
+
+        /// <summary>
+        /// Not supported: use InsertForProduct(int productId, DetailProduct entity) instead.
+        /// </summary>
+        public override void Insert(DetailProduct entity)
+        {
+            throw new NotSupportedException(
+                "Use InsertForProduct(int productId, DetailProduct entity) to add a detail to a product.");
+        }
+
+        /// <summary>
+        /// Not supported: use ProductService.Update to replace the full detail list.
+        /// </summary>
+        public override void Update(DetailProduct entity)
+        {
+            throw new NotSupportedException(
+                "Updating individual details is not supported. Use ProductService.Update to replace the full recipe.");
+        }
+
+        /// <summary>
+        /// Not supported: use DeleteByProductId(int productId) to remove all details of a product.
+        /// </summary>
+        public override void Delete(int id)
+        {
+            throw new NotSupportedException(
+                "Deleting a detail by row ID is not supported. Use DeleteByProductId(int productId) instead.");
+        }
+
+        // ========================================
+        // DETAIL-SPECIFIC OPERATIONS
+        // ========================================
+
+        /// <summary>
+        /// Inserts a single recipe line linked to the given product.
+        /// Validates: product existence, item existence, quantity > 0, and item uniqueness within the recipe.
+        /// </summary>
+        public void InsertForProduct(int productId, DetailProduct entity)
+        {
+            ValidateProductExists(productId);
+            ValidateDetail(entity);
+            ValidateItemUniqueness(productId, entity.Item.Id);
+
+            _detailRepository.CreateForProduct(productId, entity);
+
+            Logger.Current.Info($"[AUDIT] DetailProduct Added - ProductId: {productId}, Item: '{entity.Item.Name}', Qty: {entity.QuantityToConsume}, User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Removes all recipe lines linked to the given product.
+        /// </summary>
+        public void DeleteByProductId(int productId)
+        {
+            ValidateProductExists(productId);
+
+            _detailRepository.DeleteByProductId(productId);
+
+            Logger.Current.Info($"[AUDIT] All details deleted for ProductId: {productId}, User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Returns the names of all products whose recipe contains the specified item.
+        /// Used by ItemService.Delete to block deletion of items that are currently in use.
+        /// Returns an empty list when the item is not referenced by any product.
+        /// </summary>
+        public List<string> IsItemInUse(Guid itemId)
+        {
+            return _productRepository.GetAll()
+                .Where(p => p.DetailProducts != null &&
+                            p.DetailProducts.Any(d => d.Item.Id == itemId))
+                .Select(p => p.Name)
+                .ToList();
+        }
+
+        // ========================================
+        // PRIVATE VALIDATION METHODS
+        // ========================================
+
+        private void ValidateDetail(DetailProduct entity)
+        {
+            if (entity == null)
+                throw new MySystemException("DetailProduct cannot be null.", "BLL");
+
+            if (entity.Item == null || entity.Item.Id == Guid.Empty)
+                throw new MySystemException("Detail must reference a valid Item.", "BLL");
+
+            if (!ItemService.Instance().Exists(entity.Item.Id))
+                throw new MySystemException($"Item with ID {entity.Item.Id} does not exist.", "BLL");
+
+            if (entity.QuantityToConsume <= 0)
+                throw new MySystemException(
+                    $"Quantity for item '{entity.Item.Name}' must be greater than zero.", "BLL");
+        }
+
+        private void ValidateProductExists(int productId)
+        {
+            if (_productRepository.GetById(productId) == null)
+                throw new MySystemException($"Product with ID {productId} does not exist.", "BLL");
+        }
+
+        private void ValidateItemUniqueness(int productId, Guid itemId)
+        {
+            var existingDetails = _detailRepository.GetByProductId(productId);
+            if (existingDetails.Any(d => d.Item.Id == itemId))
+                throw new MySystemException(
+                    $"Item with ID {itemId} is already assigned to product ID {productId}. " +
+                    "Duplicate items are not allowed in a recipe.", "BLL");
+        }
+    }
+}

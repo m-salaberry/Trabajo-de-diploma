@@ -1,0 +1,158 @@
+﻿using DAL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace BLL.Implementations
+{
+    /// <summary>
+    /// Service for managing Product entities with business validations.
+    /// A Product is a composite entity made up of DetailProduct recipe lines.
+    /// Deletion is blocked if sales records exist; detail rows are removed via DB CASCADE.
+    /// </summary>
+    public class ProductService : GenericBllService<Product, int>
+    {
+        private ProductService(ProductRepository repository) : base(repository) { }
+
+        private static ProductService _instance = null;
+
+        public static ProductService Instance()
+        {
+            if (_instance == null)
+                _instance = new ProductService(new ProductRepository());
+            return _instance;
+        }
+
+        // ========================================
+        // OVERRIDE METHODS WITH BUSINESS VALIDATIONS
+        // ========================================
+
+        /// <summary>
+        /// Syncs (inserts) a new product.
+        /// Validates name length and Code (ExternalID) uniqueness across existing products.
+        /// Validates each detail's item existence, quantity, and uniqueness within the recipe.
+        /// </summary>
+        public override void Insert(Product entity)
+        {
+            ValidateProduct(entity);
+            ValidateProductName(entity.Name);
+            ValidateCodeUniqueness(entity.Code, excludeId: null);
+
+            if (entity.DetailProducts != null)
+                ValidateDetails(entity.DetailProducts);
+
+            base.Insert(entity);
+
+            Logger.Current.Info($"[AUDIT] Product Sync - Name: '{entity.Name}', Code: {entity.Code}, User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Updates an existing product.
+        /// Validates existence, name length, and Code uniqueness (excluding the product itself).
+        /// Replaces the full detail list — each line is validated before persisting.
+        /// </summary>
+        public override void Update(Product entity)
+        {
+            ValidateProduct(entity);
+            ValidateProductName(entity.Name);
+
+            if (!Exists(entity.Id))
+                throw new MySystemException($"Product with ID {entity.Id} does not exist.", "BLL");
+
+            ValidateCodeUniqueness(entity.Code, excludeId: entity.Id);
+
+            if (entity.DetailProducts != null)
+                ValidateDetails(entity.DetailProducts);
+
+            base.Update(entity);
+
+            Logger.Current.Info($"[AUDIT] Product Updated - ID: {entity.Id}, Name: '{entity.Name}', User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Deletes a product by ID.
+        /// Blocks deletion if the product has any sales history.
+        /// Detail rows (recipe) are removed automatically by DB ON DELETE CASCADE.
+        /// </summary>
+        public override void Delete(int id)
+        {
+            var product = GetById(id);
+            if (product == null)
+                throw new MySystemException($"Product with ID {id} does not exist.", "BLL");
+
+            // TODO: Uncomment when SaleService is implemented
+            // var salesRecords = SaleService.Instance().GetByProductId(id);
+            // if (salesRecords.Any())
+            //     throw new MySystemException(
+            //         $"Cannot delete product '{product.Name}' because it has {salesRecords.Count} sale record(s). " +
+            //         "Products with a sales history cannot be removed.", "BLL");
+
+            // DB ON DELETE CASCADE on PRODUCT_DETAILS removes detail rows automatically
+            base.Delete(id);
+
+            Logger.Current.Info($"[AUDIT] Product Deleted - ID: {id}, Name: '{product.Name}', User: [PLACEHOLDER_USER]");
+        }
+
+        // ========================================
+        // PRIVATE VALIDATION METHODS
+        // ========================================
+
+        private void ValidateProduct(Product entity)
+        {
+            if (entity == null)
+                throw new MySystemException("Product cannot be null.", "BLL");
+        }
+
+        private void ValidateProductName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new MySystemException("Product name cannot be empty.", "BLL");
+
+            if (name.Length < 3)
+                throw new MySystemException("Product name must be at least 3 characters long.", "BLL");
+
+            if (name.Length > 100)
+                throw new MySystemException("Product name cannot exceed 100 characters.", "BLL");
+        }
+
+        private void ValidateCodeUniqueness(int code, int? excludeId)
+        {
+            var duplicate = GetAll().FirstOrDefault(p =>
+                p.Code == code && (!excludeId.HasValue || p.Id != excludeId.Value));
+
+            if (duplicate != null)
+                throw new MySystemException(
+                    $"A product with code {code} already exists: '{duplicate.Name}'.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates each detail in a recipe list:
+        /// item must exist, quantity must be > 0, and no item may appear twice.
+        /// </summary>
+        private void ValidateDetails(List<DetailProduct> details)
+        {
+            var itemService = ItemService.Instance();
+            var seenItemIds = new HashSet<Guid>();
+
+            foreach (var detail in details)
+            {
+                if (detail.Item == null || detail.Item.Id == Guid.Empty)
+                    throw new MySystemException("Each recipe detail must reference a valid Item.", "BLL");
+
+                if (!itemService.Exists(detail.Item.Id))
+                    throw new MySystemException($"Item with ID {detail.Item.Id} does not exist.", "BLL");
+
+                if (detail.QuantityToConsume <= 0)
+                    throw new MySystemException(
+                        $"Quantity for item '{detail.Item.Name}' must be greater than zero.", "BLL");
+
+                if (!seenItemIds.Add(detail.Item.Id))
+                    throw new MySystemException(
+                        $"Item '{detail.Item.Name}' appears more than once in the product recipe.", "BLL");
+            }
+        }
+    }
+}

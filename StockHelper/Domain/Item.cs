@@ -13,6 +13,7 @@ namespace Domain
         public Dictionary<string, object> Unit { get; set; } = new Dictionary<string, object>();
         public ItemsCategory Category { get; set; }
         public decimal Stock { get; set; }
+        public DateTime LastUpdate { get; set; }
 
         /// <summary>
         /// Determines whether the current unit represents an integer value.

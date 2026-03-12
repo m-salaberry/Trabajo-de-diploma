@@ -98,17 +98,14 @@ namespace UI
             // Check permissions for sub-menu items
             bool hasStockManagment = currentUser.HasPermission(PermissionNames.StockManagment);
             bool hasPurchaseManagement = currentUser.HasPermission(PermissionNames.PurchaseManagement);
-            bool hasInventoryReports = currentUser.HasPermission(PermissionNames.InventoryReports);
             
             // Configure sub-menu items visibility
             tsmStockManagment.Visible = hasStockManagment;
             tsmOrders.Visible = hasPurchaseManagement;
-            tsmAnalytics.Visible = hasInventoryReports;
-            
+
             // Show parent menu only if at least one sub-menu is visible
-            tsmInventoryAndPurchasing.Visible = hasStockManagment || 
-                                                hasPurchaseManagement || 
-                                                hasInventoryReports;
+            tsmInventoryAndPurchasing.Visible = hasStockManagment ||
+                                                hasPurchaseManagement;
 
             // ============================================
             // LOGGING
@@ -285,7 +282,7 @@ namespace UI
             // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
-                PermissionNames.InventoryReports,
+                PermissionNames.Analytics,
                 "Analytics"))
             {
                 return; // Error message already shown by helper

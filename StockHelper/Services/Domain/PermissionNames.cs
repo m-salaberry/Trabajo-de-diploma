@@ -71,13 +71,7 @@ namespace Services.Domain
         /// Permission to access the Reports module.
         /// Grants access to view and generate reports.
         /// </summary>
-        public const string Reports = "Reports";
-
-        /// <summary>
-        /// Permission to access the Inventory Reports module.
-        /// Grants access to stock and inventory reports.
-        /// </summary>
-        public const string InventoryReports = "InventoryReports";
+        public const string Analytics = "Analytics";
 
         // ============================================
         // SYSTEM CONFIGURATION MODULES

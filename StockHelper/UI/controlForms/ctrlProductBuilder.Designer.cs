@@ -35,6 +35,7 @@
             lbCategories = new Label();
             txtSearchProduct = new TextBox();
             lstbxProducts = new ListBox();
+            btnCancel = new Button();
             btnClose = new Button();
             btnSaveRecipe = new Button();
             btnAddItem = new Button();
@@ -43,7 +44,7 @@
             label3 = new Label();
             label2 = new Label();
             lbRecipeDetail = new Label();
-            dataGridView1 = new DataGridView();
+            dgvDetailProduct = new DataGridView();
             ItemName = new DataGridViewTextBoxColumn();
             QuantityToConsume = new DataGridViewTextBoxColumn();
             ItemUnit = new DataGridViewTextBoxColumn();
@@ -53,7 +54,7 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nmCode).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDetailProduct).BeginInit();
             SuspendLayout();
             // 
             // splitContainer1
@@ -74,6 +75,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.BackColor = SystemColors.ActiveCaption;
+            splitContainer1.Panel2.Controls.Add(btnCancel);
             splitContainer1.Panel2.Controls.Add(btnClose);
             splitContainer1.Panel2.Controls.Add(btnSaveRecipe);
             splitContainer1.Panel2.Controls.Add(btnAddItem);
@@ -82,7 +84,7 @@
             splitContainer1.Panel2.Controls.Add(label3);
             splitContainer1.Panel2.Controls.Add(label2);
             splitContainer1.Panel2.Controls.Add(lbRecipeDetail);
-            splitContainer1.Panel2.Controls.Add(dataGridView1);
+            splitContainer1.Panel2.Controls.Add(dgvDetailProduct);
             splitContainer1.Size = new Size(754, 491);
             splitContainer1.SplitterDistance = 228;
             splitContainer1.TabIndex = 13;
@@ -95,6 +97,7 @@
             btnDelete.TabIndex = 18;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = true;
+            btnDelete.Click += btnDelete_Click;
             // 
             // btnModProduct
             // 
@@ -104,6 +107,7 @@
             btnModProduct.TabIndex = 17;
             btnModProduct.Text = "Modify";
             btnModProduct.UseVisualStyleBackColor = true;
+            btnModProduct.Click += btnModProduct_Click;
             // 
             // btnNewProduct
             // 
@@ -143,6 +147,16 @@
             lstbxProducts.Size = new Size(201, 364);
             lstbxProducts.TabIndex = 13;
             // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(433, 441);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(86, 38);
+            btnCancel.TabIndex = 24;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
+            // 
             // btnClose
             // 
             btnClose.Location = new Point(485, 0);
@@ -155,12 +169,13 @@
             // 
             // btnSaveRecipe
             // 
-            btnSaveRecipe.Location = new Point(433, 441);
+            btnSaveRecipe.Location = new Point(341, 441);
             btnSaveRecipe.Name = "btnSaveRecipe";
             btnSaveRecipe.Size = new Size(86, 38);
             btnSaveRecipe.TabIndex = 22;
             btnSaveRecipe.Text = "Save Recipe";
             btnSaveRecipe.UseVisualStyleBackColor = true;
+            btnSaveRecipe.Click += btnSaveRecipe_Click;
             // 
             // btnAddItem
             // 
@@ -170,6 +185,7 @@
             btnAddItem.TabIndex = 19;
             btnAddItem.Text = "Add Item to Recipe";
             btnAddItem.UseVisualStyleBackColor = true;
+            btnAddItem.Click += btnAddItem_Click;
             // 
             // txtProductName
             // 
@@ -216,19 +232,20 @@
             lbRecipeDetail.TabIndex = 17;
             lbRecipeDetail.Text = "Recipe Details: -";
             // 
-            // dataGridView1
+            // dgvDetailProduct
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AllowUserToOrderColumns = true;
-            dataGridView1.AllowUserToResizeColumns = false;
-            dataGridView1.AllowUserToResizeRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ItemName, QuantityToConsume, ItemUnit, ItemAction });
-            dataGridView1.Location = new Point(7, 127);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(512, 299);
-            dataGridView1.TabIndex = 16;
+            dgvDetailProduct.AllowUserToAddRows = false;
+            dgvDetailProduct.AllowUserToDeleteRows = false;
+            dgvDetailProduct.AllowUserToOrderColumns = true;
+            dgvDetailProduct.AllowUserToResizeColumns = false;
+            dgvDetailProduct.AllowUserToResizeRows = false;
+            dgvDetailProduct.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDetailProduct.Columns.AddRange(new DataGridViewColumn[] { ItemName, QuantityToConsume, ItemUnit, ItemAction });
+            dgvDetailProduct.Location = new Point(7, 127);
+            dgvDetailProduct.Name = "dgvDetailProduct";
+            dgvDetailProduct.Size = new Size(512, 299);
+            dgvDetailProduct.TabIndex = 16;
+            dgvDetailProduct.CellClick += dgvDetailProduct_CellClick;
             // 
             // ItemName
             // 
@@ -271,7 +288,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)nmCode).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDetailProduct).EndInit();
             ResumeLayout(false);
         }
 
@@ -287,7 +304,7 @@
         private Label label3;
         private Label label2;
         private Label lbRecipeDetail;
-        private DataGridView dataGridView1;
+        private DataGridView dgvDetailProduct;
         private NumericUpDown nmCode;
         private TextBox txtProductName;
         private Button btnAddItem;
@@ -297,5 +314,6 @@
         private DataGridViewTextBoxColumn ItemUnit;
         private DataGridViewButtonColumn ItemAction;
         private Button btnClose;
+        private Button btnCancel;
     }
 }

@@ -1,0 +1,154 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+using UI.secondaryForms;
+
+namespace UI.controlForms
+{
+    public partial class ctrlProductBuilder : TranslatableUserControls
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ProductService productService = ProductService.Instance();
+        ItemService itemService = ItemService.Instance();
+        List<Product> products;
+        List<Item> items;
+        public ctrlProductBuilder()
+        {
+            InitializeComponent();
+            InitialConfig();
+            GetItems();
+            LoadProducts();
+        }
+
+        private void LoadProducts()
+        {
+            products = productService.GetAll().ToList();
+            foreach (var product in products)
+            {
+                lstbxProducts.Items.Add(product.Name);
+            }
+        }
+
+        private void GetItems()
+        {
+            items = itemService.GetAll().ToList();
+        }
+        private void InitialConfig()
+        {
+            // Inputs
+            txtProductName.Enabled = false;
+            nmCode.Enabled = false;
+
+            // Buttons
+            btnAddItem.Enabled = false;
+            btnSaveRecipe.Enabled = false;
+            btnCancel.Enabled = false;
+
+            // DataGridView: disabled + explicit grey style so the state is clear
+            dgvDetailProduct.Enabled = false;
+            dgvDetailProduct.BackgroundColor = SystemColors.Control;
+            dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Control;
+            dgvDetailProduct.DefaultCellStyle.ForeColor = SystemColors.GrayText;
+            dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
+
+            // Labels: greyed text signals the section is inactive
+            label2.ForeColor = SystemColors.GrayText;
+            label3.ForeColor = SystemColors.GrayText;
+            lbRecipeDetail.ForeColor = SystemColors.GrayText;
+        }
+
+        private void EditConfig()
+        {
+            // Inputs
+            txtProductName.Enabled = true;
+            nmCode.Enabled = true;
+
+            // Buttons
+            btnAddItem.Enabled = true;
+            btnSaveRecipe.Enabled = true;
+            btnCancel.Enabled = true;
+
+            // DataGridView: restore active colours
+            dgvDetailProduct.Enabled = true;
+            dgvDetailProduct.BackgroundColor = SystemColors.Window;
+            dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Window;
+            dgvDetailProduct.DefaultCellStyle.ForeColor = SystemColors.ControlText;
+            dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
+
+            // Labels: restore normal text colour
+            label2.ForeColor = SystemColors.ControlText;
+            label3.ForeColor = SystemColors.ControlText;
+            lbRecipeDetail.ForeColor = SystemColors.ControlText;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void txtSearchProduct_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtProductName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtProductName.Text != "")
+            {
+                lbRecipeDetail.Text = "Recipe Details:" + txtProductName.Text;
+            }
+        }
+
+        private void btnNewProduct_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                EditConfig();
+            }
+            catch (MySystemException ex)
+            {
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void btnAddItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                new addItemToProductForm(items).ShowDialog();
+            }
+            catch (MySystemException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void btnSaveRecipe_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

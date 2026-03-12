@@ -1,0 +1,294 @@
+﻿using Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DAL.Contracts;
+using DAL.Implementations;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+
+namespace BLL.Implementations
+{
+    /// <summary>
+    /// Service for managing Item entities with business validations.
+    /// Implements business rules defined in SRS (Software Requirements Specification).
+    /// </summary>
+    public class ItemService : GenericBllService<Item, Guid>
+    {
+        private readonly ItemsCategoryService _categoryService;
+
+        private ItemService(IRepository<Item, Guid> repository) : base(repository)
+        {
+            _categoryService = ItemsCategoryService.Instance();
+        }
+
+        private static ItemService _instance = null;
+
+        public static ItemService Instance()
+        {
+            if (_instance == null)
+            {
+                _instance = new ItemService(new ItemRepository());
+            }
+            return _instance;
+        }
+
+        // ========================================
+        // OVERRIDE METHODS WITH BUSINESS VALIDATIONS
+        // ========================================
+
+        /// <summary>
+        /// Inserts a new item with business validations.
+        /// Validates that no item with same Name and Category exists.
+        /// Logs the operation to audit trail.
+        /// </summary>
+        public override void Insert(Item entity)
+        {
+            ValidateItem(entity);
+            ValidateItemName(entity.Name);
+            ValidateCategory(entity.Category);
+            ValidateUnit(entity.Unit);
+            
+            // Validate duplicity (Name + Category)
+            ValidateDuplicity(entity.Name, entity.Category.Id);
+            
+            // Call base method to insert
+            base.Insert(entity);
+            
+            // Log operation to audit trail
+            Logger.Current.Info($"[AUDIT] Item Created - ID: {entity.Id}, Name: '{entity.Name}', Category: '{entity.Category.Name}', User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Updates an existing item with business validations.
+        /// Validates item by ID and Category.
+        /// Logs the operation to audit trail.
+        /// </summary>
+        public override void Update(Item entity)
+        {
+            ValidateItem(entity);
+            ValidateItemName(entity.Name);
+            ValidateCategory(entity.Category);
+            ValidateUnit(entity.Unit);
+            
+            // Validate that item exists by ID
+            if (!Exists(entity.Id))
+                throw new MySystemException($"Item with id {entity.Id} does not exist.", "BLL");
+            
+            // Validate that category matches
+            var existingItem = GetById(entity.Id);
+            if (existingItem.Category.Id != entity.Category.Id)
+            {
+                Logger.Current.Warning($"Item {entity.Id} category changed from {existingItem.Category.Name} to {entity.Category.Name}");
+            }
+            
+            // Call base method to update
+            base.Update(entity);
+            
+            // Log operation to audit trail
+            Logger.Current.Info($"[AUDIT] Item Updated - ID: {entity.Id}, Name: '{entity.Name}', Category: '{entity.Category.Name}', User: [PLACEHOLDER_USER]");
+        }
+
+        /// <summary>
+        /// Deletes an item by ID.
+        /// Validates item by ID and Category.
+        /// Logs the operation to audit trail.
+        /// NOTE: Stock validation removed as per client requirements (not explicitly prohibited in SRS).
+        /// </summary>
+        public override void Delete(Guid id)
+        {
+            // Validate that item exists
+            var item = GetById(id);
+            if (item == null)
+                throw new MySystemException($"Item with id {id} does not exist.", "BLL");
+
+            // Block deletion if the item is referenced by any product recipe
+            var productsUsingItem = DetailProductService.Instance().IsItemInUse(id);
+            if (productsUsingItem.Any())
+                throw new MySystemException(
+                    $"Cannot delete item '{item.Name}' because it is used in the following product(s): " +
+                    $"{string.Join(", ", productsUsingItem.Select(p => $"'{p}'"))}.", "BLL");
+
+            // NOTE: Stock > 0 validation removed as not specified in SRS
+            // WARNING: Deleting items with stock may cause inventory inconsistencies
+            if (item.Stock > 0)
+            {
+                Logger.Current.Warning($"Deleting item '{item.Name}' (ID: {id}) with stock: {item.Stock}. This may cause inventory inconsistencies.");
+            }
+
+            // Call base method to delete
+            base.Delete(id);
+
+            // Log operation to audit trail
+            Logger.Current.Info($"[AUDIT] Item Deleted - ID: {id}, Name: '{item.Name}', Category: '{item.Category.Name}', Stock at time of deletion: {item.Stock}, User: [PLACEHOLDER_USER]");
+        }
+
+        // ========================================
+        // PRIVATE VALIDATION METHODS
+        // ========================================
+        
+        /// <summary>
+        /// Validates that item entity is not null.
+        /// </summary>
+        private void ValidateItem(Item entity)
+        {
+            if (entity == null)
+                throw new MySystemException("Item cannot be null.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates item name according to business rules.
+        /// </summary>
+        private void ValidateItemName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new MySystemException("Item name cannot be empty.", "BLL");
+            
+            if (name.Length < 3)
+                throw new MySystemException("Item name must be at least 3 characters long.", "BLL");
+            
+            if (name.Length > 100)
+                throw new MySystemException("Item name cannot exceed 100 characters.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates that stock is not negative.
+        /// </summary>
+        private void ValidateStock(long stock)
+        {
+            if (stock < 0)
+                throw new MySystemException("Stock cannot be negative.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates that category is assigned and exists in the system.
+        /// Ensures referential integrity before persisting.
+        /// </summary>
+        private void ValidateCategory(ItemsCategory category)
+        {
+            if (category == null)
+                throw new MySystemException("Item must have a category.", "BLL");
+            
+            if (category.Id <= 0)
+                throw new MySystemException("Category must be a valid existing category.", "BLL");
+            
+            // Validate that category actually exists in the database
+            var existingCategories = _categoryService.GetAll();
+            if (!existingCategories.Any(c => c.Id == category.Id))
+                throw new MySystemException($"Category with id {category.Id} does not exist in the system.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates that unit dictionary contains required keys.
+        /// </summary>
+        private void ValidateUnit(Dictionary<string, object> unit)
+        {
+            if (unit == null)
+                throw new MySystemException("Item must have a unit defined.", "BLL");
+            
+            if (!unit.ContainsKey("Name") || string.IsNullOrWhiteSpace(unit["Name"]?.ToString()))
+                throw new MySystemException("Unit name cannot be empty.", "BLL");
+            
+            if (!unit.ContainsKey("IsInteger"))
+                throw new MySystemException("Unit must specify if it's integer or not.", "BLL");
+        }
+
+        /// <summary>
+        /// Validates that no item with the same Name and Category exists.
+        /// Prevents duplicate items in the same category.
+        /// </summary>
+        private void ValidateDuplicity(string itemName, int categoryId)
+        {
+            var existingItems = GetAll();
+            var duplicate = existingItems.FirstOrDefault(i => 
+                i.Name.Equals(itemName, StringComparison.OrdinalIgnoreCase) && 
+                i.Category.Id == categoryId);
+            
+            if (duplicate != null)
+            {
+                throw new MySystemException(
+                    $"An item with name '{itemName}' already exists in category '{duplicate.Category.Name}'. Duplicate items are not allowed.",
+                    "BLL");
+            }
+        }
+
+        // ========================================
+        // BUSINESS LOGIC METHODS
+        // ========================================
+        
+        /// <summary>
+        /// Adds stock to an item.
+        /// Validates positive quantity and item existence.
+        /// </summary>
+        public void AddStock(Guid itemId, long quantity)
+        {
+            if (quantity <= 0)
+                throw new MySystemException("Quantity must be positive.", "BLL");
+            
+            var item = GetById(itemId);
+            if (item == null)
+                throw new MySystemException($"Item with id {itemId} not found.", "BLL");
+            
+            item.Stock += quantity;
+            Update(item);
+            
+            Logger.Current.Info($"[STOCK] Added {quantity} units to item '{item.Name}' (ID: {itemId}). New stock: {item.Stock}");
+        }
+
+        /// <summary>
+        /// Reduces stock from an item.
+        /// Validates sufficient stock availability before reduction.
+        /// </summary>
+        public void ReduceStock(Guid itemId, long quantity)
+        {
+            if (quantity <= 0)
+                throw new MySystemException("Quantity must be positive.", "BLL");
+            
+            var item = GetById(itemId);
+            if (item == null)
+                throw new MySystemException($"Item with id {itemId} not found.", "BLL");
+            
+            if (item.Stock < quantity)
+                throw new MySystemException($"Insufficient stock. Available: {item.Stock}, Requested: {quantity}", "BLL");
+            
+            item.Stock -= quantity;
+            Update(item);
+            
+            Logger.Current.Info($"[STOCK] Reduced {quantity} units from item '{item.Name}' (ID: {itemId}). New stock: {item.Stock}");
+        }
+
+        /// <summary>
+        /// Gets items by category ID.
+        /// </summary>
+        public IEnumerable<Item> GetItemsByCategory(int categoryId)
+        {
+            if (categoryId <= 0)
+                throw new MySystemException("Category ID must be valid.", "BLL");
+            
+            return GetAll().Where(i => i.Category.Id == categoryId);
+        }
+
+        /// <summary>
+        /// Gets items with low stock (below threshold).
+        /// Useful for inventory alerts and reordering.
+        /// </summary>
+        public IEnumerable<Item> GetLowStockItems(long threshold = 10)
+        {
+            if (threshold < 0)
+                throw new MySystemException("Threshold cannot be negative.", "BLL");
+            
+            return GetAll().Where(i => i.Stock < threshold);
+        }
+
+        /// <summary>
+        /// Gets items with zero stock.
+        /// </summary>
+        public IEnumerable<Item> GetOutOfStockItems()
+        {
+            return GetAll().Where(i => i.Stock == 0);
+        }
+    }
+}
+

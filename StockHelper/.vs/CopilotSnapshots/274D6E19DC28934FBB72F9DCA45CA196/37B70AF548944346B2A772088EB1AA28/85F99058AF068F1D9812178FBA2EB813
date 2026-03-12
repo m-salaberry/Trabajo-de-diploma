@@ -1,0 +1,441 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Contracts.Logs;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+using UI.secondaryForms;
+
+namespace UI.controlForms
+{
+    public partial class ctrlProductBuilder : TranslatableUserControls
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ProductService productService = ProductService.Instance();
+        ItemService itemService = ItemService.Instance();
+        List<Product> products;
+        List<Item> items;
+
+        List<Item> selectedItems;
+        Product currentProduct;
+        public ctrlProductBuilder()
+        {
+            InitializeComponent();
+            InitialConfig();
+            GetItems();
+            LoadProducts();
+        }
+
+        private void LoadProducts()
+        {
+            lstbxProducts.Items.Clear();
+            products = productService.GetAll().ToList();
+            foreach (var product in products)
+            {
+                lstbxProducts.Items.Add(product.Name);
+            }
+        }
+
+        private void GetItems()
+        {
+            items = itemService.GetAll().ToList();
+        }
+        private void InitialConfig()
+        {
+            // Inputs
+            txtProductName.Enabled = false;
+            nmCode.Enabled = false;
+
+            // Buttons
+            btnAddItem.Enabled = false;
+            btnAddItem.BackColor = SystemColors.ControlLight;
+            btnAddItem.ForeColor = SystemColors.GrayText;
+
+            btnSaveRecipe.Enabled = false;
+            btnSaveRecipe.BackColor = SystemColors.ControlLight;
+            btnSaveRecipe.ForeColor = SystemColors.GrayText;
+
+            btnCancel.Enabled = false;
+            btnCancel.BackColor = SystemColors.ControlLight;
+            btnCancel.ForeColor = SystemColors.GrayText;
+
+            // DataGridView: disabled + explicit grey style so the state is clear
+            dgvDetailProduct.Enabled = false;
+            dgvDetailProduct.BackgroundColor = SystemColors.Control;
+            dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Control;
+            dgvDetailProduct.DefaultCellStyle.ForeColor = SystemColors.GrayText;
+            dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
+
+            // Action column: all rows show the same "Delete" label
+            ItemAction.Text = lang.Translate("Delete");
+            ItemAction.UseColumnTextForButtonValue = true;
+
+            // Labels: greyed text signals the section is inactive
+            label2.ForeColor = SystemColors.GrayText;
+            label3.ForeColor = SystemColors.GrayText;
+            lbRecipeDetail.ForeColor = SystemColors.GrayText;
+            lbRecipeDetail.Text = lang.Translate("Recipe Details: -");
+        }
+
+        private void EditConfig()
+        {
+            // Inputs
+            txtProductName.Enabled = true;
+            nmCode.Enabled = true;
+
+            // Buttons
+            btnAddItem.Enabled = true;
+            btnAddItem.UseVisualStyleBackColor = true;
+            btnAddItem.ForeColor = SystemColors.ControlText;
+
+            btnSaveRecipe.Enabled = true;
+            btnSaveRecipe.UseVisualStyleBackColor = true;
+            btnSaveRecipe.ForeColor = SystemColors.ControlText;
+
+            btnCancel.Enabled = true;
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.ForeColor = SystemColors.ControlText;
+
+            // DataGridView: restore active colours
+            dgvDetailProduct.Enabled = true;
+            dgvDetailProduct.BackgroundColor = SystemColors.Window;
+            dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Window;
+            dgvDetailProduct.DefaultCellStyle.ForeColor = SystemColors.ControlText;
+            dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
+
+            // Labels: restore normal text colour
+            label2.ForeColor = SystemColors.ControlText;
+            label3.ForeColor = SystemColors.ControlText;
+            lbRecipeDetail.ForeColor = SystemColors.ControlText;
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void txtSearchProduct_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtProductName_TextChanged(object sender, EventArgs e)
+        {
+            if (txtProductName.Text != "")
+            {
+                lbRecipeDetail.Text = lang.Translate("Recipe Details: ") + txtProductName.Text;
+            }
+            else
+            {
+                lbRecipeDetail.Text = lang.Translate("Recipe Details: -");
+            }
+        }
+
+        private void btnNewProduct_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                currentProduct = new Product { DetailProducts = new List<DetailProduct>() };
+                selectedItems = new List<Item>();
+                txtProductName.Text = string.Empty;
+                nmCode.Value = 0;
+                ClearDetailProductGrid();
+                EditConfig();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error starting new product: {ex.Message}");
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnAddItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                addItemToProductForm addItemToProductForm = new addItemToProductForm(items);
+
+                // Subscribe BEFORE ShowDialog: the event fires inside the dialog while it is still open
+                addItemToProductForm.OnItemsAdded += (s, itemsToAdd) =>
+                {
+                    selectedItems = itemsToAdd;
+                };
+
+                addItemToProductForm.ShowDialog();
+                FillDetailProductGrid(selectedItems);
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error adding items to recipe: {ex.Message}");
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnSaveRecipe_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (currentProduct == null)
+                {
+                    MessageBox.Show(lang.Translate("No product is being edited."), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtProductName.Text))
+                {
+                    MessageBox.Show(lang.Translate("Product name cannot be empty."), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (selectedItems == null || !selectedItems.Any())
+                {
+                    MessageBox.Show(lang.Translate("Please add at least one item to the recipe."), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                currentProduct.Code = (int)nmCode.Value;
+                currentProduct.Name = txtProductName.Text.Trim();
+
+                currentProduct.DetailProducts ??= new List<DetailProduct>();
+                currentProduct.DetailProducts.Clear();
+
+                foreach (var item in selectedItems)
+                {
+                    currentProduct.DetailProducts.Add(new DetailProduct
+                    {
+                        Item = item,
+                        QuantityToConsume = dgvDetailProduct.Rows.Cast<DataGridViewRow>()
+                            .Where(r => r.Cells[nameof(ItemName)].Value?.ToString() == item.Name)
+                            .Select(r => decimal.TryParse(r.Cells[nameof(QuantityToConsume)].Value?.ToString(), out var qty) ? qty : 0m)
+                            .FirstOrDefault()
+                    });
+                }
+
+                if (currentProduct.Id == 0)
+                {
+                    productService.Insert(currentProduct);
+                    MessageBox.Show(lang.Translate("Product created successfully!"), lang.Translate("Success"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    productService.Update(currentProduct);
+                    MessageBox.Show(lang.Translate("Product updated successfully!"), lang.Translate("Success"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                currentProduct = null;
+                selectedItems = null;
+                LoadProducts();
+                ClearDetailProductGrid();
+                InitialConfig();
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error saving product recipe: {ex.Message}");
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult result = MessageBox.Show(
+                    lang.Translate("Are you sure you want to cancel? All unsaved changes will be lost."),
+                    lang.Translate("Confirm Cancel"),
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    currentProduct = null;
+                    selectedItems = null;
+                    txtProductName.Text = string.Empty;
+                    nmCode.Value = 0;
+                    ClearDetailProductGrid();
+                    InitialConfig();
+                }
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error canceling product edit: {ex.Message}");
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgvDetailProduct_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || dgvDetailProduct.Columns[e.ColumnIndex].Name != nameof(ItemAction))
+                return;
+
+            string itemName = dgvDetailProduct.Rows[e.RowIndex].Cells[nameof(ItemName)].Value?.ToString();
+
+            if (selectedItems != null)
+            {
+                var toRemove = selectedItems.FirstOrDefault(i => i.Name == itemName);
+                if (toRemove != null)
+                    selectedItems.Remove(toRemove);
+            }
+
+            dgvDetailProduct.Rows.RemoveAt(e.RowIndex);
+        }
+
+        private void FillDetailProductGrid(List<Item> itemsOfProduct)
+        {
+            dgvDetailProduct.Rows.Clear();
+            if (itemsOfProduct != null)
+            {
+                foreach (var item in itemsOfProduct)
+                {
+                    string unitName = item.Unit.TryGetValue("Name", out var u) ? u?.ToString() : string.Empty;
+                    dgvDetailProduct.Rows.Add(item.Name, 0, unitName);
+                }
+            }
+            dgvDetailProduct.Refresh();
+        }
+
+        private void FillDetailProductGrid(List<DetailProduct> details)
+        {
+            dgvDetailProduct.Rows.Clear();
+            if (details != null)
+            {
+                foreach (var detail in details)
+                {
+                    string unitName = detail.Item.Unit.TryGetValue("Name", out var u) ? u?.ToString() : string.Empty;
+                    dgvDetailProduct.Rows.Add(detail.Item.Name, detail.QuantityToConsume, unitName);
+                }
+            }
+            dgvDetailProduct.Refresh();
+        }
+
+        private void ClearDetailProductGrid()
+        {
+            dgvDetailProduct.Rows.Clear();
+            dgvDetailProduct.Refresh();
+        }
+
+        public override void ApplyTranslations()
+        {
+            lbCategories.Text = lang.Translate("Products");
+            txtSearchProduct.PlaceholderText = lang.Translate("Search");
+            btnNewProduct.Text = lang.Translate("New Product");
+            btnModProduct.Text = lang.Translate("Modify");
+            btnDelete.Text = lang.Translate("Delete");
+            btnAddItem.Text = lang.Translate("Add Item to Recipe");
+            btnSaveRecipe.Text = lang.Translate("Save Recipe");
+            btnCancel.Text = lang.Translate("Cancel");
+            label2.Text = lang.Translate("Product Code:");
+            label3.Text = lang.Translate("Product Name:");
+            lbRecipeDetail.Text = lang.Translate("Recipe Details: -");
+            ItemName.HeaderText = lang.Translate("Item Name");
+            QuantityToConsume.HeaderText = lang.Translate("Quantity to Consume");
+            ItemUnit.HeaderText = lang.Translate("Unit");
+            ItemAction.HeaderText = lang.Translate("Action");
+            ItemAction.Text = lang.Translate("Delete");
+        }
+
+        private void btnModProduct_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lstbxProducts.SelectedItem == null)
+                {
+                    MessageBox.Show(lang.Translate("Please select a product to modify."), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                currentProduct = products.FirstOrDefault(p => p.Name == lstbxProducts.SelectedItem.ToString());
+                if (currentProduct != null)
+                {
+                    txtProductName.Text = currentProduct.Name;
+                    nmCode.Value = currentProduct.Code;
+                    selectedItems = currentProduct.DetailProducts?.Select(dp => dp.Item).ToList() ?? new List<Item>();
+                    FillDetailProductGrid(currentProduct.DetailProducts ?? new List<DetailProduct>());
+                    EditConfig();
+                }
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error loading product for modification: {ex.Message}");
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (lstbxProducts.SelectedItem == null)
+                {
+                    MessageBox.Show(lang.Translate("Please select a product to delete."), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                currentProduct = products.FirstOrDefault(p => p.Name == lstbxProducts.SelectedItem.ToString());
+                if (currentProduct != null)
+                {
+                    DialogResult result = MessageBox.Show(
+                        lang.Translate($"Are you sure you want to delete the product '{currentProduct.Name}'?"),
+                        lang.Translate("Confirm Delete"),
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        productService.Delete(currentProduct.Id);
+                        MessageBox.Show(lang.Translate("Product deleted successfully!"), lang.Translate("Success"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        currentProduct = null;
+                        LoadProducts();
+                        ClearDetailProductGrid();
+                        InitialConfig();
+                    }
+                }
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ex.Handler();
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.Error($"Error deleting product: {ex.Message}");
+                MessageBox.Show(lang.Translate("An error occurred: ") + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}

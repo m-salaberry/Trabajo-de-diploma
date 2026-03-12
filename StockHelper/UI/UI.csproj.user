@@ -10,6 +10,9 @@
     <Compile Update="controlForms\ctrlProviders.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="controlForms\ctrlStock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="frmLogIn.cs">
       <SubType>Form</SubType>
     </Compile>
