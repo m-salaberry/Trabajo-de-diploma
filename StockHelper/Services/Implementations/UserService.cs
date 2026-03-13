@@ -15,11 +15,17 @@ namespace Services.Implementations
         private UsersRepository _userRepository;
         private static UserService _instance = null;
 
+        /// <summary>
+        /// Private constructor to enforce Singleton pattern.
+        /// </summary>
         private UserService()
         {
             _userRepository = new UsersRepository();
         }
 
+        /// <summary>
+        /// Gets the singleton instance of UserService.
+        /// </summary>
         public static UserService Instance()
         {
             if (_instance == null)
@@ -29,6 +35,9 @@ namespace Services.Implementations
             return _instance;
         }
 
+        /// <summary>
+        /// Deletes a user by their unique identifier.
+        /// </summary>
         public void Delete(Guid id)
         {
             User userToDelete = _userRepository.GetById(id);
@@ -40,6 +49,9 @@ namespace Services.Implementations
             _userRepository.Delete(userToDelete);
         }
 
+        /// <summary>
+        /// Determines whether a user with the specified Id exists.
+        /// </summary>
         public bool Exists(Guid id)
         {
             return _userRepository.GetById(id) != null;
@@ -55,6 +67,9 @@ namespace Services.Implementations
             return _userRepository.GetByName(name) != null;
         }
 
+        /// <summary>
+        /// Retrieves all users from the system.
+        /// </summary>
         public List<User> GetAll()
         {
             return _userRepository.GetAll().ToList();
@@ -70,16 +85,25 @@ namespace Services.Implementations
             return _userRepository.GetAllActive().ToList();
         }
 
+        /// <summary>
+        /// Retrieves a user by their unique identifier.
+        /// </summary>
         public User GetById(Guid id)
         {
             return _userRepository.GetById(id);
         }
 
+        /// <summary>
+        /// Retrieves a user by their username.
+        /// </summary>
         public User GetByName(string name)
         {
             return _userRepository.GetByName(name);
         }
 
+        /// <summary>
+        /// Inserts a new user into the system with hashed password and role assignment.
+        /// </summary>
         public void Insert(User entity)
         {
             if (ExistsByName(entity.Name))
@@ -95,6 +119,9 @@ namespace Services.Implementations
             _userRepository.SaveRelatedFamilyOfUser(entity, family);
         }
 
+        /// <summary>
+        /// Updates an existing user's information.
+        /// </summary>
         public void Update(User entity)
         {
 

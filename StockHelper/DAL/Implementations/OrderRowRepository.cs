@@ -10,6 +10,9 @@ namespace DAL.Implementations
 {
     public class OrderRowRepository : IRepository<OrderRow, Guid>
     {
+        /// <summary>
+        /// Inserts a new OrderRow into the database and sets the generated Id.
+        /// </summary>
         public void Create(OrderRow entity)
         {
             string command = @"
@@ -31,6 +34,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Deletes an OrderRow from the database by its Id.
+        /// </summary>
         public void Delete(OrderRow entity)
         {
             string command = "DELETE FROM ORDER_ROWS WHERE Id = @Id";
@@ -38,6 +44,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Retrieves all OrderRows from the database with their associated Items.
+        /// </summary>
         public IEnumerable<OrderRow> GetAll()
         {
             string command = @"
@@ -63,6 +72,9 @@ namespace DAL.Implementations
             return rows;
         }
 
+        /// <summary>
+        /// Retrieves a single OrderRow by its unique identifier.
+        /// </summary>
         public OrderRow GetById(Guid id)
         {
             string command = @"
@@ -86,6 +98,9 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Updates an existing OrderRow in the database.
+        /// </summary>
         public void Update(OrderRow entity)
         {
             string command = @"UPDATE ORDER_ROWS
@@ -132,6 +147,9 @@ namespace DAL.Implementations
             return rows;
         }
 
+        /// <summary>
+        /// Maps a SqlDataReader row to an OrderRow entity.
+        /// </summary>
         private OrderRow MapToEntity(SqlDataReader reader)
         {
             var item = (Item)Activator.CreateInstance(typeof(Item), true);

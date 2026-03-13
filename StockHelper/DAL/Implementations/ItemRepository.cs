@@ -13,10 +13,13 @@ namespace DAL.Implementations
 {
     public class ItemRepository : IRepository<Item, Guid>
     {
+        /// <summary>
+        /// Inserts a new Item into the database and sets the generated Id.
+        /// </summary>
         public void Create(Item entity)
         {
             string command = @"
-                INSERT INTO ITEMS (Name, Unit, IntegerUnit, ItemsCategoryId, CurrentStock) 
+                INSERT INTO ITEMS (Name, Unit, IntegerUnit, ItemsCategoryId, CurrentStock)
                 OUTPUT INSERTED.Id
                 VALUES (@Name, @Unit, @IntegerUnit, @ItemsCategoryId, @CurrentStock)";
             
@@ -36,6 +39,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Updates an existing Item in the database.
+        /// </summary>
         public void Update(Item entity)
         {
             string command = "UPDATE ITEMS SET Name = @Name, Unit = @Unit, IntegerUnit = @IntegerUnit, ItemsCategoryId = @ItemsCategoryId, CurrentStock = @CurrentStock, ModifiedDate = GETDATE() WHERE Id = @Id";
@@ -51,6 +57,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Deletes an Item from the database by its Id.
+        /// </summary>
         public void Delete(Item entity)
         {
             string command = "DELETE FROM ITEMS WHERE Id = @Id";
@@ -58,6 +67,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Retrieves a single Item by its unique identifier.
+        /// </summary>
         public Item GetById(Guid id)
         {
             string command = @"
@@ -79,6 +91,9 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Retrieves all Items from the database with their associated categories.
+        /// </summary>
         public IEnumerable<Item> GetAll()
         {
             string command = @"
@@ -102,6 +117,9 @@ namespace DAL.Implementations
             return items;
         }
 
+        /// <summary>
+        /// Maps a SqlDataReader row to an Item entity.
+        /// </summary>
         private Item MapToEntity(SqlDataReader reader)
         {
             // Create instance using private constructor

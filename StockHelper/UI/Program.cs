@@ -10,8 +10,8 @@ namespace UI
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         internal static extern bool AllocConsole();
 
-        internal static bool testEnvironment = true;      
-        internal static bool productionEnvironment = false;  
+        internal static bool testEnvironment = false;      
+        internal static bool productionEnvironment = true;  
     }
 
     internal static class Program
@@ -93,85 +93,6 @@ namespace UI
             config.InitializeLogger();
         }
 
-        /// <summary>
-        /// Test method for Patent & Family with User (for development/testing)
-        /// </summary>
-        private static void Test_Patent_Family()
-        {
-            try
-            {
-                Logger.Current.Debug("Starting Test_Patent_Family");
-                Console.WriteLine("This is a test method for Patent & Family");
-
-                Component p1 = new Patent
-                {
-                    Name = "A001",
-                    Id = Guid.NewGuid()
-                };
-                Console.WriteLine($"Patent 1:\n{p1.Name}");
-
-                Component p2 = new Patent
-                {
-                    Name = "A002",
-                    Id = Guid.NewGuid()
-                };
-                Console.WriteLine($"Patent 2:\n{p2.Name}");
-
-                Component p3 = new Patent
-                {
-                    Name = "A003",
-                    Id = Guid.NewGuid(),
-                };
-
-                Component f1 = new Family
-                {
-                    Name = "Administrator",
-                    Id = Guid.NewGuid(),
-                };
-
-                f1.AddChild(p1);
-                f1.AddChild(p2);
-                f1.AddChild(p3);
-
-                Console.WriteLine($"Family 1:\n{f1.Name}\n Patents:");
-                foreach (var child in f1.Children)
-                {
-                    Console.WriteLine($" - {child.Name}");
-                }
-
-                Console.ReadKey();
-                Console.Clear();
-
-                User u1 = new User
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "admin",
-                    Password = "admin",
-                };
-
-                u1.Permissions.Add(f1);
-                Console.WriteLine($"User 1:\n{u1.Name}\n Permissions:");
-                foreach (var perm in u1.Permissions)
-                {
-                    Console.WriteLine($" - {perm.Name} ({perm.GetType().Name})");
-                    if (perm is Family family)
-                    {
-                        Console.WriteLine("   Patents:");
-                        foreach (var child in family.Children)
-                        {
-                            Console.WriteLine($"    - {child.Name}");
-                        }
-                    }
-                }
-
-                Console.ReadKey();
-                Logger.Current.Debug("Test_Patent_Family completed successfully");
-            }
-            catch (Exception ex)
-            {
-                Logger.Current.LogException(LogLevels.Error, "Error in Test_Patent_Family", ex);
-                throw;
-            }
-        }
+        
     }
 }

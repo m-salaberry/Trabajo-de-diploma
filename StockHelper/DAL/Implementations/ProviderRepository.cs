@@ -10,6 +10,9 @@ namespace DAL.Implementations
 {
     public class ProviderRepository : IRepository<Provider, Guid>
     {
+        /// <summary>
+        /// Inserts a new Provider into the database and sets the generated Id.
+        /// </summary>
         public void Create(Provider entity)
         {
             string command = @"
@@ -34,6 +37,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Updates an existing Provider in the database.
+        /// </summary>
         public void Update(Provider entity)
         {
             string command = @"UPDATE PROVIDERS 
@@ -56,6 +62,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Deletes a Provider from the database by its Id.
+        /// </summary>
         public void Delete(Provider entity)
         {
             string command = "DELETE FROM PROVIDERS WHERE Id = @Id";
@@ -63,6 +72,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Retrieves a single Provider by its unique identifier.
+        /// </summary>
         public Provider GetById(Guid id)
         {
             string command = @"
@@ -84,6 +96,9 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Retrieves all Providers from the database with their associated categories.
+        /// </summary>
         public IEnumerable<Provider> GetAll()
         {
             string command = @"
@@ -107,6 +122,9 @@ namespace DAL.Implementations
             return providers;
         }
 
+        /// <summary>
+        /// Maps a SqlDataReader row to a Provider entity.
+        /// </summary>
         private Provider MapToEntity(SqlDataReader reader)
         {
             var provider = (Provider)Activator.CreateInstance(typeof(Provider), true);

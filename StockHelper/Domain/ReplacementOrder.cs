@@ -13,12 +13,18 @@ namespace Domain
         public Provider Provider { get; set; }
         public List<OrderRow> OrderRows { get; set; }
 
+        /// <summary>
+        /// Initializes a new replacement order for the specified provider.
+        /// </summary>
         public ReplacementOrder(Provider provider)
         {
             Provider = provider;
             OrderRows = new List<OrderRow>();
         }
 
+        /// <summary>
+        /// Generates a unique order number using the provider's CUIT and a sequential counter.
+        /// </summary>
         public string GenerateReplacementOrderNumber(int sequentialNumber)
         {
             string cuitBody = Provider.CUIT.Replace("-", "");

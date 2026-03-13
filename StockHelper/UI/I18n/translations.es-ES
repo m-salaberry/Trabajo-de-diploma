@@ -378,3 +378,77 @@ Item updated successfully=Artículo actualizado exitosamente
 CUIT must be a valid number.=El CUIT debe ser un número válido.
 Provider added successfully!=¡Proveedor agregado exitosamente!
 
+# Orders Module
+Please select an order to modify.=Por favor seleccione un pedido para modificar.
+Please select an order to delete.=Por favor seleccione un pedido para eliminar.
+Are you sure you want to delete this order?=¿Está seguro de que desea eliminar este pedido?
+Please select an order to send.=Por favor seleccione un pedido para enviar.
+Are you sure you want to send this order?=¿Está seguro de que desea enviar este pedido?
+Confirm Send=Confirmar Envío
+Order sent successfully!=¡Pedido enviado exitosamente!
+Invalid quantity for=Cantidad inválida para
+
+# Purchase Orders
+Please select a purchase order to upload an invoice.=Por favor seleccione una orden de compra para cargar una factura.
+Invoice Reception=Recepción de Factura
+Purchase Order #:=Orden de Compra #:
+Enter Total Invoice Amount:=Ingrese el Monto Total de la Factura:
+Browse and Upload Invoice File=Buscar y Cargar Archivo de Factura
+Confirm and Close Order=Confirmar y Cerrar Orden
+Cancel Purchase Order=Cancelar Orden de Compra
+Cancel Order=Cancelar Orden
+Are you sure you want to cancel this purchase order?=¿Está seguro de que desea cancelar esta orden de compra?
+Purchase order cancelled successfully.=Orden de compra cancelada exitosamente.
+
+# Purchase Module UI
+Please select a purchase order to cancel.=Por favor seleccione una orden de compra para cancelar.
+Select Invoice File=Seleccionar Archivo de Factura
+Please select an invoice file before confirming.=Por favor seleccione un archivo de factura antes de confirmar.
+Please enter a valid total amount greater than zero.=Por favor ingrese un monto total válido mayor a cero.
+Are you sure you want to confirm this invoice and close the order?=¿Está seguro de que desea confirmar esta factura y cerrar la orden?
+Invoice uploaded and order closed successfully.=Factura cargada y orden cerrada exitosamente.
+Choose a Provider=Elegir un Proveedor
+Select=Seleccionar
+Please select a provider.=Por favor seleccione un proveedor.
+Purchase Orders:=Órdenes de Compra:
+Upload Invoice=Cargar Factura
+Search by Provider...=Buscar por Proveedor...
+Order Name=Nombre del Pedido
+Provider=Proveedor
+Status=Estado
+Total Amount=Monto Total
+
+# Analytics Module
+Purchase Statistics=Estadísticas de Compras
+From:=Desde:
+To:=Hasta:
+Generate=Generar
+Send to Email=Enviar por Email
+Category of Purchase=Categoría de Compra
+Total Orders=Total de Pedidos
+Total Spent=Total Gastado
+% of Total Spending=% del Gasto Total
+The 'From' date must be earlier than or equal to the 'To' date.=La fecha 'Desde' debe ser anterior o igual a la fecha 'Hasta'.
+Validation=Validación
+A system error occurred while sending the report: =Ocurrió un error del sistema al enviar el reporte:
+An error occurred while sending the report: =Ocurrió un error al enviar el reporte:
+
+# WhatsApp Message Template
+Purchase Statistics Report=Reporte de Estadísticas de Compras
+Period:=Período:
+Statistics by Category=Estadísticas por Categoría
+Statistics by Provider=Estadísticas por Proveedor
+Please generate the statistics before sending.=Por favor genere las estadísticas antes de enviar.
+Could not open email client: =No se pudo abrir el cliente de correo:
+Good morning,=Buenos días,
+We send you the following replacement order=Le enviamos el siguiente pedido de reposición
+We await your confirmation.=Quedamos a la espera de su confirmación.
+Kind regards.=Saludos cordiales.
+System Language:=Idioma del Sistema:
+Please select a language.=Por favor seleccione un idioma.
+Language changed successfully.=Idioma cambiado exitosamente.
+New Category=New Category
+Delete Category=Delete Category
+Items=Items
+Unit=Unit
+Integer Unit=Integer Unit

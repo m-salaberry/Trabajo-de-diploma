@@ -16,6 +16,9 @@ namespace DAL.Implementations
         // on the DetailProduct domain entity. Use the extra methods below.
         // =====================================================================
 
+        /// <summary>
+        /// Not supported. Use CreateForProduct instead.
+        /// </summary>
         public void Create(DetailProduct entity)
         {
             throw new NotSupportedException(
@@ -23,6 +26,9 @@ namespace DAL.Implementations
                 "Use CreateForProduct(int productId, DetailProduct entity) instead.");
         }
 
+        /// <summary>
+        /// Not supported. Use ProductRepository.Update to replace the full detail list.
+        /// </summary>
         public void Update(DetailProduct entity)
         {
             throw new NotSupportedException(
@@ -30,6 +36,9 @@ namespace DAL.Implementations
                 "Use ProductRepository.Update to replace the full detail list.");
         }
 
+        /// <summary>
+        /// Not supported. Use DeleteByProductId to remove all details of a product.
+        /// </summary>
         public void Delete(DetailProduct entity)
         {
             throw new NotSupportedException(
@@ -37,6 +46,9 @@ namespace DAL.Implementations
                 "Use DeleteByProductId(int productId) to remove all details of a product.");
         }
 
+        /// <summary>
+        /// Retrieves a single DetailProduct by its unique identifier.
+        /// </summary>
         public DetailProduct GetById(int id)
         {
             string command = @"
@@ -58,6 +70,9 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Retrieves all DetailProduct entries from the database.
+        /// </summary>
         public IEnumerable<DetailProduct> GetAll()
         {
             string command = @"

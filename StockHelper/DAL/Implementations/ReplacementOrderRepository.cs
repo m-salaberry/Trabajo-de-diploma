@@ -10,6 +10,9 @@ namespace DAL.Implementations
 {
     public class ReplacementOrderRepository : IRepository<ReplacementOrder, Guid>
     {
+        /// <summary>
+        /// Inserts a new ReplacementOrder into the database and sets the generated Id.
+        /// </summary>
         public void Create(ReplacementOrder entity)
         {
             string command = @"
@@ -30,6 +33,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Deletes a ReplacementOrder from the database by its Id.
+        /// </summary>
         public void Delete(ReplacementOrder entity)
         {
             string command = "DELETE FROM REPLACEMENT_ORDERS WHERE Id = @Id";
@@ -37,6 +43,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Retrieves all ReplacementOrders from the database with their associated Providers and OrderRows.
+        /// </summary>
         public IEnumerable<ReplacementOrder> GetAll()
         {
             string command = @"
@@ -67,6 +76,9 @@ namespace DAL.Implementations
             return orders;
         }
 
+        /// <summary>
+        /// Retrieves a single ReplacementOrder by its unique identifier.
+        /// </summary>
         public ReplacementOrder GetById(Guid id)
         {
             string command = @"
@@ -93,6 +105,9 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Updates an existing ReplacementOrder in the database.
+        /// </summary>
         public void Update(ReplacementOrder entity)
         {
             string command = @"UPDATE REPLACEMENT_ORDERS
@@ -134,6 +149,9 @@ namespace DAL.Implementations
             return result != null ? Convert.ToInt32(result) : 1;
         }
 
+        /// <summary>
+        /// Loads all OrderRow entries associated with a replacement order.
+        /// </summary>
         internal List<OrderRow> LoadOrderRows(Guid replacementOrderId)
         {
             string command = @"
@@ -182,6 +200,9 @@ namespace DAL.Implementations
             return rows;
         }
 
+        /// <summary>
+        /// Maps a SqlDataReader row to a ReplacementOrder entity with its Provider.
+        /// </summary>
         private ReplacementOrder MapToEntity(SqlDataReader reader)
         {
             var provider = (Provider)Activator.CreateInstance(typeof(Provider), true);

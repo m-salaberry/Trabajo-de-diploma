@@ -10,6 +10,9 @@ namespace DAL.Implementations
 {
     public class ItemsCategoryRepository : IRepository<ItemsCategory, int>
     {
+        /// <summary>
+        /// Inserts a new ItemsCategory into the database and sets the generated Id.
+        /// </summary>
         public void Create(ItemsCategory entity)
         {
             string command = "INSERT INTO ITEMS_CATEGORY (Name) VALUES (@Name); SELECT CAST(SCOPE_IDENTITY() AS INT)";
@@ -25,6 +28,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Updates an existing ItemsCategory in the database.
+        /// </summary>
         public void Update(ItemsCategory entity)
         {
             string command = "UPDATE ITEMS_CATEGORY SET Name = @Name WHERE Id = @Id";
@@ -36,6 +42,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Deletes an ItemsCategory from the database by its Id.
+        /// </summary>
         public void Delete(ItemsCategory entity)
         {
             string command = "DELETE FROM ITEMS_CATEGORY WHERE Id = @Id";
@@ -43,6 +52,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Retrieves a single ItemsCategory by its unique identifier.
+        /// </summary>
         public ItemsCategory GetById(int id)
         {
             string command = "SELECT Id, Name FROM ITEMS_CATEGORY WHERE Id = @Id";
@@ -58,6 +70,9 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Retrieves all ItemsCategory entries from the database.
+        /// </summary>
         public IEnumerable<ItemsCategory> GetAll()
         {
             string command = "SELECT Id, Name FROM ITEMS_CATEGORY";
@@ -76,6 +91,9 @@ namespace DAL.Implementations
             return categories;
         }
 
+        /// <summary>
+        /// Maps a SqlDataReader row to an ItemsCategory entity.
+        /// </summary>
         private ItemsCategory MapToEntity(SqlDataReader reader)
         {
             return new ItemsCategory

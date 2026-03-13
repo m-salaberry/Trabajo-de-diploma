@@ -10,6 +10,9 @@ namespace DAL.Implementations
 {
     public class ProductRepository : IRepository<Product, int>
     {
+        /// <summary>
+        /// Inserts a new Product into the database and sets the generated Id.
+        /// </summary>
         public void Create(Product entity)
         {
             string command = @"
@@ -36,6 +39,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Updates an existing Product in the database.
+        /// </summary>
         public void Update(Product entity)
         {
             string command = @"
@@ -62,6 +68,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Deletes a Product from the database by its Id.
+        /// </summary>
         public void Delete(Product entity)
         {
             // ON DELETE CASCADE in PRODUCT_DETAILS handles child rows automatically
@@ -69,6 +78,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, new SqlParameter("@Id", entity.Id));
         }
 
+        /// <summary>
+        /// Retrieves a single Product by its unique identifier.
+        /// </summary>
         public Product GetById(int id)
         {
             string command = @"
@@ -90,6 +102,9 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Retrieves all Products from the database with their associated details.
+        /// </summary>
         public IEnumerable<Product> GetAll()
         {
             string command = @"
@@ -114,6 +129,9 @@ namespace DAL.Implementations
             return products;
         }
 
+        /// <summary>
+        /// Maps a SqlDataReader row to a Product entity.
+        /// </summary>
         private static Product MapToEntity(SqlDataReader reader)
         {
             var product = (Product)Activator.CreateInstance(typeof(Product), true);
@@ -123,6 +141,9 @@ namespace DAL.Implementations
             return product;
         }
 
+        /// <summary>
+        /// Loads all DetailProduct entries for a given product.
+        /// </summary>
         private List<DetailProduct> LoadDetails(int productId)
         {
             string command = @"
@@ -149,6 +170,9 @@ namespace DAL.Implementations
             return details;
         }
 
+        /// <summary>
+        /// Inserts a single product detail row.
+        /// </summary>
         private void InsertDetail(int productId, DetailProduct detail)
         {
             string command = @"
@@ -165,6 +189,9 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Deletes all detail rows for a given product.
+        /// </summary>
         private void DeleteDetailsByProductId(int productId)
         {
             string command = "DELETE FROM PRODUCT_DETAILS WHERE ProductId = @ProductId";

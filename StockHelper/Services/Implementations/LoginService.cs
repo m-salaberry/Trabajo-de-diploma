@@ -12,10 +12,16 @@ namespace Services.Implementations
     public class LoginService
     {
         private UserService _userService;
+        /// <summary>
+        /// Initializes a new instance of the LoginService.
+        /// </summary>
         public LoginService()
         {
             _userService = UserService.Instance();
         }
+        /// <summary>
+        /// Authenticates a user by verifying username and password against stored credentials.
+        /// </summary>
         public bool Authenticate(string username, string password)
         {
             try

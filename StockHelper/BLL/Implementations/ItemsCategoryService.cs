@@ -17,12 +17,18 @@ namespace BLL.Implementations
     /// </summary>
     public class ItemsCategoryService : GenericBllService<ItemsCategory, int>
     {
+        /// <summary>
+        /// Initializes a new instance with the specified category repository.
+        /// </summary>
         private ItemsCategoryService(IRepository<ItemsCategory, int> repository) : base(repository)
         {
         }
 
         private static ItemsCategoryService _instance = null;
 
+        /// <summary>
+        /// Returns the singleton instance of ItemsCategoryService.
+        /// </summary>
         public static ItemsCategoryService Instance()
         {
             if (_instance == null)

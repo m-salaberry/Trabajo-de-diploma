@@ -14,6 +14,7 @@ using Services.Contracts.Logs;
 using UI.secondaryForms;
 using UI.Helpers;
 using UI.controlForms;
+using BLL.Implementations;
 
 namespace UI
 {
@@ -23,6 +24,9 @@ namespace UI
         private User currentUser;
         private static frmMain _instance;
 
+        /// <summary>
+        /// Private constructor that initializes the main form for the logged-in user.
+        /// </summary>
         private frmMain(User logedUser)
         {
             InitializeComponent();
@@ -40,6 +44,9 @@ namespace UI
             Logger.Current.Info($"Main form initialized for user '{currentUser.Name}'");
         }
 
+        /// <summary>
+        /// Gets the singleton instance of the main form.
+        /// </summary>
         public static frmMain GetInstance(User logedUser = null!)
         {
             if (_instance == null || _instance.IsDisposed)
@@ -103,6 +110,7 @@ namespace UI
             // Configure sub-menu items visibility
             tsmStockManagment.Visible = hasStockManagment;
             tsmOrders.Visible = hasPurchaseManagement;
+            tsmPurchase.Visible = hasPurchaseManagement;
             tsmAnalytics.Visible = hasAnalytics;
 
             // Show parent menu only if at least one sub-menu is visible
@@ -118,9 +126,12 @@ namespace UI
                 $"Visible Menus: " +
                 $"UserAndPerms={tsmUserAndPerms.Visible} (Users={tsmUsers.Visible}, Perms={tsmPerms.Visible}), " +
                 $"Catalog={tsmCatalogManagment.Visible} (Items={tsmItemsAndCategories.Visible}, Providers={tsmProviders.Visible}, Builder={tsmProductBuilder.Visible}), " +
-                $"Inventory={tsmInventoryAndPurchasing.Visible} (Stock={tsmStockManagment.Visible}, Orders={tsmOrders.Visible}, Analytics={tsmAnalytics.Visible})");
+                $"Inventory={tsmInventoryAndPurchasing.Visible} (Stock={tsmStockManagment.Visible}, Orders={tsmOrders.Visible}, Purchase={tsmPurchase.Visible}, Analytics={tsmAnalytics.Visible})");
         }
 
+        /// <summary>
+        /// Handles the form load event, logging user permissions.
+        /// </summary>
         private void frmMain_Load(object sender, EventArgs e)
         {
             // Get all atomic permissions using extension method
@@ -150,6 +161,9 @@ namespace UI
             }
         }
 
+        /// <summary>
+        /// Opens the User Management module.
+        /// </summary>
         private void tsmUsers_Click(object sender, EventArgs e)
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access User Management");
@@ -169,6 +183,9 @@ namespace UI
             showContent(userManagement);
         }
 
+        /// <summary>
+        /// Opens the Permission Management module.
+        /// </summary>
         private void tsmPerms_Click(object sender, EventArgs e)
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Permission Management");
@@ -188,6 +205,9 @@ namespace UI
             showContent(permissionManagement);
         }
 
+        /// <summary>
+        /// Opens the Items and Categories module.
+        /// </summary>
         private void tsmItemsAndCategories_Click(object sender, EventArgs e)
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Items and Categories");
@@ -206,6 +226,9 @@ namespace UI
             showContent(itemsAndCategories);
         }
 
+        /// <summary>
+        /// Opens the Providers module.
+        /// </summary>
         private void tsmProviders_Click(object sender, EventArgs e)
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Providers");
@@ -224,6 +247,9 @@ namespace UI
             showContent(providers);
         }
 
+        /// <summary>
+        /// Opens the Product Builder module.
+        /// </summary>
         private void tsmProductBuilder_Click(object sender, EventArgs e)
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Product Builder");
@@ -242,6 +268,9 @@ namespace UI
             showContent(productBuilder);
         }
 
+        /// <summary>
+        /// Opens the Stock Management module.
+        /// </summary>
         private void tsmStockManagment_Click(object sender, EventArgs e)
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Stock Management");
@@ -260,24 +289,51 @@ namespace UI
             showContent(stockManagement);
         }
 
+        /// <summary>
+        /// Opens the Replacement Orders module.
+        /// </summary>
         private void tsmOrders_Click(object sender, EventArgs e)
         {
-            Logger.Current.Info($"User '{currentUser.Name}' attempting to access Orders");
+            Logger.Current.Info($"User '{currentUser.Name}' attempting to access Replacement Orders");
 
             // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.PurchaseManagement,
-                "Orders"))
+                "Replacement Orders"))
             {
                 return; // Error message already shown by helper
             }
 
-            Logger.Current.Info($"User '{currentUser.Name}' opened Orders module");
-            // TODO: Implement ctrlOrders when ready
-            MessageBox.Show("Orders module coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Logger.Current.Info($"User '{currentUser.Name}' opened Replacement Orders module");
+            ctrlOrders orders = new ctrlOrders();
+            showContent(orders);
         }
 
+        /// <summary>
+        /// Opens the Purchase Orders module.
+        /// </summary>
+        private void tsmPurchase_Click(object sender, EventArgs e)
+        {
+            Logger.Current.Info($"User '{currentUser.Name}' attempting to access Purchase Orders");
+
+            // Verify permission before opening the module
+            if (!UIPermissionHelper.CanAccessForm(
+                currentUser,
+                PermissionNames.PurchaseManagement,
+                "Purchase Orders"))
+            {
+                return; // Error message already shown by helper
+            }
+
+            Logger.Current.Info($"User '{currentUser.Name}' opened Purchase Orders module");
+            ctrlPurchase purchase = new ctrlPurchase();
+            showContent(purchase);
+        }
+
+        /// <summary>
+        /// Opens the Analytics module.
+        /// </summary>
         private void tsmAnalytics_Click(object sender, EventArgs e)
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Analytics");
@@ -292,10 +348,23 @@ namespace UI
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Analytics module");
-            // TODO: Implement ctrlAnalytics when ready
-            MessageBox.Show("Analytics module coming soon!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ctrlAnalytics analytics = new ctrlAnalytics();
+            showContent(analytics);
         }
 
+        /// <summary>
+        /// Opens the Configuration module. Accessible to all users without permission checks.
+        /// </summary>
+        private void tsmConfiguration_Click(object sender, EventArgs e)
+        {
+            Logger.Current.Info($"User '{currentUser.Name}' opened Configuration module");
+            ctrlConfiguration configuration = new ctrlConfiguration();
+            showContent(configuration);
+        }
+
+        /// <summary>
+        /// Displays a UserControl in the main content panel.
+        /// </summary>
         private void showContent(UserControl newContent)
         {
             this.MinimumSize = new Size(0, 0);
@@ -305,6 +374,9 @@ namespace UI
             newContent.BringToFront();
         }
 
+        /// <summary>
+        /// Resets the main panel to its default minimum size.
+        /// </summary>
         public void ResetMainPanelSize()
         {
             this.MinimumSize = new Size(800, 600);

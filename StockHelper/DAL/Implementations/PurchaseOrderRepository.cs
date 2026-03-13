@@ -12,19 +12,23 @@ namespace DAL.Implementations
     {
         private readonly ReplacementOrderRepository _replacementOrderRepo = new ReplacementOrderRepository();
 
+        /// <summary>
+        /// Inserts a new PurchaseOrder into the database and sets the generated Id.
+        /// </summary>
         public void Create(PurchaseOrder entity)
         {
             string command = @"
-                INSERT INTO PURCHASE_ORDERS (ReplacementOrderId, Status, BillFilePath, TotalAmount)
+                INSERT INTO PURCHASE_ORDERS (ReplacementOrderId, Status, BillFilePath, TotalAmount, IssuedDate)
                 OUTPUT INSERTED.Id
-                VALUES (@ReplacementOrderId, @Status, @BillFilePath, @TotalAmount)";
+                VALUES (@ReplacementOrderId, @Status, @BillFilePath, @TotalAmount, @IssuedDate)";
 
             var parameters = new[]
             {
                 new SqlParameter("@ReplacementOrderId", entity.ReplacementOrder.Id),
                 new SqlParameter("@Status", entity.Status),
                 new SqlParameter("@BillFilePath", (object)entity.BillFilePath ?? DBNull.Value),
-                new SqlParameter("@TotalAmount", entity.TotalAmount)
+                new SqlParameter("@TotalAmount", entity.TotalAmount),
+                new SqlParameter("@IssuedDate", entity.IssuedDate)
             };
 
             var result = SqlHelper.ExecuteScalar(command, CommandType.Text, parameters);
@@ -34,6 +38,9 @@ namespace DAL.Implementations
             }
         }
 
+        /// <summary>
+        /// Deletes a PurchaseOrder from the database by its Id.
+        /// </summary>
         public void Delete(PurchaseOrder entity)
         {
             string command = "DELETE FROM PURCHASE_ORDERS WHERE Id = @Id";
@@ -41,10 +48,13 @@ namespace DAL.Implementations
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Retrieves all PurchaseOrders from the database with their associated ReplacementOrders and Providers.
+        /// </summary>
         public IEnumerable<PurchaseOrder> GetAll()
         {
             string command = @"
-                SELECT po.Id, po.Status, po.BillFilePath, po.TotalAmount,
+                SELECT po.Id, po.Status, po.BillFilePath, po.TotalAmount, po.IssuedDate,
                        ro.Id AS ReplacementOrderId, ro.ReplacementOrderNumber,
                        p.Id AS ProviderId, p.Name AS ProviderName, p.CUIT,
                        p.CompanyName, p.ContactTel, p.Email,
@@ -73,10 +83,13 @@ namespace DAL.Implementations
             return orders;
         }
 
+        /// <summary>
+        /// Retrieves a single PurchaseOrder by its unique identifier.
+        /// </summary>
         public PurchaseOrder GetById(Guid id)
         {
             string command = @"
-                SELECT po.Id, po.Status, po.BillFilePath, po.TotalAmount,
+                SELECT po.Id, po.Status, po.BillFilePath, po.TotalAmount, po.IssuedDate,
                        ro.Id AS ReplacementOrderId, ro.ReplacementOrderNumber,
                        p.Id AS ProviderId, p.Name AS ProviderName, p.CUIT,
                        p.CompanyName, p.ContactTel, p.Email,
@@ -101,13 +114,17 @@ namespace DAL.Implementations
             return null;
         }
 
+        /// <summary>
+        /// Updates an existing PurchaseOrder in the database.
+        /// </summary>
         public void Update(PurchaseOrder entity)
         {
             string command = @"UPDATE PURCHASE_ORDERS
                 SET ReplacementOrderId = @ReplacementOrderId,
                     Status = @Status,
                     BillFilePath = @BillFilePath,
-                    TotalAmount = @TotalAmount
+                    TotalAmount = @TotalAmount,
+                    IssuedDate = @IssuedDate
                 WHERE Id = @Id";
 
             var parameters = new[]
@@ -116,12 +133,16 @@ namespace DAL.Implementations
                 new SqlParameter("@ReplacementOrderId", entity.ReplacementOrder.Id),
                 new SqlParameter("@Status", entity.Status),
                 new SqlParameter("@BillFilePath", (object)entity.BillFilePath ?? DBNull.Value),
-                new SqlParameter("@TotalAmount", entity.TotalAmount)
+                new SqlParameter("@TotalAmount", entity.TotalAmount),
+                new SqlParameter("@IssuedDate", entity.IssuedDate)
             };
 
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Maps a SqlDataReader row to a PurchaseOrder entity with its ReplacementOrder and Provider.
+        /// </summary>
         private PurchaseOrder MapToEntity(SqlDataReader reader)
         {
             // Map Provider
@@ -150,6 +171,7 @@ namespace DAL.Implementations
             purchaseOrder.Status = reader.GetString(reader.GetOrdinal("Status"));
             purchaseOrder.BillFilePath = reader.IsDBNull(reader.GetOrdinal("BillFilePath")) ? null : reader.GetString(reader.GetOrdinal("BillFilePath"));
             purchaseOrder.TotalAmount = reader.GetDecimal(reader.GetOrdinal("TotalAmount"));
+            purchaseOrder.IssuedDate = reader.GetDateTime(reader.GetOrdinal("IssuedDate"));
 
             return purchaseOrder;
         }

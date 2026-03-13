@@ -1,0 +1,83 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.controlForms
+{
+    public partial class ctrlOrders : TranslatableUserControls
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ReplacementOrderService orderService = ReplacementOrderService.Instance();
+
+        List<ReplacementOrder> orders;
+        List<ReplacementOrder> filteredOrders;
+
+        public ctrlOrders()
+        {
+            InitializeComponent();
+
+            lstbxOrders.FormattingEnabled = true;
+            lstbxOrders.Format += LstbxOrders_Format;
+
+            LoadOrders();
+            txtFilterByProvider.TextChanged += txtFilterByProvider_TextChanged;
+        }
+
+        private void LstbxOrders_Format(object sender, ListControlConvertEventArgs e)
+        {
+            if (e.ListItem is ReplacementOrder order)
+            {
+                string providerName = order.Provider != null ? order.Provider.Name : "N/A";
+                // Alinea el número de orden a la izquierda usando padding simulando columnas
+                e.Value = $"{order.ReplacementOrderNumber,-20} | {providerName}";
+            }
+        }
+
+        private void LoadOrders()
+        {
+            orders = orderService.GetAll().ToList();
+            filteredOrders = orders;
+            ApplyFilters();
+        }
+
+        private void ApplyFilters()
+        {
+            var result = orders.AsEnumerable();
+
+            if (!string.IsNullOrWhiteSpace(txtFilterByProvider.Text))
+            {
+                string searchTerm = txtFilterByProvider.Text.ToLower();
+                result = result.Where(o =>
+                    o.Provider.Name.ToLower().Contains(searchTerm) ||
+                    o.ReplacementOrderNumber.ToLower().Contains(searchTerm));
+            }
+
+            filteredOrders = result.ToList();
+            RenderOrders(filteredOrders);
+        }
+
+        private void RenderOrders(List<ReplacementOrder> source)
+        {
+            lstbxOrders.Items.Clear();
+            foreach (var order in source)
+            {
+                lstbxOrders.Items.Add(order);
+            }
+        }
+
+        private void txtFilterByProvider_TextChanged(object sender, EventArgs e)
+        {
+            ApplyFilters();
+        }
+    }
+}

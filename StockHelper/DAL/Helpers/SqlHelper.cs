@@ -21,6 +21,9 @@ namespace DAL.Helpers
             conString = conString.Replace("{sqlUser}", ConfigurationManager.AppSettings["sqlUser"]);
             conString = conString.Replace("{sqlPassword}", ConfigurationManager.AppSettings["sqlPassword"]);
         }
+        /// <summary>
+        /// Executes a non-query SQL command and returns the number of rows affected.
+        /// </summary>
         public static Int32 ExecuteNonQuery(String commandText,
             CommandType commandType, params SqlParameter[] parameters)
         {
@@ -49,6 +52,9 @@ namespace DAL.Helpers
             }
         }
 
+        /// <summary>
+        /// Replaces null SqlParameter values with DBNull.Value to prevent SQL errors.
+        /// </summary>
         private static void CheckNullables(SqlParameter[] parameters)
         {
             foreach (SqlParameter item in parameters)

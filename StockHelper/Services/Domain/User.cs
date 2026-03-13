@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Services.Domain
 {
+    /// <summary>
+    /// Represents a system user with authentication and permission data.
+    /// </summary>
     public class User
     {
         private Guid id;
@@ -36,6 +39,7 @@ namespace Services.Domain
         public string Password { get => password; set => password = value; }
         public string Role { get => role; set => role = value; }
         public bool IsActive { get => isActive; set => isActive = value; }
+        public string Email { get; set; }
 
         public override string ToString()
         {

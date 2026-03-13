@@ -15,10 +15,16 @@ namespace BLL.Implementations
     /// </summary>
     public class ProductService : GenericBllService<Product, int>
     {
+        /// <summary>
+        /// Initializes a new instance with the specified product repository.
+        /// </summary>
         private ProductService(ProductRepository repository) : base(repository) { }
 
         private static ProductService _instance = null;
 
+        /// <summary>
+        /// Returns the singleton instance of ProductService.
+        /// </summary>
         public static ProductService Instance()
         {
             if (_instance == null)
@@ -118,12 +124,18 @@ namespace BLL.Implementations
         // PRIVATE VALIDATION METHODS
         // ========================================
 
+        /// <summary>
+        /// Validates that the product entity is not null.
+        /// </summary>
         private void ValidateProduct(Product entity)
         {
             if (entity == null)
                 throw new MySystemException("Product cannot be null.", "BLL");
         }
 
+        /// <summary>
+        /// Validates product name format: not empty, between 3 and 100 characters.
+        /// </summary>
         private void ValidateProductName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -136,6 +148,9 @@ namespace BLL.Implementations
                 throw new MySystemException("Product name cannot exceed 100 characters.", "BLL");
         }
 
+        /// <summary>
+        /// Validates that no other product with the same code exists, optionally excluding a given ID.
+        /// </summary>
         private void ValidateCodeUniqueness(int code, int? excludeId)
         {
             var duplicate = GetAll().FirstOrDefault(p =>

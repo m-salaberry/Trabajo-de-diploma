@@ -209,3 +209,9 @@ D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.second
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlStock.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.importShiftUsageFileForm.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlOrders.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.chooseProviderForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlPurchase.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.cancelPurchaseOrderForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.uploadBillToPurchaseOrderForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlAnalytics.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlConfiguration.resources

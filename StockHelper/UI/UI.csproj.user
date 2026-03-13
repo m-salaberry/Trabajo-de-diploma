@@ -1,6 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Compile Update="controlForms\ctrlAnalytics.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="controlForms\ctrlConfiguration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="controlForms\ctrlItemsAndCategories.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -11,6 +17,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="controlForms\ctrlProviders.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="controlForms\ctrlPurchase.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="controlForms\ctrlStock.cs">
@@ -35,6 +44,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="secondaryForms\addItemToProductForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\cancelPurchaseOrderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\chooseProviderForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="secondaryForms\deleteProviderForm.cs">
@@ -77,6 +92,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="secondaryForms\newUserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\uploadBillToPurchaseOrderForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

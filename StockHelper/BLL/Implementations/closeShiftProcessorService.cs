@@ -25,12 +25,18 @@ namespace BLL.Implementations
         private readonly List<Product> products;
 
         private ProductService productService;
+        /// <summary>
+        /// Initializes the processor and loads all products from the database.
+        /// </summary>
         public closeShiftProcessorService()
         {
             productService = ProductService.Instance();
             this.products = productService.GetAll().ToList();
         }
 
+        /// <summary>
+        /// Processes a close-shift file and returns the aggregated item consumption for all sold products.
+        /// </summary>
         public List<(Item item, decimal quantity)> Process(string closeShiftFilePath)
         {
             List<(Product product, decimal quantity)> sales = ItemDataBuilder(closeShiftFilePath);

@@ -19,6 +19,9 @@ namespace BLL.Implementations
     {
         private readonly ItemsCategoryService _categoryService;
 
+        /// <summary>
+        /// Initializes a new instance with the specified provider repository.
+        /// </summary>
         private ProviderService(IRepository<Provider, Guid> repository) : base(repository)
         {
             _categoryService = ItemsCategoryService.Instance();
@@ -26,6 +29,9 @@ namespace BLL.Implementations
 
         private static ProviderService _instance = null;
 
+        /// <summary>
+        /// Returns the singleton instance of ProviderService.
+        /// </summary>
         public static ProviderService Instance()
         {
             if (_instance == null)
@@ -108,12 +114,18 @@ namespace BLL.Implementations
         // PRIVATE VALIDATION METHODS
         // ========================================
 
+        /// <summary>
+        /// Validates that the provider entity is not null.
+        /// </summary>
         private void ValidateProvider(Provider entity)
         {
             if (entity == null)
                 throw new MySystemException("Provider cannot be null.", "BLL");
         }
 
+        /// <summary>
+        /// Validates provider name format: not empty, between 3 and 100 characters.
+        /// </summary>
         private void ValidateName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -126,6 +138,9 @@ namespace BLL.Implementations
                 throw new MySystemException("Provider name cannot exceed 100 characters.", "BLL");
         }
 
+        /// <summary>
+        /// Validates that the provider has a company name and contact phone.
+        /// </summary>
         private void ValidateContactInfo(Provider entity)
         {
             if (string.IsNullOrWhiteSpace(entity.CompanyName))
@@ -135,6 +150,9 @@ namespace BLL.Implementations
                 throw new MySystemException("Provider contact phone cannot be empty.", "BLL");
         }
 
+        /// <summary>
+        /// Validates that the CUIT is not empty and has a valid 11-digit format.
+        /// </summary>
         private void ValidateCuitFormat(string cuit)
         {
             if (string.IsNullOrWhiteSpace(cuit))
@@ -144,6 +162,9 @@ namespace BLL.Implementations
                 throw new MySystemException("CUIT must contain exactly 11 numeric digits.", "BLL");
         }
 
+        /// <summary>
+        /// Validates that no other provider with the same CUIT exists, optionally excluding a given ID.
+        /// </summary>
         private void ValidateCuitUniqueness(string cuit, Guid? excludeId)
         {
             var duplicate = GetAll().FirstOrDefault(p =>
@@ -156,6 +177,9 @@ namespace BLL.Implementations
                     "BLL");
         }
 
+        /// <summary>
+        /// Validates that the category is assigned, valid, and exists in the system.
+        /// </summary>
         private void ValidateCategory(ItemsCategory category)
         {
             if (category == null)
@@ -172,24 +196,21 @@ namespace BLL.Implementations
         /// Verifies referential integrity before deletion.
         /// Checks for active Purchase Orders linked to the provider.
         /// Throws a detailed exception listing all blocking orders if any are found.
-        /// TODO: Enable validation body once PurchaseOrderService is implemented.
         /// </summary>
         private void ValidatePurchaseOrderDependencies(Guid providerId)
         {
-            // TODO: Uncomment and complete once PurchaseOrderService is available.
-            //
-            // var activeOrders = PurchaseOrderService.Instance()
-            //     .GetActiveOrdersByProvider(providerId)
-            //     .Select(o => o.OrderNumber)
-            //     .ToList();
-            //
-            // if (!activeOrders.Any())
-            //     return;
-            //
-            // var orderList = string.Join(", ", activeOrders);
-            // throw new MySystemException(
-            //     $"Cannot delete provider. It has active Purchase Orders: ({orderList}). Please complete or cancel these orders first.",
-            //     "BLL");
+            var activeOrders = PurchaseOrderService.Instance()
+                .GetActiveOrdersByProvider(providerId)
+                .Select(o => o.ReplacementOrder.ReplacementOrderNumber)
+                .ToList();
+
+            if (!activeOrders.Any())
+                return;
+
+            var orderList = string.Join(", ", activeOrders);
+            throw new MySystemException(
+                $"Cannot delete provider. It has active Purchase Orders: ({orderList}). Please complete or cancel these orders first.",
+                "BLL");
         }
 
         /// <summary>

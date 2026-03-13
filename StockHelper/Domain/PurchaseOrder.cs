@@ -13,5 +13,6 @@ namespace Domain
         public string Status { get; set; }
         public string BillFilePath { get; set; }
         public decimal TotalAmount { get; set; }
+        public DateTime IssuedDate { get; set; }
     }
 }

@@ -39,14 +39,18 @@
             tsmInventoryAndPurchasing = new ToolStripMenuItem();
             tsmStockManagment = new ToolStripMenuItem();
             tsmOrders = new ToolStripMenuItem();
+            tsmPurchase = new ToolStripMenuItem();
             tsmAnalytics = new ToolStripMenuItem();
             panelContainerMain = new TableLayoutPanel();
+            tsmSystem = new ToolStripMenuItem();
+            tsmConfiguration = new ToolStripMenuItem();
+            tsmLogs = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip
             // 
-            menuStrip.Items.AddRange(new ToolStripItem[] { tsmUserAndPerms, tsmCatalogManagment, tsmInventoryAndPurchasing });
+            menuStrip.Items.AddRange(new ToolStripItem[] { tsmSystem, tsmUserAndPerms, tsmCatalogManagment, tsmInventoryAndPurchasing });
             menuStrip.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
@@ -106,7 +110,7 @@
             // 
             // tsmInventoryAndPurchasing
             // 
-            tsmInventoryAndPurchasing.DropDownItems.AddRange(new ToolStripItem[] { tsmStockManagment, tsmOrders, tsmAnalytics });
+            tsmInventoryAndPurchasing.DropDownItems.AddRange(new ToolStripItem[] { tsmStockManagment, tsmOrders, tsmPurchase, tsmAnalytics });
             tsmInventoryAndPurchasing.Name = "tsmInventoryAndPurchasing";
             tsmInventoryAndPurchasing.Size = new Size(154, 20);
             tsmInventoryAndPurchasing.Text = "Inventory and Purchasing";
@@ -114,21 +118,28 @@
             // tsmStockManagment
             // 
             tsmStockManagment.Name = "tsmStockManagment";
-            tsmStockManagment.Size = new Size(180, 22);
+            tsmStockManagment.Size = new Size(181, 22);
             tsmStockManagment.Text = "Stock Managment";
             tsmStockManagment.Click += tsmStockManagment_Click;
             // 
             // tsmOrders
             // 
             tsmOrders.Name = "tsmOrders";
-            tsmOrders.Size = new Size(180, 22);
-            tsmOrders.Text = "Orders";
+            tsmOrders.Size = new Size(181, 22);
+            tsmOrders.Text = "Replacement Orders";
             tsmOrders.Click += tsmOrders_Click;
+            // 
+            // tsmPurchase
+            // 
+            tsmPurchase.Name = "tsmPurchase";
+            tsmPurchase.Size = new Size(181, 22);
+            tsmPurchase.Text = "Purchase Orders";
+            tsmPurchase.Click += tsmPurchase_Click;
             // 
             // tsmAnalytics
             // 
             tsmAnalytics.Name = "tsmAnalytics";
-            tsmAnalytics.Size = new Size(180, 22);
+            tsmAnalytics.Size = new Size(181, 22);
             tsmAnalytics.Text = "Analytics";
             tsmAnalytics.Click += tsmAnalytics_Click;
             // 
@@ -145,6 +156,26 @@
             panelContainerMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             panelContainerMain.Size = new Size(0, 0);
             panelContainerMain.TabIndex = 2;
+            // 
+            // tsmSystem
+            // 
+            tsmSystem.DropDownItems.AddRange(new ToolStripItem[] { tsmConfiguration, tsmLogs });
+            tsmSystem.Name = "tsmSystem";
+            tsmSystem.Size = new Size(57, 20);
+            tsmSystem.Text = "System";
+            // 
+            // tsmConfiguration
+            // 
+            tsmConfiguration.Name = "tsmConfiguration";
+            tsmConfiguration.Size = new Size(180, 22);
+            tsmConfiguration.Text = "Configuration";
+            tsmConfiguration.Click += tsmConfiguration_Click;
+            // 
+            // tsmLogs
+            // 
+            tsmLogs.Name = "tsmLogs";
+            tsmLogs.Size = new Size(180, 22);
+            tsmLogs.Text = "Logs";
             // 
             // frmMain
             // 
@@ -178,6 +209,10 @@
         private ToolStripMenuItem tsmInventoryAndPurchasing;
         private ToolStripMenuItem tsmStockManagment;
         private ToolStripMenuItem tsmOrders;
+        private ToolStripMenuItem tsmPurchase;
         private ToolStripMenuItem tsmAnalytics;
+        private ToolStripMenuItem tsmSystem;
+        private ToolStripMenuItem tsmConfiguration;
+        private ToolStripMenuItem tsmLogs;
     }
 }

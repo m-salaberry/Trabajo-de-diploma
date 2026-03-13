@@ -19,6 +19,9 @@ namespace BLL.Implementations
     {
         private readonly ItemsCategoryService _categoryService;
 
+        /// <summary>
+        /// Initializes a new instance with the specified item repository.
+        /// </summary>
         private ItemService(IRepository<Item, Guid> repository) : base(repository)
         {
             _categoryService = ItemsCategoryService.Instance();
@@ -26,6 +29,9 @@ namespace BLL.Implementations
 
         private static ItemService _instance = null;
 
+        /// <summary>
+        /// Returns the singleton instance of ItemService.
+        /// </summary>
         public static ItemService Instance()
         {
             if (_instance == null)
@@ -103,6 +109,12 @@ namespace BLL.Implementations
             var item = GetById(id);
             if (item == null)
                 throw new MySystemException($"Item with id {id} does not exist.", "BLL");
+
+            // Block deletion if item is referenced in pending supply orders
+            if (OrderRowService.Instance().IsItemInPendingOrders(id))
+                throw new MySystemException(
+                    $"Cannot delete item '{item.Name}' because it is referenced in pending supply orders.",
+                    "BLL");
 
             // Block deletion if the item is referenced by any product recipe
             var productsUsingItem = ProductService.Instance().GetProductsUsingItem(id);
@@ -222,7 +234,7 @@ namespace BLL.Implementations
         /// Adds stock to an item.
         /// Validates positive quantity and item existence.
         /// </summary>
-        public void AddStock(Guid itemId, long quantity)
+        public void AddStock(Guid itemId, decimal quantity)
         {
             if (quantity <= 0)
                 throw new MySystemException("Quantity must be positive.", "BLL");
