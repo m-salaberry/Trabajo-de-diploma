@@ -198,6 +198,7 @@
             // nmCode
             // 
             nmCode.Location = new Point(120, 69);
+            nmCode.Maximum = new decimal(new int[] { 9999, 0, 0, 0 });
             nmCode.Name = "nmCode";
             nmCode.Size = new Size(102, 23);
             nmCode.TabIndex = 20;

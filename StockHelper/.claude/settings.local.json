@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 install:*)",
+      "Bash(python3 -m pip install pymupdf 2>&1 | tail -5)",
+      "Bash(powershell -Command \"Add-Type -AssemblyName System.Drawing; \\\\$bytes = [System.IO.File]::ReadAllBytes\\('D:\\\\Facultad\\\\Trabajo-de-diploma\\\\StockHelper.pdf'\\); Write-Host \\('PDF size: ' + \\\\$bytes.Length + ' bytes'\\)\")",
+      "Bash(powershell -Command \"Get-Item 'D:\\\\Facultad\\\\Trabajo-de-diploma\\\\StockHelper.pdf' | Select-Object Length\")",
+      "Bash(winget list:*)",
+      "Bash(where py.exe)",
+      "Bash(ls \"/c/Python\"*)",
+      "Read(//c/Users/salab/AppData/Local/Programs/**)",
+      "Bash(cd \"D:/Facultad/Trabajo-de-diploma/StockHelper\" && dotnet build 2>&1 | tail -20)",
+      "Bash(cd \"D:\\\\Facultad\\\\Trabajo-de-diploma\\\\StockHelper\" && dotnet build 2>&1 | grep -E \"\\(error|Error|Build succeeded\\)\" | head -20)",
+      "Bash(cd \"D:\\\\Facultad\\\\Trabajo-de-diploma\\\\StockHelper\" && dotnet build 2>&1 | tail -3)"
+    ]
+  }
+}

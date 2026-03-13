@@ -1,0 +1,211 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class importShiftUsageFileForm : TranslatableForm
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ItemService itemService = ItemService.Instance();
+        List<Item> items;
+        List<ItemsCategory> categories;
+        string filePath;
+        public importShiftUsageFileForm(List<Item> items, List<ItemsCategory> categories)
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            this.items = items;
+            this.categories = categories;
+            InitialConfig();
+        }
+
+        private void LoadCategories()
+        {
+            cmbCategories.Items.Clear();
+            cmbCategories.Items.Add(lang.Translate("All"));
+            foreach (var category in categories)
+            {
+                cmbCategories.Items.Add(category.Name);
+            }
+
+        }
+
+        private void btnBrowseAndLoadFile_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.ShowDialog();
+                filePath = ofd.FileName;
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    MessageBox.Show(lang.Translate("NoFileSelected"), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                txtDirectory.Text = filePath;
+                btnProcessFile.Enabled = true;
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("ErrorLoadingFile") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(lang.Translate("UnexpectedError") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnProcessFile_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                MessageBox.Show(lang.Translate("NoFileSelected"), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                closeShiftProcessorService processor = new closeShiftProcessorService();
+                List<(Item item, decimal quantity)> itemsToSubstract = processor.Process(filePath);
+
+                var itemsDataList = new List<Dictionary<string, object>>();
+
+                foreach (var itemData in itemsToSubstract)
+                {
+                    Item item = items.FirstOrDefault(i => i.Id == itemData.item.Id);
+                    if (item == null) continue; // Skip if item is not found in the current items list
+
+                    decimal previousStock = item.Stock;
+                    decimal subtractedStock = itemData.quantity;
+                    decimal calculatedStock = previousStock - subtractedStock;
+
+                    var itemElement = new Dictionary<string, object>
+                    {
+                        { "name", item.Name },
+                        { "category", item.Category?.Name ?? "" },
+                        { "unit", item.Unit != null && item.Unit.ContainsKey("Name") ? item.Unit["Name"] : "" },
+                        { "previousStock", previousStock },
+                        { "subtractedStock", subtractedStock },
+                        { "calculatedStock", calculatedStock }
+                    };
+
+                    itemsDataList.Add(itemElement);
+                }
+
+                // Render in DGV
+                dgvItemsAndStock.Rows.Clear();
+                foreach (var dict in itemsDataList)
+                {
+                    dgvItemsAndStock.Rows.Add(
+                        dict["name"],
+                        dict["category"],
+                        dict["unit"],
+                        dict["previousStock"],
+                        dict["subtractedStock"],
+                        dict["calculatedStock"]
+                    );
+                }
+                dgvItemsAndStock.Refresh();
+                LoadCategories();
+                btnBrowseAndLoadFile.Enabled = false;
+                btnProcessFile.Enabled = false;
+                btnSaveNewStock.Enabled = true;
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("ErrorProcessingFile") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(lang.Translate("UnexpectedError") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void InitialConfig()
+        {
+            btnProcessFile.Enabled = false;
+            btnSaveNewStock.Enabled = false;
+            btnCancel.Enabled = true;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (MySystemException ex)
+            {
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void btnSaveNewStock_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<(Guid itemId, decimal newStock)> updatedStocks = new List<(Guid itemId, decimal newStock)>();
+                foreach (DataGridViewRow row in dgvItemsAndStock.Rows)
+                {
+                    if (row.IsNewRow) continue;
+                    string itemName = row.Cells[0].Value?.ToString() ?? "";
+                    decimal calculatedStock = Convert.ToDecimal(row.Cells[5].Value);
+                    Item item = items.FirstOrDefault(i => i.Name == itemName);
+                    if (item != null)
+                    {
+                        updatedStocks.Add((item.Id, calculatedStock));
+                    }
+                }
+                foreach (var stockUpdate in updatedStocks)
+                {
+                    itemService.ReduceStock(stockUpdate.itemId, stockUpdate.newStock);
+                }
+            }
+            catch (MySystemException ex)
+            {
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void cmbCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbCategories.SelectedIndex != -1)
+            {
+                string selectedCategory = cmbCategories.SelectedItem.ToString();
+                if (selectedCategory == lang.Translate("All"))
+                {
+                    foreach (DataGridViewRow row in dgvItemsAndStock.Rows)
+                    {
+                        row.Visible = true;
+                    }
+                }
+                else
+                {
+                    foreach (DataGridViewRow row in dgvItemsAndStock.Rows)
+                    {
+                        if (row.IsNewRow) continue;
+                        string category = row.Cells[1].Value?.ToString() ?? "";
+                        row.Visible = category == selectedCategory;
+                    }
+                }
+            }
+        }
+    }
+}

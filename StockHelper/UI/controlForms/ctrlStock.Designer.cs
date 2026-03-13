@@ -29,15 +29,19 @@
         private void InitializeComponent()
         {
             dgvItemsAndStock = new DataGridView();
-            label1 = new Label();
             ItemName = new DataGridViewTextBoxColumn();
             ItemCategory = new DataGridViewTextBoxColumn();
             ItemUnit = new DataGridViewTextBoxColumn();
             ItemStock = new DataGridViewTextBoxColumn();
             ItemUpdatedDate = new DataGridViewTextBoxColumn();
+            label1 = new Label();
             txtSearchItem = new TextBox();
             cmbCategories = new ComboBox();
             btnClose = new Button();
+            btnEditMode = new Button();
+            btnSaveEdit = new Button();
+            btnImportShiftUsage = new Button();
+            btnCancelEdit = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvItemsAndStock).BeginInit();
             SuspendLayout();
             // 
@@ -56,16 +60,6 @@
             dgvItemsAndStock.Size = new Size(693, 358);
             dgvItemsAndStock.TabIndex = 0;
             dgvItemsAndStock.TabStop = false;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(3, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(162, 30);
-            label1.TabIndex = 8;
-            label1.Text = "Items Stock List";
             // 
             // ItemName
             // 
@@ -102,6 +96,16 @@
             ItemUpdatedDate.ReadOnly = true;
             ItemUpdatedDate.Width = 110;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(162, 30);
+            label1.TabIndex = 8;
+            label1.Text = "Items Stock List";
+            // 
             // txtSearchItem
             // 
             txtSearchItem.Location = new Point(3, 33);
@@ -109,6 +113,7 @@
             txtSearchItem.PlaceholderText = "Search Item...";
             txtSearchItem.Size = new Size(180, 23);
             txtSearchItem.TabIndex = 9;
+            txtSearchItem.TextChanged += txtSearchItem_TextChanged;
             // 
             // cmbCategories
             // 
@@ -117,6 +122,7 @@
             cmbCategories.Name = "cmbCategories";
             cmbCategories.Size = new Size(180, 23);
             cmbCategories.TabIndex = 10;
+            cmbCategories.SelectedIndexChanged += cmbCategories_SelectedIndexChanged;
             // 
             // btnClose
             // 
@@ -126,18 +132,64 @@
             btnClose.TabIndex = 11;
             btnClose.Text = "X";
             btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
+            // 
+            // btnEditMode
+            // 
+            btnEditMode.Location = new Point(391, 32);
+            btnEditMode.Name = "btnEditMode";
+            btnEditMode.Size = new Size(116, 23);
+            btnEditMode.TabIndex = 12;
+            btnEditMode.Text = "Enable Edition";
+            btnEditMode.UseVisualStyleBackColor = true;
+            btnEditMode.Click += btnEditMode_Click;
+            // 
+            // btnSaveEdit
+            // 
+            btnSaveEdit.Location = new Point(635, 33);
+            btnSaveEdit.Name = "btnSaveEdit";
+            btnSaveEdit.Size = new Size(61, 23);
+            btnSaveEdit.TabIndex = 13;
+            btnSaveEdit.Text = "Save";
+            btnSaveEdit.UseVisualStyleBackColor = true;
+            btnSaveEdit.Click += btnSaveEdit_Click;
+            // 
+            // btnImportShiftUsage
+            // 
+            btnImportShiftUsage.Location = new Point(574, 426);
+            btnImportShiftUsage.Name = "btnImportShiftUsage";
+            btnImportShiftUsage.Size = new Size(122, 38);
+            btnImportShiftUsage.TabIndex = 14;
+            btnImportShiftUsage.Text = "Import Shift Usage";
+            btnImportShiftUsage.UseVisualStyleBackColor = true;
+            btnImportShiftUsage.Click += btnImportShiftUsage_Click;
+            // 
+            // btnCancelEdit
+            // 
+            btnCancelEdit.Location = new Point(513, 33);
+            btnCancelEdit.Name = "btnCancelEdit";
+            btnCancelEdit.Size = new Size(116, 23);
+            btnCancelEdit.TabIndex = 15;
+            btnCancelEdit.Text = "Cancel Edition";
+            btnCancelEdit.UseVisualStyleBackColor = true;
+            btnCancelEdit.Click += btnCancelEdit_Click;
             // 
             // ctrlStock
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Control;
+            Controls.Add(btnCancelEdit);
+            Controls.Add(btnImportShiftUsage);
+            Controls.Add(btnSaveEdit);
+            Controls.Add(btnEditMode);
             Controls.Add(btnClose);
             Controls.Add(cmbCategories);
             Controls.Add(txtSearchItem);
             Controls.Add(label1);
             Controls.Add(dgvItemsAndStock);
             Name = "ctrlStock";
-            Size = new Size(700, 569);
+            Size = new Size(700, 469);
             ((System.ComponentModel.ISupportInitialize)dgvItemsAndStock).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -147,13 +199,17 @@
 
         private DataGridView dgvItemsAndStock;
         private Label label1;
+        private TextBox txtSearchItem;
+        private ComboBox cmbCategories;
+        private Button btnClose;
+        private Button btnEditMode;
+        private Button btnSaveEdit;
+        private Button btnImportShiftUsage;
+        private Button btnCancelEdit;
         private DataGridViewTextBoxColumn ItemName;
         private DataGridViewTextBoxColumn ItemCategory;
         private DataGridViewTextBoxColumn ItemUnit;
         private DataGridViewTextBoxColumn ItemStock;
         private DataGridViewTextBoxColumn ItemUpdatedDate;
-        private TextBox txtSearchItem;
-        private ComboBox cmbCategories;
-        private Button btnClose;
     }
 }

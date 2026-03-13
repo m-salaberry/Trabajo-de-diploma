@@ -49,7 +49,6 @@ D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.csproj
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\Azure.Core.dll
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\Azure.Identity.dll
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\Microsoft.Bcl.AsyncInterfaces.dll
-D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\Microsoft.Bcl.Cryptography.dll
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\Microsoft.Data.SqlClient.dll
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Caching.Abstractions.dll
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\bin\Debug\net8.0-windows\Microsoft.Extensions.Caching.Memory.dll
@@ -208,3 +207,5 @@ D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.second
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlProductBuilder.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.addItemToProductForm.resources
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlStock.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.secondaryForms.importShiftUsageFileForm.resources
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Debug\net8.0-windows\UI.controlForms.ctrlOrders.resources

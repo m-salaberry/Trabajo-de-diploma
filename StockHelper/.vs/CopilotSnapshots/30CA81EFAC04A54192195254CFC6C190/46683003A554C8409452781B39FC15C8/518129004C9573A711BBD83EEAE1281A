@@ -1,0 +1,31 @@
+﻿using Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Implementations
+{
+    public class closeShiftProcessorService
+    {
+        TextReader _reader;
+        List<Item> items;
+
+        public closeShiftProcessorService(List<Item> items)
+        {
+            this.items = items;
+        }
+
+        public void Process(string closeShiftFilePath)
+        {
+            
+        }
+
+        private Dictionary<string, object> ItemDataBuilder()
+        {
+            
+
+        }
+    }
+}

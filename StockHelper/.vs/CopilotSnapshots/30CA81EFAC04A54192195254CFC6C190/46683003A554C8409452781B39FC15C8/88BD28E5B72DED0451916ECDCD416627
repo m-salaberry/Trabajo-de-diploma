@@ -1,0 +1,183 @@
+﻿namespace UI
+{
+    partial class frmMain
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            menuStrip = new MenuStrip();
+            tsmUserAndPerms = new ToolStripMenuItem();
+            tsmUsers = new ToolStripMenuItem();
+            tsmPerms = new ToolStripMenuItem();
+            tsmCatalogManagment = new ToolStripMenuItem();
+            tsmItemsAndCategories = new ToolStripMenuItem();
+            tsmProviders = new ToolStripMenuItem();
+            tsmProductBuilder = new ToolStripMenuItem();
+            tsmInventoryAndPurchasing = new ToolStripMenuItem();
+            tsmStockManagment = new ToolStripMenuItem();
+            tsmOrders = new ToolStripMenuItem();
+            tsmAnalytics = new ToolStripMenuItem();
+            panelContainerMain = new TableLayoutPanel();
+            menuStrip.SuspendLayout();
+            SuspendLayout();
+            // 
+            // menuStrip
+            // 
+            menuStrip.Items.AddRange(new ToolStripItem[] { tsmUserAndPerms, tsmCatalogManagment, tsmInventoryAndPurchasing });
+            menuStrip.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            menuStrip.Location = new Point(0, 0);
+            menuStrip.Name = "menuStrip";
+            menuStrip.RenderMode = ToolStripRenderMode.Professional;
+            menuStrip.Size = new Size(838, 24);
+            menuStrip.TabIndex = 1;
+            menuStrip.Text = "menuStrip1";
+            // 
+            // tsmUserAndPerms
+            // 
+            tsmUserAndPerms.DropDownItems.AddRange(new ToolStripItem[] { tsmUsers, tsmPerms });
+            tsmUserAndPerms.Name = "tsmUserAndPerms";
+            tsmUserAndPerms.Size = new Size(136, 20);
+            tsmUserAndPerms.Text = "Users and Permissions";
+            // 
+            // tsmUsers
+            // 
+            tsmUsers.Name = "tsmUsers";
+            tsmUsers.Size = new Size(205, 22);
+            tsmUsers.Text = "Users Managment";
+            tsmUsers.Click += tsmUsers_Click;
+            // 
+            // tsmPerms
+            // 
+            tsmPerms.Name = "tsmPerms";
+            tsmPerms.Size = new Size(205, 22);
+            tsmPerms.Text = "Permissions Managment";
+            tsmPerms.Click += tsmPerms_Click;
+            // 
+            // tsmCatalogManagment
+            // 
+            tsmCatalogManagment.DropDownItems.AddRange(new ToolStripItem[] { tsmItemsAndCategories, tsmProviders, tsmProductBuilder });
+            tsmCatalogManagment.Name = "tsmCatalogManagment";
+            tsmCatalogManagment.Size = new Size(128, 20);
+            tsmCatalogManagment.Text = "Catalog Managment";
+            // 
+            // tsmItemsAndCategories
+            // 
+            tsmItemsAndCategories.Name = "tsmItemsAndCategories";
+            tsmItemsAndCategories.Size = new Size(185, 22);
+            tsmItemsAndCategories.Text = "Items and Categories";
+            tsmItemsAndCategories.Click += tsmItemsAndCategories_Click;
+            // 
+            // tsmProviders
+            // 
+            tsmProviders.Name = "tsmProviders";
+            tsmProviders.Size = new Size(185, 22);
+            tsmProviders.Text = "Providers";
+            tsmProviders.Click += tsmProviders_Click;
+            // 
+            // tsmProductBuilder
+            // 
+            tsmProductBuilder.Name = "tsmProductBuilder";
+            tsmProductBuilder.Size = new Size(185, 22);
+            tsmProductBuilder.Text = "Product Builder";
+            tsmProductBuilder.Click += tsmProductBuilder_Click;
+            // 
+            // tsmInventoryAndPurchasing
+            // 
+            tsmInventoryAndPurchasing.DropDownItems.AddRange(new ToolStripItem[] { tsmStockManagment, tsmOrders, tsmAnalytics });
+            tsmInventoryAndPurchasing.Name = "tsmInventoryAndPurchasing";
+            tsmInventoryAndPurchasing.Size = new Size(154, 20);
+            tsmInventoryAndPurchasing.Text = "Inventory and Purchasing";
+            // 
+            // tsmStockManagment
+            // 
+            tsmStockManagment.Name = "tsmStockManagment";
+            tsmStockManagment.Size = new Size(180, 22);
+            tsmStockManagment.Text = "Stock Managment";
+            tsmStockManagment.Click += tsmStockManagment_Click_1;
+            // 
+            // tsmOrders
+            // 
+            tsmOrders.Name = "tsmOrders";
+            tsmOrders.Size = new Size(180, 22);
+            tsmOrders.Text = "Orders";
+            tsmOrders.Click += tsmOrders_Click_1;
+            // 
+            // tsmAnalytics
+            // 
+            tsmAnalytics.Name = "tsmAnalytics";
+            tsmAnalytics.Size = new Size(180, 22);
+            tsmAnalytics.Text = "Analytics";
+            tsmAnalytics.Click += tsmAnalytics_Click_1;
+            // 
+            // panelContainerMain
+            // 
+            panelContainerMain.AutoSize = true;
+            panelContainerMain.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelContainerMain.BackColor = SystemColors.ControlDark;
+            panelContainerMain.ColumnCount = 1;
+            panelContainerMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            panelContainerMain.Location = new Point(0, 24);
+            panelContainerMain.Name = "panelContainerMain";
+            panelContainerMain.RowCount = 1;
+            panelContainerMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            panelContainerMain.Size = new Size(0, 0);
+            panelContainerMain.TabIndex = 2;
+            // 
+            // frmMain
+            // 
+            AutoScaleMode = AutoScaleMode.None;
+            AutoSize = true;
+            AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            ClientSize = new Size(838, 441);
+            Controls.Add(panelContainerMain);
+            Controls.Add(menuStrip);
+            MainMenuStrip = menuStrip;
+            MinimizeBox = false;
+            Name = "frmMain";
+            Load += frmMain_Load;
+            menuStrip.ResumeLayout(false);
+            menuStrip.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem tsmUserAndPerms;
+        private ToolStripMenuItem tsmUsers;
+        private ToolStripMenuItem tsmPerms;
+        private TableLayoutPanel panelContainerMain;
+        private ToolStripMenuItem tsmCatalogManagment;
+        private ToolStripMenuItem tsmItemsAndCategories;
+        private ToolStripMenuItem tsmProviders;
+        private ToolStripMenuItem tsmProductBuilder;
+        private ToolStripMenuItem tsmInventoryAndPurchasing;
+        private ToolStripMenuItem tsmStockManagment;
+        private ToolStripMenuItem tsmOrders;
+        private ToolStripMenuItem tsmAnalytics;
+    }
+}

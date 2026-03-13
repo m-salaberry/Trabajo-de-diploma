@@ -8,6 +8,7 @@ namespace Domain
 {
     public class DetailProduct
     {
+        public int Id { get; private set; }
         public Item Item { get; set; }
         public decimal QuantityToConsume { get; set; }
     }

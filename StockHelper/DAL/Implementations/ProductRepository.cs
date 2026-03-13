@@ -126,7 +126,7 @@ namespace DAL.Implementations
         private List<DetailProduct> LoadDetails(int productId)
         {
             string command = @"
-                SELECT pd.QuantityToConsume,
+                SELECT pd.Id AS DetailId, pd.QuantityToConsume,
                        i.Id AS ItemId, i.Name AS ItemName, i.Unit, i.IntegerUnit, i.CurrentStock,
                        c.Id AS CategoryId, c.Name AS CategoryName
                 FROM PRODUCT_DETAILS pd
@@ -176,28 +176,27 @@ namespace DAL.Implementations
         /// </summary>
         internal static DetailProduct MapDetailToEntity(SqlDataReader reader)
         {
-            var item = new Item
-            {
-                Name = reader.GetString(reader.GetOrdinal("ItemName")),
-                Unit = new Dictionary<string, object>
-                {
-                    { "Name", reader.IsDBNull(reader.GetOrdinal("Unit")) ? string.Empty : reader.GetString(reader.GetOrdinal("Unit")) },
-                    { "IsInteger", reader.GetBoolean(reader.GetOrdinal("IntegerUnit")) }
-                },
-                Stock = reader.GetDecimal(reader.GetOrdinal("CurrentStock")),
-                Category = new ItemsCategory
-                {
-                    Id = reader.GetInt32(reader.GetOrdinal("CategoryId")),
-                    Name = reader.GetString(reader.GetOrdinal("CategoryName"))
-                }
-            };
+            var item = (Item)Activator.CreateInstance(typeof(Item), true);
             typeof(Item).GetProperty("Id")?.SetValue(item, reader.GetGuid(reader.GetOrdinal("ItemId")));
-
-            return new DetailProduct
+            item.Name = reader.GetString(reader.GetOrdinal("ItemName"));
+            item.Unit = new Dictionary<string, object>
             {
-                Item = item,
-                QuantityToConsume = reader.GetDecimal(reader.GetOrdinal("QuantityToConsume"))
+                { "Name", reader.IsDBNull(reader.GetOrdinal("Unit")) ? string.Empty : reader.GetString(reader.GetOrdinal("Unit")) },
+                { "IsInteger", reader.GetBoolean(reader.GetOrdinal("IntegerUnit")) }
             };
+            item.Stock = reader.GetDecimal(reader.GetOrdinal("CurrentStock"));
+            item.Category = new ItemsCategory
+            {
+                Id = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                Name = reader.GetString(reader.GetOrdinal("CategoryName"))
+            };
+
+            var detail = (DetailProduct)Activator.CreateInstance(typeof(DetailProduct), true);
+            typeof(DetailProduct).GetProperty("Id")?.SetValue(detail, reader.GetInt32(reader.GetOrdinal("DetailId")));
+            detail.Item = item;
+            detail.QuantityToConsume = reader.GetDecimal(reader.GetOrdinal("QuantityToConsume"));
+
+            return detail;
         }
     }
 }

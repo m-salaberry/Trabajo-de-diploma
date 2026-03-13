@@ -1,0 +1,95 @@
+﻿using Domain;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace BLL.Implementations
+{
+    public class closeShiftProcessorService
+    {
+        // ── Fixed-width column layout of a product line in the close-shift file ──
+        // "  72 PALLARD de  LOMO  2.0      59990.00"
+        //  [0..3][4][5..21]                [22..]
+        //   Code  │  Name (17 chars)         Qty + Total
+        private const int CodeFieldLength  = 4;
+        private const int NameOffset       = 5;   // CodeFieldLength + 1 separator
+        private const int NameFieldLength  = 17;
+        private const int QuantityOffset   = 22;  // NameOffset + NameFieldLength
+
+        private static readonly Regex QuantityPattern =
+            new(@"^\s*(\d+(?:[.,]\d+)?)", RegexOptions.Compiled);
+
+        private readonly List<Product> products;
+
+        public closeShiftProcessorService(List<Product> products)
+        {
+            this.products = products;
+        }
+
+        public void Process(string closeShiftFilePath)
+        {
+            List<(Product product, decimal quantity)> sales = ItemDataBuilder(closeShiftFilePath);
+            // TODO: consume sales list to reduce stock based on each product's recipe
+        }
+
+        /// <summary>
+        /// Reads the close-shift report line by line and returns every product-sale
+        /// found as a (Product, quantity) tuple.
+        ///
+        /// Matching strategy:
+        ///   1. The first 4 characters (right-aligned) must parse as an integer code.
+        ///   2. That code must match a known Product.Code.
+        ///   3. The 17-char name field (columns 5-21) is compared against the product
+        ///      name (truncated to 17 chars) as a secondary guard — this disambiguates
+        ///      lines whose leading number coincidentally matches a product code but
+        ///      belongs to a section total or a product name with numeric characters.
+        ///   4. The quantity is the first decimal number starting at column 22.
+        /// </summary>
+        private List<(Product product, decimal quantity)> ItemDataBuilder(string filePath)
+        {
+            var result = new List<(Product product, decimal quantity)>();
+
+            foreach (string line in File.ReadLines(filePath))
+            {
+                if (line.Length < QuantityOffset)
+                    continue;
+
+                // ── 1. Extract and parse the code from the fixed-width code column ──
+                string codeStr = line[..CodeFieldLength].Trim();
+                if (!int.TryParse(codeStr, out int code))
+                    continue;
+
+                // ── 2. Match code against known products ──────────────────────────
+                Product product = products.FirstOrDefault(p => p.Code == code);
+                if (product is null)
+                    continue;
+
+                // ── 3. Validate name field (guards against numeric chars in names) ─
+                string nameInFile = line.Substring(NameOffset, NameFieldLength).Trim();
+                string nameToCompare = product.Name.Length > NameFieldLength
+                    ? product.Name[..NameFieldLength].Trim()
+                    : product.Name;
+
+                if (!nameToCompare.Equals(nameInFile, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                // ── 4. Parse quantity — first decimal after the name column ────────
+                Match match = QuantityPattern.Match(line[QuantityOffset..]);
+                if (!match.Success)
+                    continue;
+
+                string quantityStr = match.Groups[1].Value.Replace(',', '.');
+                if (!decimal.TryParse(quantityStr, NumberStyles.Number,
+                        CultureInfo.InvariantCulture, out decimal quantity))
+                    continue;
+
+                result.Add((product, quantity));
+            }
+
+            return result;
+        }
+    }
+}

@@ -1,0 +1,116 @@
+﻿using BLL.Implementations;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+using Domain;
+
+namespace UI.controlForms
+{
+    public partial class ctrlStock : TranslatableUserControls
+    {
+        LanguageService lang = LanguageService.GetInstance;
+        ItemService itemService = ItemService.Instance();
+        ItemsCategoryService itemsCategoryService = ItemsCategoryService.Instance();
+
+        List<Item> items;
+        List<ItemsCategory> categories;
+
+        List<Item> filteredItems;
+        public ctrlStock()
+        {
+            InitializeComponent();
+            LoadData();
+            LoadCategories();
+            LoadItems();
+        }
+
+        private void LoadData()
+        {
+            items = itemService.GetAll().ToList();
+            categories = itemsCategoryService.GetAll().ToList();
+        }
+
+        private void LoadCategories()
+        {
+            cmbCategories.Items.Clear();
+            cmbCategories.Items.Add(lang.Translate("All"));
+            foreach (var category in categories)
+            {
+                cmbCategories.Items.Add(category.Name);
+            }
+        }
+
+        private void LoadItems()
+        {
+            dgvItemsAndStock.Rows.Clear();
+            foreach (var item in items)
+            {
+                dgvItemsAndStock.Rows.Add(item.Name, item.Category.Name, item.Unit["Name"], item.Stock, item.LastUpdate);
+            }
+            dgvItemsAndStock.Refresh();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
+        }
+
+        private void cmbCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbCategories.SelectedIndex != -1)
+            {
+                string selectedCategory = cmbCategories.SelectedItem.ToString();
+                if (selectedCategory == lang.Translate("All"))
+                {
+                    filteredItems = items;
+                }
+                else
+                {
+                    filteredItems = items.Where(i => i.Category.Name == selectedCategory).ToList();
+                }
+                dgvItemsAndStock.Rows.Clear();
+                foreach (var item in filteredItems)
+                {
+                    dgvItemsAndStock.Rows.Add(item.Name, item.Category.Name, item.Unit["Name"], item.Stock, item.LastUpdate);
+                }
+                dgvItemsAndStock.Refresh();
+            }
+        }
+
+        private void txtSearchItem_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtSearchItem.Text))
+            {
+                LoadItems();
+            }
+            else
+            {
+                string searchTerm = txtSearchItem.Text.ToLower();
+                var searchedItems = filteredItems.Where(i => i.Name.ToLower().Contains(searchTerm)).ToList();
+                dgvItemsAndStock.Rows.Clear();
+                foreach (var item in searchedItems)
+                {
+                    dgvItemsAndStock.Rows.Add(item.Name, item.Category.Name, item.Unit["Name"], item.Stock, item.LastUpdate);
+                }
+                dgvItemsAndStock.Refresh();
+            }
+        }
+
+        private void InitialConfig()
+        {
+            btnCancelEdit.Enabled = false;
+            btnSaveEdit.Enabled = false;
+            dgvItemsAndStock.Rows
+        }
+    }
+}

@@ -1,0 +1,78 @@
+﻿using BLL.Implementations;
+using Domain;
+using Services.Contracts.CustomsException;
+using Services.Implementations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using UI.Implementations;
+
+namespace UI.secondaryForms
+{
+    public partial class importShiftUsageFileForm : TranslatableForm
+    {
+        LanguageService lang = LanguageService.GetInstance;
+
+        List<Item> items;
+        string filePath;
+        public importShiftUsageFileForm(List<Item> items)
+        {
+            InitializeComponent();
+            this.CenterToScreen();
+            this.items = items;
+        }
+
+        private void btnBrowseAndLoadFile_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.ShowDialog();
+                filePath = ofd.FileName;
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    MessageBox.Show(lang.Translate("NoFileSelected"), lang.Translate("Warning"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("ErrorLoadingFile") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(lang.Translate("UnexpectedError") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnProcessFile_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                closeShiftProcessorService processor = new closeShiftProcessorService();
+                List<(Item item, decimal quantity)> itemsToSubstract = processor.Process(filePath);
+                foreach (var itemData in itemsToSubstract)
+                {
+                    Item item = items.FirstOrDefault(i => i.Id == itemData.item.Id);
+                    Dictionary<string, object> itemElement;
+                    
+                }
+            }
+            catch (MySystemException ex)
+            {
+                MessageBox.Show(lang.Translate("ErrorProcessingFile") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(lang.Translate("UnexpectedError") + "\n\n" + ex.Message, lang.Translate("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}

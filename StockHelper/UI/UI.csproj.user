@@ -4,6 +4,9 @@
     <Compile Update="controlForms\ctrlItemsAndCategories.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="controlForms\ctrlOrders.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="controlForms\ctrlProductBuilder.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -35,6 +38,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="secondaryForms\deleteProviderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="secondaryForms\importShiftUsageFileForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="secondaryForms\modProviderForm.cs">

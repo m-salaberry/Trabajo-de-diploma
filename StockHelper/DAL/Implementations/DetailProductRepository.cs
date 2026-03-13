@@ -1,5 +1,3 @@
-﻿using DAL.Contracts;
-using Domain;
 using DAL.Contracts;
 using DAL.Helpers;
 using Domain;
@@ -42,7 +40,7 @@ namespace DAL.Implementations
         public DetailProduct GetById(int id)
         {
             string command = @"
-                SELECT pd.QuantityToConsume,
+                SELECT pd.Id AS DetailId, pd.QuantityToConsume,
                        i.Id AS ItemId, i.Name AS ItemName, i.Unit, i.IntegerUnit, i.CurrentStock,
                        c.Id AS CategoryId, c.Name AS CategoryName
                 FROM PRODUCT_DETAILS pd
@@ -63,7 +61,7 @@ namespace DAL.Implementations
         public IEnumerable<DetailProduct> GetAll()
         {
             string command = @"
-                SELECT pd.QuantityToConsume,
+                SELECT pd.Id AS DetailId, pd.QuantityToConsume,
                        i.Id AS ItemId, i.Name AS ItemName, i.Unit, i.IntegerUnit, i.CurrentStock,
                        c.Id AS CategoryId, c.Name AS CategoryName
                 FROM PRODUCT_DETAILS pd
@@ -113,7 +111,7 @@ namespace DAL.Implementations
         public List<DetailProduct> GetByProductId(int productId)
         {
             string command = @"
-                SELECT pd.QuantityToConsume,
+                SELECT pd.Id AS DetailId, pd.QuantityToConsume,
                        i.Id AS ItemId, i.Name AS ItemName, i.Unit, i.IntegerUnit, i.CurrentStock,
                        c.Id AS CategoryId, c.Name AS CategoryName
                 FROM PRODUCT_DETAILS pd
