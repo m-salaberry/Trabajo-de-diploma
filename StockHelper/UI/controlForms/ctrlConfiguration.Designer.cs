@@ -37,7 +37,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(29, 17);
+            label1.Location = new Point(181, 26);
             label1.Name = "label1";
             label1.Size = new Size(136, 20);
             label1.TabIndex = 0;
@@ -46,14 +46,14 @@
             // cmbLangauge
             // 
             cmbLangauge.FormattingEnabled = true;
-            cmbLangauge.Location = new Point(3, 40);
+            cmbLangauge.Location = new Point(155, 49);
             cmbLangauge.Name = "cmbLangauge";
             cmbLangauge.Size = new Size(188, 23);
             cmbLangauge.TabIndex = 1;
             // 
             // btnSaveConfig
             // 
-            btnSaveConfig.Location = new Point(60, 84);
+            btnSaveConfig.Location = new Point(212, 93);
             btnSaveConfig.Name = "btnSaveConfig";
             btnSaveConfig.Size = new Size(75, 23);
             btnSaveConfig.TabIndex = 2;
@@ -69,7 +69,7 @@
             Controls.Add(cmbLangauge);
             Controls.Add(label1);
             Name = "ctrlConfiguration";
-            Size = new Size(194, 117);
+            Size = new Size(500, 140);
             ResumeLayout(false);
             PerformLayout();
         }

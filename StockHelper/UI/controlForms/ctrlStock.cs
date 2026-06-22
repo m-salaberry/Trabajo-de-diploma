@@ -36,6 +36,36 @@ namespace UI.controlForms
             InitialConfig();
         }
 
+        public override void ApplyTranslations()
+        {
+            label1.Text = lang.Translate("Items Stock List");
+            btnEditMode.Text = lang.Translate("Enable Edition");
+            btnSaveEdit.Text = lang.Translate("Save");
+            btnImportShiftUsage.Text = lang.Translate("Import Shift Usage");
+            btnCancelEdit.Text = lang.Translate("Cancel Edition");
+
+            if (dgvItemsAndStock.Columns["ItemName"] != null)
+                dgvItemsAndStock.Columns["ItemName"].HeaderText = lang.Translate("Name");
+            if (dgvItemsAndStock.Columns["ItemCategory"] != null)
+                dgvItemsAndStock.Columns["ItemCategory"].HeaderText = lang.Translate("Category");
+            if (dgvItemsAndStock.Columns["ItemUnit"] != null)
+                dgvItemsAndStock.Columns["ItemUnit"].HeaderText = lang.Translate("Unit");
+            if (dgvItemsAndStock.Columns["ItemStock"] != null)
+                dgvItemsAndStock.Columns["ItemStock"].HeaderText = lang.Translate("Current Stock");
+            if (dgvItemsAndStock.Columns["ItemUpdatedDate"] != null)
+                dgvItemsAndStock.Columns["ItemUpdatedDate"].HeaderText = lang.Translate("Last Updated");
+
+            dgvItemsAndStock.Refresh();
+
+            // Refresh category combobox if needed
+            if (cmbCategories.Items.Count > 0)
+            {
+                int selIndex = cmbCategories.SelectedIndex;
+                LoadCategories();
+                cmbCategories.SelectedIndex = selIndex >= 0 ? selIndex : 0;
+            }
+        }
+
         private void LoadData()
         {
             items = itemService.GetAll().ToList();

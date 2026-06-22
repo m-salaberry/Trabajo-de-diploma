@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             menuStrip = new MenuStrip();
+            tsmSystem = new ToolStripMenuItem();
+            tsmConfiguration = new ToolStripMenuItem();
+            tsmLogs = new ToolStripMenuItem();
             tsmUserAndPerms = new ToolStripMenuItem();
             tsmUsers = new ToolStripMenuItem();
             tsmPerms = new ToolStripMenuItem();
@@ -42,9 +45,6 @@
             tsmPurchase = new ToolStripMenuItem();
             tsmAnalytics = new ToolStripMenuItem();
             panelContainerMain = new TableLayoutPanel();
-            tsmSystem = new ToolStripMenuItem();
-            tsmConfiguration = new ToolStripMenuItem();
-            tsmLogs = new ToolStripMenuItem();
             menuStrip.SuspendLayout();
             SuspendLayout();
             // 
@@ -58,6 +58,26 @@
             menuStrip.Size = new Size(838, 24);
             menuStrip.TabIndex = 1;
             menuStrip.Text = "menuStrip1";
+            // 
+            // tsmSystem
+            // 
+            tsmSystem.DropDownItems.AddRange(new ToolStripItem[] { tsmConfiguration, tsmLogs });
+            tsmSystem.Name = "tsmSystem";
+            tsmSystem.Size = new Size(57, 20);
+            tsmSystem.Text = "System";
+            // 
+            // tsmConfiguration
+            // 
+            tsmConfiguration.Name = "tsmConfiguration";
+            tsmConfiguration.Size = new Size(148, 22);
+            tsmConfiguration.Text = "Configuration";
+            tsmConfiguration.Click += tsmConfiguration_Click;
+            // 
+            // tsmLogs
+            // 
+            tsmLogs.Name = "tsmLogs";
+            tsmLogs.Size = new Size(148, 22);
+            tsmLogs.Text = "Logs";
             // 
             // tsmUserAndPerms
             // 
@@ -156,26 +176,6 @@
             panelContainerMain.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             panelContainerMain.Size = new Size(0, 0);
             panelContainerMain.TabIndex = 2;
-            // 
-            // tsmSystem
-            // 
-            tsmSystem.DropDownItems.AddRange(new ToolStripItem[] { tsmConfiguration, tsmLogs });
-            tsmSystem.Name = "tsmSystem";
-            tsmSystem.Size = new Size(57, 20);
-            tsmSystem.Text = "System";
-            // 
-            // tsmConfiguration
-            // 
-            tsmConfiguration.Name = "tsmConfiguration";
-            tsmConfiguration.Size = new Size(180, 22);
-            tsmConfiguration.Text = "Configuration";
-            tsmConfiguration.Click += tsmConfiguration_Click;
-            // 
-            // tsmLogs
-            // 
-            tsmLogs.Name = "tsmLogs";
-            tsmLogs.Size = new Size(180, 22);
-            tsmLogs.Text = "Logs";
             // 
             // frmMain
             // 
