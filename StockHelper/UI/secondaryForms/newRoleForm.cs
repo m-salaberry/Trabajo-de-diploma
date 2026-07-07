@@ -22,6 +22,9 @@ namespace UI.secondaryForms
         
         public event EventHandler RoleCreated;
         
+        /// <summary>
+        /// Initializes the form and loads the available permissions into the checked list.
+        /// </summary>
         public newRoleForm()
         {
             InitializeComponent();
@@ -29,6 +32,10 @@ namespace UI.secondaryForms
             LoadPermissionsToCheckedList();
         }
 
+        /// <summary>
+        /// Validates the form, builds a new role with the checked permissions, persists it,
+        /// raises the RoleCreated event and clears the form.
+        /// </summary>
         private void btnSaveNew_Click(object sender, EventArgs e)
         {
             try
@@ -78,6 +85,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Loads all available patents (permissions) and lists their names in the checked list box.
+        /// </summary>
         private void LoadPermissionsToCheckedList()
         {
             permissions = _permissionService.GetAllPatents();
@@ -88,6 +98,10 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Validates that a role name is entered and at least one permission is checked.
+        /// </summary>
+        /// <returns>True if the form is valid; otherwise false.</returns>
         private bool ValidateForm()
         {
             if (string.IsNullOrWhiteSpace(txtRoleName.Text))
@@ -111,6 +125,9 @@ namespace UI.secondaryForms
             return true;
         }
 
+        /// <summary>
+        /// Clears the role name field and unchecks every permission in the list.
+        /// </summary>
         private void ClearForm()
         {
             txtRoleName.Text = "";

@@ -45,6 +45,7 @@
             label2 = new Label();
             btnGenerate = new Button();
             btnSendToEmail = new Button();
+            btnClose = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
@@ -186,11 +187,22 @@
             btnSendToEmail.UseVisualStyleBackColor = true;
             btnSendToEmail.Click += btnSendToEmail_Click;
             // 
+            // btnClose
+            // 
+            btnClose.Location = new Point(514, 3);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(37, 24);
+            btnClose.TabIndex = 10;
+            btnClose.Text = "X";
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
+            // 
             // ctrlAnalytics
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
+            Controls.Add(btnClose);
             Controls.Add(btnSendToEmail);
             Controls.Add(btnGenerate);
             Controls.Add(label2);
@@ -227,5 +239,6 @@
         private Label label2;
         private Button btnGenerate;
         private Button btnSendToEmail;
+        private Button btnClose;
     }
 }

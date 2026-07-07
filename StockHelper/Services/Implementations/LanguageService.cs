@@ -22,6 +22,9 @@ namespace Services.Implementations
 
         public static LanguageService GetInstance => _instance;
 
+        /// <summary>
+        /// Initializes the singleton instance by loading the configured culture.
+        /// </summary>
         private LanguageService()
         {
             LoadCultureFromConfig();
@@ -49,21 +52,23 @@ namespace Services.Implementations
                 return word;
             }
 
+            string trimmedWord = word.Trim();
+            string leading = word.Substring(0, word.Length - word.TrimStart().Length);
+            string trailing = word.Substring(word.TrimEnd().Length);
+
             try
             {
-                // Use instance method instead of static
-                return LanguageRepository.GetInstance.Translate(word);
+                return leading + LanguageRepository.GetInstance.Translate(trimmedWord) + trailing;
             }
             catch (WordNotFoundException)
             {
-                // Word not found - add it to the translation file
-                LanguageRepository.GetInstance.AddDatakey(word);
+                LanguageRepository.GetInstance.AddDatakey(trimmedWord);
                 
                 Logger.Current.Warning(
                     $"Translation key '{word}' not found in culture '{GetCurrentCulture()}'. " +
                     $"Added to translation file for future translation.");
                 
-                return word; // Return the original word
+                return word;
             }
             catch (Exception ex)
             {
@@ -87,10 +92,8 @@ namespace Services.Implementations
 
             try
             {
-                // Validate culture exists
                 CultureInfo culture = new CultureInfo(cultureName);
 
-                // Check if translation file exists for this culture
                 if (!LanguageRepository.GetInstance.TranslationFileExists(cultureName))
                 {
                     Logger.Current.Warning(
@@ -98,13 +101,10 @@ namespace Services.Implementations
                         $"Application will use keys as fallback.");
                 }
 
-                // Set the culture
                 SetCultureInternal(cultureName);
 
-                // Save to config
                 SaveCultureToConfig(cultureName);
 
-                // Notify subscribers about the language change
                 OnLanguageChanged();
 
                 Logger.Current.Info($"Culture changed successfully to: {cultureName}");
@@ -170,13 +170,11 @@ namespace Services.Implementations
                     return cultures;
                 }
 
-                // Find all translation files
                 string searchPattern = $"{fileName}.*";
                 string[] files = Directory.GetFiles(folderPath, searchPattern);
 
                 foreach (string file in files)
                 {
-                    // Extract culture from filename (e.g., translations.es-ES -> es-ES)
                     string fileNameOnly = Path.GetFileName(file);
                     int lastDotIndex = fileNameOnly.LastIndexOf('.');
                     
@@ -184,7 +182,6 @@ namespace Services.Implementations
                     {
                         string cultureName = fileNameOnly.Substring(lastDotIndex + 1);
                         
-                        // Validate it's a valid culture
                         try
                         {
                             CultureInfo culture = new CultureInfo(cultureName);
@@ -192,7 +189,6 @@ namespace Services.Implementations
                         }
                         catch (CultureNotFoundException)
                         {
-                            // Skip invalid culture names
                             Logger.Current.Debug($"Skipping invalid culture file: {fileNameOnly}");
                         }
                     }
@@ -220,6 +216,9 @@ namespace Services.Implementations
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Loads the culture from the application configuration, falling back to "en-US" when missing or on error.
+        /// </summary>
         private void LoadCultureFromConfig()
         {
             try
@@ -228,7 +227,7 @@ namespace Services.Implementations
 
                 if (string.IsNullOrWhiteSpace(cultureName))
                 {
-                    cultureName = "en-US"; // Default culture
+                    cultureName = "en-US";
                     Logger.Current.Info($"No culture configured, using default: {cultureName}");
                 }
 
@@ -243,17 +242,24 @@ namespace Services.Implementations
             }
         }
 
+        /// <summary>
+        /// Applies the specified culture to the current thread and as the default for new threads.
+        /// </summary>
+        /// <param name="cultureName">Culture code to apply (e.g., "es-ES", "en-US").</param>
         private void SetCultureInternal(string cultureName)
         {
             CultureInfo culture = new CultureInfo(cultureName);
             Thread.CurrentThread.CurrentCulture = culture;
             Thread.CurrentThread.CurrentUICulture = culture;
 
-            // Also set default culture for new threads
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
         }
 
+        /// <summary>
+        /// Persists the specified culture to the application configuration file.
+        /// </summary>
+        /// <param name="cultureName">Culture code to save (e.g., "es-ES", "en-US").</param>
         private void SaveCultureToConfig(string cultureName)
         {
             try
@@ -281,6 +287,9 @@ namespace Services.Implementations
             }
         }
 
+        /// <summary>
+        /// Raises the LanguageChanged event, swallowing and logging any exception thrown by subscribers.
+        /// </summary>
         private void OnLanguageChanged()
         {
             try

@@ -17,6 +17,11 @@ namespace Services.Contracts.Logs
         private readonly long _maxFileSizeBytes = 10 * 1024 * 1024; // 10 MB default
         private readonly int _maxBackupFiles = 5;
 
+        /// <summary>
+        /// Initializes the appender, resolving the log directory from configuration (falling back
+        /// to a "Logs" folder under the application base directory) and building the target file path.
+        /// </summary>
+        /// <param name="fileName">The log file name; defaults to "system.log" when null.</param>
         public FileAppender(string fileName)
         {
             var logDir = ConfigurationManager.AppSettings["logFileDirectory"];
@@ -50,6 +55,12 @@ namespace Services.Contracts.Logs
             _filePath = Path.Combine(logDir, fileName ?? "system.log");
         }
 
+        /// <summary>
+        /// Writes a formatted log line to the file, rotating it first if needed. Entries below the
+        /// minimum level are ignored, and IO errors are reported to the error console instead of throwing.
+        /// </summary>
+        /// <param name="level">The severity level of the message.</param>
+        /// <param name="message">The message to append.</param>
         public void Append(LogLevels level, string message)
         {
             if (level < _minimumLevel)

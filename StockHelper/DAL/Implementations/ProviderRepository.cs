@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using Services.Implementations;
 
 namespace DAL.Implementations
 {
@@ -23,10 +24,10 @@ namespace DAL.Implementations
             var parameters = new[]
             {
                 new SqlParameter("@Name", entity.Name),
-                new SqlParameter("@CUIT", entity.CUIT),
+                new SqlParameter("@CUIT", CryptographyService.ProtectField(entity.CUIT)),
                 new SqlParameter("@CompanyName", (object)entity.CompanyName ?? DBNull.Value),
-                new SqlParameter("@ContactTel", (object)entity.ContactTel ?? DBNull.Value),
-                new SqlParameter("@Email", (object)entity.Email ?? DBNull.Value),
+                new SqlParameter("@ContactTel", (object)CryptographyService.ProtectField(entity.ContactTel) ?? DBNull.Value),
+                new SqlParameter("@Email", (object)CryptographyService.ProtectField(entity.Email) ?? DBNull.Value),
                 new SqlParameter("@ItemsCategoryId", entity.Category.Id)
             };
 
@@ -52,10 +53,10 @@ namespace DAL.Implementations
             {
                 new SqlParameter("@Id", entity.Id),
                 new SqlParameter("@Name", entity.Name),
-                new SqlParameter("@CUIT", entity.CUIT),
+                new SqlParameter("@CUIT", CryptographyService.ProtectField(entity.CUIT)),
                 new SqlParameter("@CompanyName", (object)entity.CompanyName ?? DBNull.Value),
-                new SqlParameter("@ContactTel", (object)entity.ContactTel ?? DBNull.Value),
-                new SqlParameter("@Email", (object)entity.Email ?? DBNull.Value),
+                new SqlParameter("@ContactTel", (object)CryptographyService.ProtectField(entity.ContactTel) ?? DBNull.Value),
+                new SqlParameter("@Email", (object)CryptographyService.ProtectField(entity.Email) ?? DBNull.Value),
                 new SqlParameter("@ItemsCategoryId", entity.Category.Id)
             };
 
@@ -131,11 +132,11 @@ namespace DAL.Implementations
 
             typeof(Provider).GetProperty("Id")?.SetValue(provider, reader.GetGuid(reader.GetOrdinal("Id")));
 
-            provider.CUIT = reader.GetString(reader.GetOrdinal("CUIT"));
+            provider.CUIT = CryptographyService.UnprotectField(reader.GetString(reader.GetOrdinal("CUIT")));
             provider.Name = reader.GetString(reader.GetOrdinal("Name"));
             provider.CompanyName = reader.IsDBNull(reader.GetOrdinal("CompanyName")) ? null : reader.GetString(reader.GetOrdinal("CompanyName"));
-            provider.ContactTel = reader.IsDBNull(reader.GetOrdinal("ContactTel")) ? null : reader.GetString(reader.GetOrdinal("ContactTel"));
-            provider.Email = reader.IsDBNull(reader.GetOrdinal("Email")) ? null : reader.GetString(reader.GetOrdinal("Email"));
+            provider.ContactTel = reader.IsDBNull(reader.GetOrdinal("ContactTel")) ? null : CryptographyService.UnprotectField(reader.GetString(reader.GetOrdinal("ContactTel")));
+            provider.Email = reader.IsDBNull(reader.GetOrdinal("Email")) ? null : CryptographyService.UnprotectField(reader.GetString(reader.GetOrdinal("Email")));
 
             provider.Category = new ItemsCategory
             {

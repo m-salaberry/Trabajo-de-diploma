@@ -18,6 +18,9 @@ namespace Services.Domain
         private string role;
         private bool isActive;
 
+        /// <summary>
+        /// Initializes a new user with an empty permissions collection.
+        /// </summary>
         public User()
         {
             _permissions = new List<Component>();
@@ -39,8 +42,11 @@ namespace Services.Domain
         public string Password { get => password; set => password = value; }
         public string Role { get => role; set => role = value; }
         public bool IsActive { get => isActive; set => isActive = value; }
-        public string Email { get; set; }
 
+        /// <summary>
+        /// Returns the user's name as its string representation.
+        /// </summary>
+        /// <returns>The user's name.</returns>
         public override string ToString()
         {
             return Name;

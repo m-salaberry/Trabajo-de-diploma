@@ -32,6 +32,7 @@
             tsmSystem = new ToolStripMenuItem();
             tsmConfiguration = new ToolStripMenuItem();
             tsmLogs = new ToolStripMenuItem();
+            tsmLogOut = new ToolStripMenuItem();
             tsmUserAndPerms = new ToolStripMenuItem();
             tsmUsers = new ToolStripMenuItem();
             tsmPerms = new ToolStripMenuItem();
@@ -61,7 +62,7 @@
             // 
             // tsmSystem
             // 
-            tsmSystem.DropDownItems.AddRange(new ToolStripItem[] { tsmConfiguration, tsmLogs });
+            tsmSystem.DropDownItems.AddRange(new ToolStripItem[] { tsmConfiguration, tsmLogs, tsmLogOut });
             tsmSystem.Name = "tsmSystem";
             tsmSystem.Size = new Size(57, 20);
             tsmSystem.Text = "System";
@@ -69,15 +70,23 @@
             // tsmConfiguration
             // 
             tsmConfiguration.Name = "tsmConfiguration";
-            tsmConfiguration.Size = new Size(148, 22);
+            tsmConfiguration.Size = new Size(180, 22);
             tsmConfiguration.Text = "Configuration";
             tsmConfiguration.Click += tsmConfiguration_Click;
             // 
             // tsmLogs
             // 
             tsmLogs.Name = "tsmLogs";
-            tsmLogs.Size = new Size(148, 22);
+            tsmLogs.Size = new Size(180, 22);
             tsmLogs.Text = "Logs";
+            tsmLogs.Click += tsmLogs_Click;
+            // 
+            // tsmLogOut
+            // 
+            tsmLogOut.Name = "tsmLogOut";
+            tsmLogOut.Size = new Size(180, 22);
+            tsmLogOut.Text = "Log Out";
+            tsmLogOut.Click += tsmLogOut_Click;
             // 
             // tsmUserAndPerms
             // 
@@ -214,5 +223,6 @@
         private ToolStripMenuItem tsmSystem;
         private ToolStripMenuItem tsmConfiguration;
         private ToolStripMenuItem tsmLogs;
+        private ToolStripMenuItem tsmLogOut;
     }
 }

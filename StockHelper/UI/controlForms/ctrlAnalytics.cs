@@ -154,8 +154,7 @@ namespace UI.controlForms
                 string body = EmailMessageTemplates.BuildAnalyticsReport(categoryStats, providerStats, from, to, lang);
                 string subject = EmailMessageTemplates.BuildAnalyticsSubject(from, to, lang);
 
-                string recipient = frmMain.GetInstance().CurrentUser.Email ?? "";
-                var emailService = new EmailMessengerService(recipient, subject, body);
+                var emailService = new EmailMessengerService(string.Empty, subject, body);
                 emailService.SendEmail();
             }
             catch (MySystemException ex)
@@ -174,6 +173,16 @@ namespace UI.controlForms
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Closes the control, removing it from its parent, resetting the main panel size and disposing it.
+        /// </summary>
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
         }
     }
 }

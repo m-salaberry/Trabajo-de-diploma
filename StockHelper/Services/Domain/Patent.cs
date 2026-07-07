@@ -16,6 +16,9 @@ namespace Services.Domain
         // Prevents shared state between instances
         private readonly IList<Component> _emptyChildren;
 
+        /// <summary>
+        /// Initializes a new leaf component with its own read-only, empty children collection.
+        /// </summary>
         public Patent()
         {
             // Create a readonly empty collection for each instance
@@ -30,11 +33,19 @@ namespace Services.Domain
             }
         }
 
+        /// <summary>
+        /// Not supported on a leaf component; always throws to prevent adding children.
+        /// </summary>
+        /// <param name="c">The child component that would be added.</param>
         public override void AddChild(Component c)
         {
             throw new LeafComponentException();
         }
 
+        /// <summary>
+        /// Not supported on a leaf component; always throws to prevent removing children.
+        /// </summary>
+        /// <param name="c">The child component that would be removed.</param>
         public override void RemoveChild(Component c)
         {
             throw new LeafComponentException();

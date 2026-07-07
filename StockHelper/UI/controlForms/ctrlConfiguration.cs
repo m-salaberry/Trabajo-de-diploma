@@ -16,6 +16,9 @@ namespace UI.controlForms
     {
         LanguageService lang = LanguageService.GetInstance;
 
+        /// <summary>
+        /// Initializes the configuration control, setting the language combo box to a drop-down list and loading the available languages.
+        /// </summary>
         public ctrlConfiguration()
         {
             InitializeComponent();
@@ -74,6 +77,16 @@ namespace UI.controlForms
                 lang.Translate("Success"),
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Closes the control, removing it from its parent, resetting the main panel size and disposing it.
+        /// </summary>
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Parent.Controls.Remove(this);
+            frmMain.GetInstance().ResetMainPanelSize();
+            this.Dispose();
         }
     }
 }

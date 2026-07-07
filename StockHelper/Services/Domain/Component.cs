@@ -28,6 +28,11 @@ namespace Services.Domain
         /// <param name="component"></param>
         public abstract void RemoveChild(Component component);
 
+        /// <summary>
+        /// Determines whether this component or any of its descendants grants the given permission.
+        /// </summary>
+        /// <param name="permissionName">The name of the permission to look for.</param>
+        /// <returns>True if this component or a descendant matches the permission name; otherwise false.</returns>
         public bool HasPermission (string permissionName)
         {
             if (this.Name == permissionName)
@@ -47,6 +52,10 @@ namespace Services.Domain
 
         }
 
+        /// <summary>
+        /// Returns the component's name as its string representation.
+        /// </summary>
+        /// <returns>The component's name.</returns>
         public override string ToString()
         {
             return Name;

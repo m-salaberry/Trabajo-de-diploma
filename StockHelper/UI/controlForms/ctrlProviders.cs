@@ -22,6 +22,9 @@ namespace UI.controlForms
         ItemsCategoryService categoryService = ItemsCategoryService.Instance();
         List<Provider> providers;
         List<ItemsCategory> categories;
+        /// <summary>
+        /// Initializes the control, loads the available categories and populates the providers grid.
+        /// </summary>
         public ctrlProviders()
         {
             InitializeComponent();
@@ -29,6 +32,9 @@ namespace UI.controlForms
             LoadProviders();
         }
 
+        /// <summary>
+        /// Applies the current language translations to the buttons, labels and provider grid column headers.
+        /// </summary>
         public override void ApplyTranslations()
         {
             btnClearFilter.Text = languageService.Translate("Clear Filter");
@@ -53,6 +59,9 @@ namespace UI.controlForms
             dgvProviders.Refresh();
         }
 
+        /// <summary>
+        /// Loads all item categories from the service into the categories checked list box and selects the first one.
+        /// </summary>
         private void LoadCategories()
         {
             categories = categoryService.GetAll().ToList();
@@ -66,6 +75,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Loads all providers from the service and displays them in the providers grid.
+        /// </summary>
         private void LoadProviders()
         {
             providers = providerService.GetAll().ToList();
@@ -76,6 +88,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Filters the providers grid by name as the search text changes, showing all providers when the text is empty.
+        /// </summary>
         private void txtProviderName_TextChanged(object sender, EventArgs e)
         {
             string filter = txtProviderName.Text.Trim();
@@ -90,6 +105,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Filters the providers grid to only those belonging to the categories checked in the list box.
+        /// </summary>
         private void btnFilter_Click(object sender, EventArgs e)
         {
             try
@@ -119,6 +137,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Unchecks all selected categories and reloads the full list of providers.
+        /// </summary>
         private void btnClearFilter_Click(object sender, EventArgs e)
         {
             foreach (int i in lstbxCategories.CheckedIndices)
@@ -128,6 +149,9 @@ namespace UI.controlForms
             LoadProviders();
         }
 
+        /// <summary>
+        /// Opens the new provider dialog and refreshes the providers list when a provider is created.
+        /// </summary>
         private void btnCreateProvider_Click(object sender, EventArgs e)
         {
             try
@@ -148,6 +172,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Removes this control from its parent, resets the main panel size and disposes the control.
+        /// </summary>
         private void btnClose_Click(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
@@ -155,6 +182,9 @@ namespace UI.controlForms
             this.Dispose();
         }
 
+        /// <summary>
+        /// Opens the modify provider dialog and refreshes the providers list when a provider is modified.
+        /// </summary>
         private void btnModProvider_Click(object sender, EventArgs e)
         {
             try
@@ -176,6 +206,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Opens the delete provider dialog and refreshes the providers list when a provider is deleted.
+        /// </summary>
         private void btnDeleteProvider_Click(object sender, EventArgs e)
         {
             try

@@ -124,6 +124,11 @@ namespace Services.Implementations
             return _familyRepository.GetByName(name);
         }
 
+        /// <summary>
+        /// Gets all patents associated with the specified family.
+        /// </summary>
+        /// <param name="familyId">The unique identifier of the family.</param>
+        /// <returns>An enumerable collection of patents belonging to the family.</returns>
         public IEnumerable<Patent> GetFamilyPatents(Guid familyId)
         {
             return _familyRepository.GetFamilyPatents(familyId);
@@ -165,6 +170,11 @@ namespace Services.Implementations
             _lastCacheUpdate = null;
         }
 
+        /// <summary>
+        /// Gets a component (patent or family) by its unique identifier, refreshing the cache if needed.
+        /// </summary>
+        /// <param name="id">The unique identifier of the component.</param>
+        /// <returns>The matching component, or null if none exists.</returns>
         public Component GetById(Guid id)
         {
             // Check if cache is valid
@@ -179,6 +189,11 @@ namespace Services.Implementations
             return _cachedPermissions.GetValueOrDefault(id);
         }
 
+        /// <summary>
+        /// Inserts a component, dispatching to patent or family creation based on its type, and invalidates the cache.
+        /// </summary>
+        /// <param name="entity">The component to insert; must be a Patent or Family.</param>
+        /// <exception cref="ArgumentException">Thrown when the entity is neither a Patent nor a Family.</exception>
         public void Insert(Component entity)
         {
             if (entity is Patent patent)
@@ -198,6 +213,12 @@ namespace Services.Implementations
             InvalidateCache();
         }
 
+        /// <summary>
+        /// Updates a component. For patents it updates the patent directly; for families it reconciles the
+        /// assigned patents (adding and removing relations) within a transaction. Invalidates the cache afterwards.
+        /// </summary>
+        /// <param name="entity">The component to update; must be a Patent or Family.</param>
+        /// <exception cref="ArgumentException">Thrown when the entity is neither a Patent nor a Family.</exception>
         public void Update(Component entity)
         {
             if (entity is Patent patent)
@@ -235,6 +256,13 @@ namespace Services.Implementations
             InvalidateCache();
         }
 
+        /// <summary>
+        /// Deletes the family with the specified identifier, ensuring it exists and is not assigned to any user,
+        /// removing its patent relations within a transaction, and invalidating the cache.
+        /// </summary>
+        /// <param name="id">The unique identifier of the family to delete.</param>
+        /// <exception cref="KeyNotFoundException">Thrown when no family with the given identifier exists.</exception>
+        /// <exception cref="MySystemException">Thrown when the family is still assigned to one or more users.</exception>
         public void Delete(Guid id)
         {
             var family = _familyRepository.GetById(id);
@@ -264,6 +292,11 @@ namespace Services.Implementations
             InvalidateCache();
         }
 
+        /// <summary>
+        /// Determines whether a component with the specified identifier exists.
+        /// </summary>
+        /// <param name="id">The unique identifier to check.</param>
+        /// <returns>true if a matching component exists; otherwise, false.</returns>
         public bool Exists(Guid id)
         {
             var component = GetById(id);

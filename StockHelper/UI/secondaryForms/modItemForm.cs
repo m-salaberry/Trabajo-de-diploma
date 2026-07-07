@@ -26,6 +26,12 @@ namespace UI.secondaryForms
         Item selectedItem = null;
         public event EventHandler ItemModified;
 
+        /// <summary>
+        /// Initialize the modify-item form, center it, store the supplied category and item lists and
+        /// populate the combo boxes.
+        /// </summary>
+        /// <param name="categories">Available item categories used to populate the category selectors.</param>
+        /// <param name="items">Existing items available for modification.</param>
         public modItemForm(List<ItemsCategory> categories, List<Item> items)
         {
             InitializeComponent();
@@ -35,6 +41,10 @@ namespace UI.secondaryForms
             LoadCmb();
         }
 
+        /// <summary>
+        /// Validate that an item is selected, apply the edited name, category and unit values to it,
+        /// persist the update through the item service and raise <see cref="ItemModified"/>.
+        /// </summary>
         private void btnSaveChangesItem_Click(object sender, EventArgs e)
         {
             try
@@ -90,8 +100,18 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Populate the category, filter-category and item combo boxes with their initial selections
+        /// and disable the editable fields until an item is chosen.
+        /// </summary>
         private void LoadCmb()
         {
+            cmbCategories.Items.Clear();
+            cmbCategories.Items.AddRange(categories.Select(c => c.Name).ToArray());
+            if (categories.Count > 0)
+                cmbCategories.SelectedIndex = 0;
+            cmbCategories.Enabled = false;
+
             cmbFilterCategory.Items.Clear();
             cmbFilterCategory.Items.Add(lang.Translate("All Categories"));
             cmbFilterCategory.Items.AddRange(categories.Select(c => c.Name).ToArray());
@@ -102,17 +122,16 @@ namespace UI.secondaryForms
             if (items.Count > 0)
                 cmbItems.SelectedIndex = 0;
 
-            cmbCategories.Items.Clear();
-            cmbCategories.Items.AddRange(categories.Select(c => c.Name).ToArray());
-            if (categories.Count > 0)
-                cmbCategories.SelectedIndex = 0;
-            cmbCategories.Enabled = false;
-
             txtItemName.Enabled = false;
             txtUnit.Enabled = false;
             ckIntegerUnit.Enabled = false;
         }
 
+        /// <summary>
+        /// Populate the items combo box with the items belonging to the given category, or with all
+        /// items when no category is provided.
+        /// </summary>
+        /// <param name="category">Category to filter items by, or <c>null</c> to show all items.</param>
         private void LoadItemsWithCategory(ItemsCategory category)
         {
             var filteredItems = category == null ? items : items.Where(i => i.Category != null && i.Category.Id == category.Id).ToList();
@@ -124,6 +143,10 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Update the selected filter category and reload the items combo box accordingly, treating
+        /// the first entry as "all categories".
+        /// </summary>
         private void cmbFilterCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbFilterCategory.SelectedIndex > 0)
@@ -137,6 +160,10 @@ namespace UI.secondaryForms
             LoadItemsWithCategory(selectedCategory);
         }
 
+        /// <summary>
+        /// Load the selected item's name, category and unit details into the editable fields and
+        /// enable them.
+        /// </summary>
         private void cmbItems_SelectedIndexChanged(object sender, EventArgs e)
         {
             try

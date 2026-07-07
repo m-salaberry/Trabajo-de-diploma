@@ -21,12 +21,18 @@ namespace UI.secondaryForms
         private ItemsCategoryService _categoryService = ItemsCategoryService.Instance();
         LanguageService lang = LanguageService.GetInstance;
 
+        /// <summary>
+        /// Initializes the form and centers it on the screen.
+        /// </summary>
         public newCategoryForm()
         {
             InitializeComponent();
             this.CenterToScreen();
         }
 
+        /// <summary>
+        /// Builds a new category from the entered name, persists it, raises the CategoryAdded event and closes the form.
+        /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -66,6 +72,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Applies the current language translations to the form title, labels, buttons and placeholder.
+        /// </summary>
         public override void ApplyTranslations()
         {
             // Translate form title

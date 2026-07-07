@@ -19,11 +19,18 @@ namespace Services.DAL.Implementations.Repositories
     {
         private FamilyRepository _familyRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the repository and its family repository dependency.
+        /// </summary>
         public UsersRepository()
         {
             _familyRepository = new FamilyRepository();
         }
 
+        /// <summary>
+        /// Inserts a new user record into the USERS table.
+        /// </summary>
+        /// <param name="entity">The user to create.</param>
         public void Create(User entity)
         {
             string command = "INSERT INTO USERS (Id, Name, Password, IsActive, Role) VALUES (@Id, @Name, @Password, @IsActive, @Role)";
@@ -38,6 +45,10 @@ namespace Services.DAL.Implementations.Repositories
             SqlHelper.ExecuteNonQuery(command, CommandType.Text, parameters);
         }
 
+        /// <summary>
+        /// Deletes a user, first removing its related USERS_FAMILIES entries and then the user record itself.
+        /// </summary>
+        /// <param name="entity">The user to delete.</param>
         public void Delete(User entity)
         {
             // First, delete related entries in USERS_FAMILIES
@@ -113,6 +124,10 @@ namespace Services.DAL.Implementations.Repositories
             }
         }
 
+        /// <summary>
+        /// Updates the name, password, active state and role of an existing user record.
+        /// </summary>
+        /// <param name="entity">The user containing the updated values, identified by its Id.</param>
         public void Update(User entity)
         {
             string command = "UPDATE USERS SET Name = @Name, Password = @Password, IsActive = @IsActive, Role = @Role WHERE Id = @Id";

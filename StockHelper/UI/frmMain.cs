@@ -25,6 +25,9 @@ namespace UI
         private User currentUser;
         private static frmMain _instance;
 
+        /// <summary>True when this form was closed via the Log Out action (as opposed to app exit).</summary>
+        public bool LoggedOut { get; private set; }
+
         /// <summary>
         /// Private constructor that initializes the main form for the logged-in user.
         /// </summary>
@@ -41,7 +44,6 @@ namespace UI
             var lang = LanguageService.GetInstance;
             this.Text = $"{lang.Translate("StockHelper - Logged in as:")} {currentUser.Name}";
 
-            // Configure UI based on user permissions
             ConfigurePermissions();
 
             Logger.Current.Info($"Main form initialized for user '{currentUser.Name}'");
@@ -67,63 +69,41 @@ namespace UI
         /// </summary>
         private void ConfigurePermissions()
         {
-            // ============================================
-            // CONFIGURE USERS AND PERMISSIONS MENU
-            // ============================================
+            bool hasSystemLogs = currentUser.HasPermission(PermissionNames.SystemLogs);
+            tsmLogs.Visible = hasSystemLogs;
 
-            // Check permissions for sub-menu items
             bool hasUserManagement = currentUser.HasPermission(PermissionNames.UserManagement);
             bool hasPermissionManagement = currentUser.HasPermission(PermissionNames.PermissionManagement);
 
-            // Configure sub-menu items visibility
             tsmUsers.Visible = hasUserManagement;
             tsmPerms.Visible = hasPermissionManagement;
 
-            // Show parent menu only if at least one sub-menu is visible
             tsmUserAndPerms.Visible = hasUserManagement || hasPermissionManagement;
 
-            // ============================================
-            // CONFIGURE CATALOG MANAGEMENT MENU
-            // ============================================
-
-            // Check permissions for sub-menu items
             bool hasItemCategoryManagment = currentUser.HasPermission(PermissionNames.ItemCategoryManagment);
             bool hasSupplierManagment = currentUser.HasPermission(PermissionNames.SupplierManagment);
             bool hasProductBuilder = currentUser.HasPermission(PermissionNames.ProductBuilder);
 
-            // Configure sub-menu items visibility
             tsmItemsAndCategories.Visible = hasItemCategoryManagment;
             tsmProviders.Visible = hasSupplierManagment;
             tsmProductBuilder.Visible = hasProductBuilder;
 
-            // Show parent menu only if at least one sub-menu is visible
             tsmCatalogManagment.Visible = hasItemCategoryManagment ||
                                           hasSupplierManagment ||
                                           hasProductBuilder;
 
-            // ============================================
-            // CONFIGURE INVENTORY AND PURCHASING MENU
-            // ============================================
-
-            // Check permissions for sub-menu items
             bool hasStockManagment = currentUser.HasPermission(PermissionNames.StockManagment);
             bool hasPurchaseManagement = currentUser.HasPermission(PermissionNames.PurchaseManagement);
             bool hasAnalytics = currentUser.HasPermission(PermissionNames.Analytics);
 
-            // Configure sub-menu items visibility
             tsmStockManagment.Visible = hasStockManagment;
             tsmOrders.Visible = hasPurchaseManagement;
             tsmPurchase.Visible = hasPurchaseManagement;
             tsmAnalytics.Visible = hasAnalytics;
 
-            // Show parent menu only if at least one sub-menu is visible
             tsmInventoryAndPurchasing.Visible = hasStockManagment ||
                                                 hasPurchaseManagement ||
                                                 hasAnalytics;
-
-            // ============================================
-            // LOGGING
-            // ============================================
 
             Logger.Current.Info($"Menu configured for user '{currentUser.Name}' - " +
                 $"Visible Menus: " +
@@ -137,10 +117,8 @@ namespace UI
         /// </summary>
         private void frmMain_Load(object sender, EventArgs e)
         {
-            // Get all atomic permissions using extension method
             List<Patent> userPermissions = currentUser.GetAllAtomicPermissions();
 
-            // Detailed logging only in test environment
             if (NativeMethods.testEnvironment)
             {
                 Console.WriteLine($"\n=== User Permissions for '{currentUser.Name}' ===");
@@ -158,7 +136,6 @@ namespace UI
             }
             else
             {
-                // Simple log in production
                 Logger.Current.Info(
                     $"User '{currentUser.Name}' loaded main form with {userPermissions.Count} permissions");
             }
@@ -171,13 +148,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access User Management");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.UserManagement,
                 "User Management"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened User Management module");
@@ -193,13 +169,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Permission Management");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.PermissionManagement,
                 "Permission Management"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Permission Management module");
@@ -215,13 +190,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Items and Categories");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.ItemCategoryManagment,
                 "Items and Categories"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Items and Categories module");
@@ -236,13 +210,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Providers");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.SupplierManagment,
                 "Providers"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Providers module");
@@ -257,13 +230,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Product Builder");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.ProductBuilder,
                 "Product Builder"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Product Builder module");
@@ -278,13 +250,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Stock Management");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.StockManagment,
                 "Stock Management"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Stock Management module");
@@ -299,13 +270,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Replacement Orders");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.PurchaseManagement,
                 "Replacement Orders"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Replacement Orders module");
@@ -320,13 +290,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Purchase Orders");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.PurchaseManagement,
                 "Purchase Orders"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Purchase Orders module");
@@ -341,13 +310,12 @@ namespace UI
         {
             Logger.Current.Info($"User '{currentUser.Name}' attempting to access Analytics");
 
-            // Verify permission before opening the module
             if (!UIPermissionHelper.CanAccessForm(
                 currentUser,
                 PermissionNames.Analytics,
                 "Analytics"))
             {
-                return; // Error message already shown by helper
+                return;
             }
 
             Logger.Current.Info($"User '{currentUser.Name}' opened Analytics module");
@@ -366,12 +334,38 @@ namespace UI
         }
 
         /// <summary>
+        /// Opens the Logs module. Accessible to all users without permission checks.
+        /// </summary>
+        private void tsmLogs_Click(object sender, EventArgs e)
+        {
+            Logger.Current.Info($"User '{currentUser.Name}' opened Logs module");
+            ctrlLogs logs = new ctrlLogs();
+            showContent(logs);
+        }
+
+        /// <summary>
+        /// Logout the current user and return to the login form.
+        /// </summary>
+        private void tsmLogOut_Click(object sender, EventArgs e)
+        {
+            Logger.Current.Info($"User '{currentUser?.Name}' logged out");
+            LoggedOut = true;
+            _instance = null;
+            this.Close();
+        }
+
+        /// <summary>
         /// Displays a UserControl in the main content panel.
         /// </summary>
         private void showContent(UserControl newContent)
         {
             this.MinimumSize = new Size(0, 0);
-            panelContainerMain.Controls.Clear();
+            while (panelContainerMain.Controls.Count > 0)
+            {
+                Control old = panelContainerMain.Controls[0];
+                panelContainerMain.Controls.Remove(old);
+                old.Dispose();
+            }
             newContent.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             panelContainerMain.Controls.Add(newContent);
             newContent.BringToFront();

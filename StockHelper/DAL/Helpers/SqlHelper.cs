@@ -35,8 +35,6 @@ namespace DAL.Helpers
                 {
                     using (SqlCommand cmd = new SqlCommand(commandText, conn))
                     {
-                        // There're three command types: StoredProcedure, Text, TableDirect. The TableDirect 
-                        // type is only for OLE DB.  
                         cmd.CommandType = commandType;
                         cmd.Parameters.AddRange(parameters);
 
@@ -48,7 +46,7 @@ namespace DAL.Helpers
             catch (Exception ex)
             {
                 new DALExceptionHandler(ex.Message).Handler();
-                return -1;
+                throw new MySystemException(ex.Message, "DAL", ex);
             }
         }
 
@@ -89,7 +87,7 @@ namespace DAL.Helpers
             catch (Exception ex)
             {
                 new DALExceptionHandler(ex.Message).Handler();
-                return null;
+                throw new MySystemException(ex.Message, "DAL", ex);
             }
 
         }
@@ -100,18 +98,15 @@ namespace DAL.Helpers
         public static SqlDataReader ExecuteReader(String commandText,
             CommandType commandType, params SqlParameter[] parameters)
         {
+            SqlConnection conn = new SqlConnection(conString);
             try
             {
-                SqlConnection conn = new SqlConnection(conString);
-
                 using (SqlCommand cmd = new SqlCommand(commandText, conn))
                 {
                     cmd.CommandType = commandType;
                     cmd.Parameters.AddRange(parameters);
 
                     conn.Open();
-                    // When using CommandBehavior.CloseConnection, the connection will be closed when the 
-                    // IDataReader is closed.
                     SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                     return reader;
@@ -119,8 +114,9 @@ namespace DAL.Helpers
             }
             catch (Exception ex)
             {
+                conn.Dispose();
                 new DALExceptionHandler(ex.Message).Handler();
-                return null;
+                throw new MySystemException(ex.Message, "DAL", ex);
             }
 
         }

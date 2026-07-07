@@ -24,24 +24,34 @@ namespace UI
         {
             try
             {
-                // Initialize Logger based on environment
                 InitializeLogger();
 
                 Logger.Current.Info("StockHelper application starting...");
 
-                // Initialize WinForms application
+                if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("STOCK_HELPER_SECRET_KEY")))
+                {
+                    Logger.Current.Fatal(
+                        "STOCK_HELPER_SECRET_KEY environment variable is not set. Sensitive data cannot be read or written.");
+                    MessageBox.Show(
+                        "The encryption key (STOCK_HELPER_SECRET_KEY) is not configured on this machine.\n\n" +
+                        "The application cannot start because sensitive data cannot be read or written without it.\n" +
+                        "Please set the STOCK_HELPER_SECRET_KEY environment variable and try again.",
+                        "Configuration Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+
                 ApplicationConfiguration.Initialize();
 
                 Logger.Current.Info("ApplicationConfiguration initialized successfully");
 
-                // Run the main form
                 Application.Run(new frmLogIn());
 
                 Logger.Current.Info("StockHelper application shutting down normally");
             }
             catch (Exception ex)
             {
-                // Log fatal errors
                 Logger.Current.LogException(LogLevels.Fatal, "Fatal error during application startup", ex);
 
                 MessageBox.Show(
@@ -52,7 +62,6 @@ namespace UI
             }
             finally
             {
-                // Cleanup logger resources
                 Logger.Current.Info("Application terminated");
             }
         }
@@ -66,20 +75,17 @@ namespace UI
 
             if (NativeMethods.testEnvironment)
             {
-                // Test/Development environment configuration
-                NativeMethods.AllocConsole(); // Opens the console for debugging
+                NativeMethods.AllocConsole();
                 config = LoggerConfiguration.CreateTestConfiguration();
                 Console.WriteLine("=== TEST ENVIRONMENT ===");
                 Console.WriteLine("Console appender enabled for debugging");
             }
             else if (NativeMethods.productionEnvironment)
             {
-                // Production environment configuration
                 config = LoggerConfiguration.CreateProductionConfiguration();
             }
             else
             {
-                // Default configuration (file only)
                 config = new LoggerConfiguration
                 {
                     EnableConsoleLogging = false,
@@ -89,7 +95,6 @@ namespace UI
                 };
             }
 
-            // Initialize logger with the selected configuration
             config.InitializeLogger();
         }
 

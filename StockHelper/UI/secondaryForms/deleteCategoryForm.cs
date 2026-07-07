@@ -22,6 +22,10 @@ namespace UI.secondaryForms
         public event EventHandler CategoryDeleted;
         LanguageService lang = LanguageService.GetInstance;
 
+        /// <summary>
+        /// Initializes the form with the categories to display and loads them into the list box.
+        /// </summary>
+        /// <param name="currentCategories">The categories available for deletion.</param>
         public deleteCategoryForm(List<ItemsCategory> currentCategories)
         {
             InitializeComponent();
@@ -30,6 +34,9 @@ namespace UI.secondaryForms
             LoadCategories();
         }
 
+        /// <summary>
+        /// Deletes the selected category, notifies success, raises the CategoryDeleted event and closes the form.
+        /// </summary>
         private void btnDelete_Click(object sender, EventArgs e)
         {
             try
@@ -75,6 +82,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Binds the categories to the list box using their name as the display member.
+        /// </summary>
         private void LoadCategories()
         {
             lstbxCategoriesToDelete.DataSource = null;
@@ -82,6 +92,9 @@ namespace UI.secondaryForms
             lstbxCategoriesToDelete.DisplayMember = "Name";
         }
 
+        /// <summary>
+        /// Applies the current language translations to the form title, labels and buttons.
+        /// </summary>
         public override void ApplyTranslations()
         {
             // Translate form title

@@ -25,6 +25,9 @@ namespace UI.controlForms
         ItemsCategoryService categoryService = ItemsCategoryService.Instance();
         ItemService itemService = ItemService.Instance();
 
+        /// <summary>
+        /// Initializes the items and categories control, loading the category and item lists.
+        /// </summary>
         public ctrlItemsAndCategories()
         {
             InitializeComponent();
@@ -32,11 +35,17 @@ namespace UI.controlForms
             LoadItems();
         }
 
+        /// <summary>
+        /// Handles the split container splitter moved event. No action is taken.
+        /// </summary>
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// Closes the control, removing it from its parent, resetting the main panel size and disposing it.
+        /// </summary>
         private void btnClose_Click(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
@@ -44,6 +53,9 @@ namespace UI.controlForms
             this.Dispose();
         }
 
+        /// <summary>
+        /// Opens the new category dialog and refreshes the category list when a category is added.
+        /// </summary>
         private void btnAddCategory_Click(object sender, EventArgs e)
         {
             try
@@ -73,11 +85,17 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Reloads the category list.
+        /// </summary>
         private void RefreshCategoryList()
         {
             LoadCategories();
         }
 
+        /// <summary>
+        /// Loads all categories from the service into the categories list box and selects the first one.
+        /// </summary>
         private void LoadCategories()
         {
             categories = categoryService.GetAll().ToList();
@@ -91,6 +109,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Loads all items from the service and populates the items grid.
+        /// </summary>
         private void LoadItems()
         {
             items = itemService.GetAll().ToList();
@@ -102,6 +123,9 @@ namespace UI.controlForms
 
         }
 
+        /// <summary>
+        /// Applies the current language translations to the buttons, labels and item grid columns.
+        /// </summary>
         public override void ApplyTranslations()
         {
             // Translate buttons
@@ -127,6 +151,9 @@ namespace UI.controlForms
             dgvItems.Refresh();
         }
 
+        /// <summary>
+        /// Opens the delete category dialog and refreshes the category list when a category is deleted.
+        /// </summary>
         private void deleteCategory_Click(object sender, EventArgs e)
         {
             try
@@ -155,6 +182,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Filters the items grid to show only items belonging to the categories checked in the list box.
+        /// </summary>
         private void btnFilter_Click(object sender, EventArgs e)
         {
             try
@@ -184,6 +214,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Clears all checked categories and reloads the full item list.
+        /// </summary>
         private void btnClearFilter_Click(object sender, EventArgs e)
         {
             foreach (int i in lstbxCategories.CheckedIndices)
@@ -193,6 +226,9 @@ namespace UI.controlForms
             LoadItems();
         }
 
+        /// <summary>
+        /// Opens the modify item dialog and reloads the items grid when an item is modified.
+        /// </summary>
         private void btnModItem_Click(object sender, EventArgs e)
         {
             try
@@ -222,6 +258,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Opens the new item dialog and reloads the items grid when an item is added.
+        /// </summary>
         private void btnCreateItem_Click(object sender, EventArgs e)
         {
             try
@@ -251,6 +290,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Opens the delete item dialog and reloads the items grid when an item is deleted.
+        /// </summary>
         private void btnDeteleItem_Click(object sender, EventArgs e)
         {
             try

@@ -12,11 +12,22 @@ namespace Services.Contracts.CustomsException
     {
         private string layerOrigin;
 
+        /// <summary>
+        /// Initializes the exception with a message and the layer of the system it originated from.
+        /// </summary>
+        /// <param name="message">The message describing the error.</param>
+        /// <param name="layer">The layer that raised the exception (for example "UI", "BLL", "DAL" or "Services").</param>
         public MySystemException(string message, string layer) : base(message)
         {
             this.layerOrigin = layer;
         }
 
+        /// <summary>
+        /// Initializes the exception with a message, the originating layer and an inner exception.
+        /// </summary>
+        /// <param name="message">The message describing the error.</param>
+        /// <param name="layer">The layer that raised the exception (for example "UI", "BLL", "DAL" or "Services").</param>
+        /// <param name="innerException">The exception that caused this exception.</param>
         public MySystemException(string message, string layer, Exception innerException) 
             : base(message, innerException)
         {

@@ -10,12 +10,18 @@ namespace UI
     {
         internal LoginService _loginService = new LoginService();
         internal UserService _userService = UserService.Instance();
+        /// <summary>
+        /// Initializes a new instance of the login form and its designer components.
+        /// </summary>
         public frmLogIn()
         {
             InitializeComponent();
             
         }
 
+        /// <summary>
+        /// Applies the current language translations to all controls on the form.
+        /// </summary>
         public override void ApplyTranslations()
         {
             var lang = LanguageService.GetInstance;
@@ -27,6 +33,9 @@ namespace UI
             loginbtn.Text = lang.Translate("Log In");
         }
 
+        /// <summary>
+        /// Shows or hides the password text depending on the checkbox state.
+        /// </summary>
         private void checkShowPassword_CheckedChanged(object sender, EventArgs e)
         {
             if (checkShowPassword.Checked)
@@ -39,16 +48,26 @@ namespace UI
             }
         }
 
+        /// <summary>
+        /// Makes the password text visible by clearing the password mask character.
+        /// </summary>
         private void showPassword()
         {
             passwordtxt.PasswordChar = '\0';
         }
 
+        /// <summary>
+        /// Masks the password text using the '*' password character.
+        /// </summary>
         private void hidePassword()
         {
             passwordtxt.PasswordChar = '*';
         }
 
+        /// <summary>
+        /// Validates the entered credentials, authenticates the user and opens the main window,
+        /// handling logout and application-exit flows as well as any login errors.
+        /// </summary>
         private void loginbtn_Click(object sender, EventArgs e)
         {
             try
@@ -69,10 +88,25 @@ namespace UI
                 {
                     User currentUser = _userService.GetByName(loginUser.Name);
                     Logger.Current.Info($"User {currentUser.Name} has logged in successfully.");
+
+                    BLL.Implementations.BackupService.Instance().RunDailyBackupIfNeeded();
+
                     this.Hide();
                     frmMain mainForm = frmMain.GetInstance(currentUser);
                     mainForm.ShowDialog();
-                    this.Close();
+
+                    if (mainForm.LoggedOut)
+                    {
+                        mainForm.Dispose();
+                        usernametxt.Clear();
+                        passwordtxt.Clear();
+                        checkShowPassword.Checked = false;
+                        this.Show();
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
                 }
                 else
                 {
@@ -97,7 +131,6 @@ namespace UI
             validationMessage = string.Empty;
             var lang = LanguageService.GetInstance;
 
-            // 1. Check if username is empty or whitespace
             if (string.IsNullOrWhiteSpace(usernametxt.Text))
             {
                 validationMessage = lang.Translate("Username cannot be empty");
@@ -105,7 +138,6 @@ namespace UI
                 return false;
             }
 
-            // 2. Check if password is empty
             if (string.IsNullOrEmpty(passwordtxt.Text))
             {
                 validationMessage = lang.Translate("Password cannot be empty");
@@ -113,7 +145,6 @@ namespace UI
                 return false;
             }
 
-            // 3. Validate username length (minimum 3 characters)
             if (usernametxt.Text.Trim().Length < 3)
             {
                 validationMessage = lang.Translate("Username must be at least 3 characters long");
@@ -121,7 +152,6 @@ namespace UI
                 return false;
             }
 
-            // 4. Validate username length (maximum 50 characters)
             if (usernametxt.Text.Trim().Length > 50)
             {
                 validationMessage = lang.Translate("Username cannot exceed 50 characters");
@@ -129,7 +159,6 @@ namespace UI
                 return false;
             }
 
-            // 5. Validate password length (minimum 4 characters)
             if (passwordtxt.Text.Length < 4)
             {
                 validationMessage = lang.Translate("Password must be at least 4 characters long");
@@ -137,7 +166,6 @@ namespace UI
                 return false;
             }
 
-            // 6. Validate password length (maximum 100 characters)
             if (passwordtxt.Text.Length > 100)
             {
                 validationMessage = lang.Translate("Password cannot exceed 100 characters");
@@ -145,7 +173,6 @@ namespace UI
                 return false;
             }
 
-            // 7. Check for invalid characters in username (only alphanumeric, underscore, dot, hyphen)
             if (!System.Text.RegularExpressions.Regex.IsMatch(usernametxt.Text.Trim(), @"^[a-zA-Z0-9._-]+$"))
             {
                 validationMessage = lang.Translate("Username contains invalid characters. Only letters, numbers, dots, underscores and hyphens are allowed");
@@ -153,7 +180,6 @@ namespace UI
                 return false;
             }
 
-            // 8. Trim whitespace from username
             usernametxt.Text = usernametxt.Text.Trim();
 
             Logger.Current.Debug($"Credentials validation passed for user: {usernametxt.Text}");

@@ -20,6 +20,9 @@ namespace UI.secondaryForms
         PermissionService _permissionService = PermissionService.Instance();
         LanguageService lang = LanguageService.GetInstance;
 
+        /// <summary>
+        /// Initializes the control, loads the roles and displays them in the roles grid.
+        /// </summary>
         public ctrlPermsissions()
         {
             InitializeComponent();
@@ -27,6 +30,9 @@ namespace UI.secondaryForms
             LoadRolesToGrid();
         }
 
+        /// <summary>
+        /// Removes this control from its parent, resets the main panel size and disposes the control.
+        /// </summary>
         private void btnClose_Click(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
@@ -34,11 +40,17 @@ namespace UI.secondaryForms
             this.Dispose();
         }
 
+        /// <summary>
+        /// Loads all role families from the permission service into the roles collection.
+        /// </summary>
         private void LoadRoles()
         {
             roles = _permissionService.GetAllFamilies();
         }
 
+        /// <summary>
+        /// Binds the roles collection to the grid, hiding the Id and Children columns and translating the name header.
+        /// </summary>
         private void LoadRolesToGrid()
         {
             dgvRoles.DataSource = null;
@@ -50,6 +62,9 @@ namespace UI.secondaryForms
             dgvRoles.Refresh();
         }
 
+        /// <summary>
+        /// Opens the new role dialog and refreshes the roles list when a role is created.
+        /// </summary>
         private void btnNewRole_Click(object sender, EventArgs e)
         {
             try
@@ -79,12 +94,18 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Reloads the roles from the service and refreshes the roles grid.
+        /// </summary>
         public void RefreshRoleList()
         {
             LoadRoles();
             LoadRolesToGrid();
         }
 
+        /// <summary>
+        /// Applies the current language translations to the buttons, labels and roles grid.
+        /// </summary>
         public override void ApplyTranslations()
         {
             // Translate buttons
@@ -102,6 +123,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Opens the modify role dialog and refreshes the roles list when a role is modified.
+        /// </summary>
         private void btnModifyRole_Click(object sender, EventArgs e)
         {
             try
@@ -131,6 +155,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Opens the delete role dialog and refreshes the roles list when a role is deleted.
+        /// </summary>
         private void btnDeleteRole_Click(object sender, EventArgs e)
         {
             try

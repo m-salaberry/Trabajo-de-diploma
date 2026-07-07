@@ -25,6 +25,12 @@ namespace UI.secondaryForms
         List<Provider> providers;
         private int _lastValidProviderIndex = -1;
         public event EventHandler ProviderModded;
+        /// <summary>
+        /// Initialize the modify-provider form, center it, store the supplied category and provider
+        /// lists, populate the dropdowns and apply the initial disabled-controls configuration.
+        /// </summary>
+        /// <param name="categories">Available item categories used to populate the category selectors.</param>
+        /// <param name="providers">Existing providers available for modification.</param>
         public modProviderForm(List<ItemsCategory> categories, List<Provider> providers)
         {
             InitializeComponent();
@@ -35,6 +41,10 @@ namespace UI.secondaryForms
             LoadProviders();
             InitialConfig();
         }
+        /// <summary>
+        /// Bind the read-only category selector to all categories and the filter selector to the
+        /// categories preceded by an "All categories" option.
+        /// </summary>
         private void LoadCategories()
         {
             cmbCategories.DataSource = null;
@@ -56,6 +66,10 @@ namespace UI.secondaryForms
             cmbChooseCategory.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Bind the provider selector to the full provider list preceded by a placeholder entry,
+        /// temporarily detaching the selection-changed handler to avoid spurious events.
+        /// </summary>
         private void LoadProviders()
         {
             cmbChooseProvider.SelectedIndexChanged -= cmbChooseProvider_SelectedIndexChanged;
@@ -75,6 +89,9 @@ namespace UI.secondaryForms
             cmbChooseProvider.SelectedIndexChanged += cmbChooseProvider_SelectedIndexChanged;
         }
 
+        /// <summary>
+        /// Disable all editable provider fields until a provider is selected.
+        /// </summary>
         private void InitialConfig()
         {
             txtName.Enabled = false;
@@ -85,6 +102,10 @@ namespace UI.secondaryForms
             cmbCategories.Enabled = false;
         }
 
+        /// <summary>
+        /// Filter the provider selector by the chosen category, or reload all providers when the
+        /// "All categories" option is selected.
+        /// </summary>
         private void cmbChooseCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbChooseCategory.SelectedIndex == 0)
@@ -110,6 +131,10 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Load the selected provider's details into the editable fields, reverting to the last
+        /// valid selection when the placeholder entry is chosen.
+        /// </summary>
         private void cmbChooseProvider_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbChooseProvider.SelectedIndex == 0 && _lastValidProviderIndex >= 1)
@@ -139,6 +164,10 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Validate that a provider is selected, apply the edited field values, persist the changes
+        /// through the provider service, raise <see cref="ProviderModded"/> and close the form.
+        /// </summary>
         private void btnSaveProvider_Click(object sender, EventArgs e)
         {
             Provider providerToMod = cmbChooseProvider.SelectedItem as Provider;
@@ -190,6 +219,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Apply the current language translations to the form title, labels and buttons.
+        /// </summary>
         public override void ApplyTranslations()
         {
             this.Text = lang.Translate("Modify Provider");
@@ -202,6 +234,11 @@ namespace UI.secondaryForms
             btnSaveProvider.Text = lang.Translate("Save");
         }
 
+        /// <summary>
+        /// Format an 11-digit CUIT string into the dashed "XX-XXXXXXXX-X" presentation form.
+        /// </summary>
+        /// <param name="cuit">The raw CUIT value to format.</param>
+        /// <returns>The dashed CUIT when it has 11 digits; otherwise the original value or an empty string.</returns>
         private string FormatCUIT(string cuit)
         {
             if (cuit?.Length == 11)

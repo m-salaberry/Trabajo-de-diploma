@@ -217,10 +217,13 @@ BEGIN
     CREATE TABLE PROVIDERS (
         Id              UNIQUEIDENTIFIER    NOT NULL PRIMARY KEY DEFAULT NEWID(),
         Name            NVARCHAR(255)       NOT NULL,
-        CUIT            NVARCHAR(20)        NOT NULL UNIQUE,
+        -- CUIT, ContactTel and Email are stored ENCRYPTED at rest (REQ.002); columns are widened
+        -- to fit the Base64 ciphertext + HMAC. No UNIQUE on CUIT: random-IV encryption makes
+        -- ciphertext non-deterministic, so DB-level uniqueness would not apply.
+        CUIT            NVARCHAR(512)       NOT NULL,
         CompanyName     NVARCHAR(255)       NULL,
-        ContactTel      NVARCHAR(50)        NULL,
-        Email           NVARCHAR(255)       NULL,
+        ContactTel      NVARCHAR(512)       NULL,
+        Email           NVARCHAR(512)       NULL,
         ItemsCategoryId INT                 NOT NULL,
         CreatedDate     DATETIME            NOT NULL DEFAULT GETDATE(),
         ModifiedDate    DATETIME            NULL,

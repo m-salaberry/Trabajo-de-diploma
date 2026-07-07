@@ -87,66 +87,8 @@ namespace Services.Domain
         /// Permission to access the System Logs module.
         /// Grants access to view system logs and audit trails.
         /// </summary>
-        public const string SystemLogs = "SystemLogs";
-
-        /// <summary>
-        /// Permission to access the Database Backup module.
-        /// Grants access to backup and restore database.
-        /// </summary>
-        public const string DatabaseBackup = "DatabaseBackup";
+        public const string SystemLogs = "SystemLogs"; 
 
     }
 
-    /// <summary>
-    /// Constants for system roles (Families).
-    /// Each role is a collection of permissions grouped by job function.
-    /// Provides type-safe role names.
-    /// </summary>
-    public static class RoleNames
-    {
-        /// <summary>
-        /// Administrator role - Full system access to all modules.
-        /// </summary>
-        public const string Administrator = "Administrator";
-
-        /// <summary>
-        /// Manager role - Management level access to most operational modules.
-        /// </summary>
-        public const string Manager = "Manager";
-
-        /// <summary>
-        /// Salesperson role - Access to sales and customer-related modules.
-        /// </summary>
-        public const string Salesperson = "Salesperson";
-
-        /// <summary>
-        /// Inventory Manager role - Full access to inventory and stock modules.
-        /// </summary>
-        public const string InventoryManager = "InventoryManager";
-
-        /// <summary>
-        /// Cashier role - Access to Point of Sale and basic sales operations.
-        /// </summary>
-        public const string Cashier = "Cashier";
-
-        /// <summary>
-        /// Auditor role - Read-only access to reports and logs.
-        /// </summary>
-        public const string Auditor = "Auditor";
-
-        /// <summary>
-        /// Warehouse Operator role - Access to warehouse and stock control.
-        /// </summary>
-        public const string WarehouseOperator = "WarehouseOperator";
-
-        /// <summary>
-        /// Accountant role - Access to financial reports and pricing.
-        /// </summary>
-        public const string Accountant = "Accountant";
-
-        /// <summary>
-        /// Guest role - Minimal read-only access (e.g., Dashboard only).
-        /// </summary>
-        public const string Guest = "Guest";
-    }
 }

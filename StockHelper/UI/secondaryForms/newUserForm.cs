@@ -23,6 +23,9 @@ namespace UI.secondaryForms
 
         public event EventHandler UserCreated;
         
+        /// <summary>
+        /// Initialize the new-user form, center it and load the role dropdown.
+        /// </summary>
         public newUserForm()
         {
             InitializeComponent();
@@ -30,16 +33,26 @@ namespace UI.secondaryForms
             LoadRoleDropdown();
         }
 
+        /// <summary>
+        /// Handle the click on label1. No action is performed.
+        /// </summary>
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// Handle the click on label2. No action is performed.
+        /// </summary>
         private void label2_Click(object sender, EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// Validate the form, build a new user from the input fields, persist it through the user
+        /// service, raise <see cref="UserCreated"/> and clear the form.
+        /// </summary>
         private void btnSaveUser_Click(object sender, EventArgs e)
         {
             try
@@ -90,6 +103,11 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Validate that the username, password (including confirmation) and role meet the required
+        /// rules, showing a warning for the first failing field.
+        /// </summary>
+        /// <returns><c>true</c> when all inputs are valid; otherwise <c>false</c>.</returns>
         private bool ValidateForm()
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
@@ -161,6 +179,9 @@ namespace UI.secondaryForms
             return true;
         }
 
+        /// <summary>
+        /// Clear the username and password input fields.
+        /// </summary>
         private void ClearForm()
         {
             txtUsername.Text = "";
@@ -168,12 +189,18 @@ namespace UI.secondaryForms
             txtRepeatedPassword.Text = "";
         }
 
+        /// <summary>
+        /// Populate the role selector with the names of all permission families.
+        /// </summary>
         private void LoadRoleDropdown()
         {
             List<string> roles = permissionService.GetAllFamilies().Select(r => r.Name).ToList();
             cbRoleSelector.DataSource = roles;
         }
 
+        /// <summary>
+        /// Apply the current language translations to the form labels and buttons.
+        /// </summary>
         public override void ApplyTranslations()
         {
             lbUsername.Text = lang.Translate("Username:");

@@ -14,6 +14,10 @@ namespace Services.Contracts.Logs
         public string LogFilePath { get; set; }
         public LogLevels MinimumLogLevel { get; set; }
 
+        /// <summary>
+        /// Initializes the configuration with default values (file logging enabled, console logging disabled,
+        /// "system.log" file and Info minimum level).
+        /// </summary>
         public LoggerConfiguration()
         {
             EnableConsoleLogging = false;

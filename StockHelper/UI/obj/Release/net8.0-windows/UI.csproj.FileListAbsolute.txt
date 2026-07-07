@@ -111,3 +111,4 @@ D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Release\net8.0-windows\refint\
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Release\net8.0-windows\UI.pdb
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Release\net8.0-windows\UI.genruntimeconfig.cache
 D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Release\net8.0-windows\ref\UI.dll
+D:\Facultad\Trabajo-de-diploma\StockHelper\UI\obj\Release\net8.0-windows\UI.controlForms.ctrlLogs.resources

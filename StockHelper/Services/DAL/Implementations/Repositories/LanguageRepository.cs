@@ -22,6 +22,9 @@ namespace Services.DAL.Implementations.Repositories
 
         public static LanguageRepository GetInstance => _instance;
 
+        /// <summary>
+        /// Initializes the singleton repository by resolving the translation file paths.
+        /// </summary>
         private LanguageRepository()
         {
             InitializePaths();
@@ -44,6 +47,10 @@ namespace Services.DAL.Implementations.Repositories
         #endregion
 
         #region Initialization
+        /// <summary>
+        /// Initializes the cache structures and resolves the translation folder, file name and base file path
+        /// from configuration, applying defaults when values are missing.
+        /// </summary>
         private void InitializePaths()
         {
             _translationCache = new Dictionary<string, Dictionary<string, string>>();
@@ -221,6 +228,12 @@ namespace Services.DAL.Implementations.Repositories
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Gets the translations for the specified culture, returning the cached copy when it is still current
+        /// or reloading from file when the cache is missing or the file has been modified.
+        /// </summary>
+        /// <param name="culture">Culture code (e.g., "es-ES").</param>
+        /// <returns>A dictionary mapping translation keys to their translated values.</returns>
         private Dictionary<string, string> GetTranslationsForCulture(string culture)
         {
             lock (_cacheLock)
@@ -258,6 +271,12 @@ namespace Services.DAL.Implementations.Repositories
             }
         }
 
+        /// <summary>
+        /// Loads and parses the key=value translation entries from the culture's file, skipping blank lines,
+        /// comments and malformed entries.
+        /// </summary>
+        /// <param name="culture">Culture code (e.g., "es-ES").</param>
+        /// <returns>A case-insensitive dictionary of translation keys and values; empty if the file is missing.</returns>
         private Dictionary<string, string> LoadTranslationsFromFile(string culture)
         {
             Dictionary<string, string> translations = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -321,11 +340,22 @@ namespace Services.DAL.Implementations.Repositories
             return translations;
         }
 
+        /// <summary>
+        /// Builds the full translation file path for the specified culture.
+        /// </summary>
+        /// <param name="culture">Culture code (e.g., "es-ES").</param>
+        /// <returns>The file path composed of the base file path and the culture suffix.</returns>
         private string GetFilePathForCulture(string culture)
         {
             return $"{_baseFilePath}.{culture}";
         }
 
+        /// <summary>
+        /// Determines whether the specified key already exists in the given translation file (case-insensitive).
+        /// </summary>
+        /// <param name="filePath">Path to the translation file to inspect.</param>
+        /// <param name="key">The translation key to search for.</param>
+        /// <returns>true if the key is found; otherwise, false.</returns>
         private bool KeyExistsInFile(string filePath, string key)
         {
             try

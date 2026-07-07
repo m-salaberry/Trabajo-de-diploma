@@ -15,12 +15,24 @@ namespace DAL.Helpers
     {
         readonly static string conString;
 
+        /// <summary>
+        /// Initializes the shared connection string from configuration, substituting the SQL user and
+        /// password placeholders with their configured values.
+        /// </summary>
         static SqlHelper()
         {
             conString = ConfigurationManager.ConnectionStrings["iamDb"].ConnectionString;
             conString = conString.Replace("{sqlUser}", ConfigurationManager.AppSettings["sqlUser"]);
             conString = conString.Replace("{sqlPassword}", ConfigurationManager.AppSettings["sqlPassword"]);
         }
+        /// <summary>
+        /// Opens a connection and executes a command that does not return rows, returning the number of rows affected.
+        /// Failures are logged and rethrown as a <see cref="MySystemException"/> for the DAL layer.
+        /// </summary>
+        /// <param name="commandText">The SQL statement or stored procedure name to execute.</param>
+        /// <param name="commandType">The type of command (for example Text or StoredProcedure).</param>
+        /// <param name="parameters">The parameters to pass to the command.</param>
+        /// <returns>The number of rows affected by the command.</returns>
         public static Int32 ExecuteNonQuery(String commandText,
             CommandType commandType, params SqlParameter[] parameters)
         {
@@ -32,8 +44,6 @@ namespace DAL.Helpers
                 {
                     using (SqlCommand cmd = new SqlCommand(commandText, conn))
                     {
-                        // There're three command types: StoredProcedure, Text, TableDirect. The TableDirect 
-                        // type is only for OLE DB.  
                         cmd.CommandType = commandType;
                         cmd.Parameters.AddRange(parameters);
 
@@ -45,10 +55,14 @@ namespace DAL.Helpers
             catch (Exception ex)
             {
                 new DALExceptionHandler(ex.Message).Handler();
-                return -1;
+                throw new MySystemException(ex.Message, "DAL", ex);
             }
         }
 
+        /// <summary>
+        /// Replaces any null parameter values with <see cref="DBNull.Value"/> so they are sent correctly to SQL Server.
+        /// </summary>
+        /// <param name="parameters">The parameters to inspect and normalize.</param>
         private static void CheckNullables(SqlParameter[] parameters)
         {
             foreach (SqlParameter item in parameters)
@@ -83,7 +97,7 @@ namespace DAL.Helpers
             catch (Exception ex)
             {
                 new DALExceptionHandler(ex.Message).Handler();
-                return null;
+                throw new MySystemException(ex.Message, "DAL", ex);
             }
 
         }
@@ -94,18 +108,15 @@ namespace DAL.Helpers
         public static SqlDataReader ExecuteReader(String commandText,
             CommandType commandType, params SqlParameter[] parameters)
         {
+            SqlConnection conn = new SqlConnection(conString);
             try
             {
-                SqlConnection conn = new SqlConnection(conString);
-
                 using (SqlCommand cmd = new SqlCommand(commandText, conn))
                 {
                     cmd.CommandType = commandType;
                     cmd.Parameters.AddRange(parameters);
 
                     conn.Open();
-                    // When using CommandBehavior.CloseConnection, the connection will be closed when the 
-                    // IDataReader is closed.
                     SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                     return reader;
@@ -113,8 +124,9 @@ namespace DAL.Helpers
             }
             catch (Exception ex)
             {
+                conn.Dispose();
                 new DALExceptionHandler(ex.Message).Handler();
-                return null;
+                throw new MySystemException(ex.Message, "DAL", ex);
             }
 
         }

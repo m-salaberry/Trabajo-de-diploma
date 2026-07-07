@@ -27,6 +27,10 @@ namespace UI.controlForms
 
         List<Item> selectedItems;
         Product currentProduct;
+        /// <summary>
+        /// Initializes the product builder control, applies the initial disabled configuration and
+        /// loads the available items and existing products.
+        /// </summary>
         public ctrlProductBuilder()
         {
             InitializeComponent();
@@ -35,6 +39,9 @@ namespace UI.controlForms
             LoadProducts();
         }
 
+        /// <summary>
+        /// Reloads all products from the product service and lists their names in the products list box.
+        /// </summary>
         private void LoadProducts()
         {
             lstbxProducts.Items.Clear();
@@ -45,17 +52,22 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Loads all items from the item service into the local items list.
+        /// </summary>
         private void GetItems()
         {
             items = itemService.GetAll().ToList();
         }
+        /// <summary>
+        /// Applies the initial inactive state: disables the inputs, buttons and detail grid and greys
+        /// out their styling to signal that no product is being edited.
+        /// </summary>
         private void InitialConfig()
         {
-            // Inputs
             txtProductName.Enabled = false;
             nmCode.Enabled = false;
 
-            // Buttons
             btnAddItem.Enabled = false;
             btnAddItem.BackColor = SystemColors.ControlLight;
             btnAddItem.ForeColor = SystemColors.GrayText;
@@ -68,7 +80,6 @@ namespace UI.controlForms
             btnCancel.BackColor = SystemColors.ControlLight;
             btnCancel.ForeColor = SystemColors.GrayText;
 
-            // DataGridView: disabled + explicit grey style so the state is clear
             dgvDetailProduct.Enabled = false;
             dgvDetailProduct.BackgroundColor = SystemColors.Control;
             dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Control;
@@ -76,24 +87,24 @@ namespace UI.controlForms
             dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.GrayText;
             QuantityToConsume.ReadOnly = true;
 
-            // Action column: all rows show the same "Delete" label
             ItemAction.Text = lang.Translate("Delete");
             ItemAction.UseColumnTextForButtonValue = true;
 
-            // Labels: greyed text signals the section is inactive
             label2.ForeColor = SystemColors.GrayText;
             label3.ForeColor = SystemColors.GrayText;
             lbRecipeDetail.ForeColor = SystemColors.GrayText;
             lbRecipeDetail.Text = lang.Translate("Recipe Details: -");
         }
 
+        /// <summary>
+        /// Switches the control into editing state: enables the inputs, buttons and detail grid and
+        /// restores their normal (active) styling.
+        /// </summary>
         private void EditConfig()
         {
-            // Inputs
             txtProductName.Enabled = true;
             nmCode.Enabled = true;
 
-            // Buttons
             btnAddItem.Enabled = true;
             btnAddItem.UseVisualStyleBackColor = true;
             btnAddItem.ForeColor = SystemColors.ControlText;
@@ -106,7 +117,6 @@ namespace UI.controlForms
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.ForeColor = SystemColors.ControlText;
 
-            // DataGridView: restore active colours
             dgvDetailProduct.Enabled = true;
             dgvDetailProduct.BackgroundColor = SystemColors.Window;
             dgvDetailProduct.DefaultCellStyle.BackColor = SystemColors.Window;
@@ -114,12 +124,15 @@ namespace UI.controlForms
             dgvDetailProduct.ColumnHeadersDefaultCellStyle.ForeColor = SystemColors.ControlText;
             QuantityToConsume.ReadOnly = false;
 
-            // Labels: restore normal text colour
             label2.ForeColor = SystemColors.ControlText;
             label3.ForeColor = SystemColors.ControlText;
             lbRecipeDetail.ForeColor = SystemColors.ControlText;
         }
 
+        /// <summary>
+        /// Handles the Close button click: removes this control from its parent, resets the main
+        /// panel size and disposes the control.
+        /// </summary>
         private void btnClose_Click(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
@@ -127,6 +140,10 @@ namespace UI.controlForms
             this.Dispose();
         }
 
+        /// <summary>
+        /// Handles the product search text change: reloads all products when the box is empty,
+        /// otherwise lists only the products whose name contains the search text.
+        /// </summary>
         private void txtSearchProduct_TextChanged(object sender, EventArgs e)
         {
             if (txtSearchProduct.Text == "") 
@@ -144,6 +161,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the product name text change: updates the recipe detail label to include the
+        /// typed name, or shows a placeholder when the name is empty.
+        /// </summary>
         private void txtProductName_TextChanged(object sender, EventArgs e)
         {
             if (txtProductName.Text != "")
@@ -156,6 +177,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the New Product button click: starts a fresh product with empty details, clears
+        /// the inputs and detail grid and switches the control into editing state.
+        /// </summary>
         private void btnNewProduct_Click(object sender, EventArgs e)
         {
             try
@@ -179,20 +204,35 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Add Item button click: opens the item picker dialog and, if the user confirms,
+        /// adds the newly chosen items to the recipe (skipping duplicates) and shows their grid rows.
+        /// </summary>
         private void btnAddItem_Click(object sender, EventArgs e)
         {
             try
             {
                 addItemToProductForm addItemToProductForm = new addItemToProductForm(items);
 
-                // Subscribe BEFORE ShowDialog: the event fires inside the dialog while it is still open
+                List<Item> newlyAdded = null;
                 addItemToProductForm.OnItemsAdded += (s, itemsToAdd) =>
                 {
-                    selectedItems = itemsToAdd;
+                    newlyAdded = itemsToAdd;
                 };
 
                 addItemToProductForm.ShowDialog();
-                FillDetailProductGrid(selectedItems);
+
+                if (newlyAdded == null)
+                    return;
+
+                selectedItems ??= new List<Item>();
+                foreach (var item in newlyAdded)
+                {
+                    if (!selectedItems.Any(i => i.Name == item.Name))
+                        selectedItems.Add(item);
+                }
+
+                AddMissingItemRows();
             }
             catch (MySystemException ex)
             {
@@ -206,6 +246,11 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Save Recipe button click: validates that a product is being edited with a
+        /// name and at least one item, builds its detail rows from the grid quantities, then inserts
+        /// or updates the product and resets the control to its initial state.
+        /// </summary>
         private void btnSaveRecipe_Click(object sender, EventArgs e)
         {
             try
@@ -275,6 +320,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Cancel button click: after user confirmation, discards the in-progress product
+        /// and unsaved changes, clears the inputs and grid and returns the control to its initial state.
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try
@@ -307,6 +356,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles clicks on the detail grid: when the Delete action cell is clicked, removes the
+        /// corresponding item from the selected items and deletes its grid row.
+        /// </summary>
         private void dgvDetailProduct_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || dgvDetailProduct.Columns[e.ColumnIndex].Name != nameof(ItemAction))
@@ -324,6 +377,11 @@ namespace UI.controlForms
             dgvDetailProduct.Rows.RemoveAt(e.RowIndex);
         }
 
+        /// <summary>
+        /// Rebuilds the detail grid from a list of items, adding one row per item with a zero quantity
+        /// to consume and its unit name.
+        /// </summary>
+        /// <param name="itemsOfProduct">The items to display, each starting at quantity zero.</param>
         private void FillDetailProductGrid(List<Item> itemsOfProduct)
         {
             dgvDetailProduct.Rows.Clear();
@@ -338,6 +396,11 @@ namespace UI.controlForms
             dgvDetailProduct.Refresh();
         }
 
+        /// <summary>
+        /// Rebuilds the detail grid from a list of product details, adding one row per detail with its
+        /// item name, quantity to consume and unit name.
+        /// </summary>
+        /// <param name="details">The product details to display in the grid.</param>
         private void FillDetailProductGrid(List<DetailProduct> details)
         {
             dgvDetailProduct.Rows.Clear();
@@ -352,12 +415,41 @@ namespace UI.controlForms
             dgvDetailProduct.Refresh();
         }
 
+        /// <summary>
+        /// Clears all rows from the detail product grid and refreshes it.
+        /// </summary>
         private void ClearDetailProductGrid()
         {
             dgvDetailProduct.Rows.Clear();
             dgvDetailProduct.Refresh();
         }
 
+        /// <summary>
+        /// Adds grid rows for selected items not yet shown, preserving existing rows and their
+        /// already-typed quantities (unlike FillDetailProductGrid which rebuilds everything at qty 0).
+        /// </summary>
+        private void AddMissingItemRows()
+        {
+            var existingNames = dgvDetailProduct.Rows.Cast<DataGridViewRow>()
+                .Select(r => r.Cells[nameof(ItemName)].Value?.ToString())
+                .Where(n => !string.IsNullOrEmpty(n))
+                .ToHashSet();
+
+            foreach (var item in selectedItems)
+            {
+                if (existingNames.Contains(item.Name))
+                    continue;
+
+                string unitName = item.Unit.TryGetValue("Name", out var u) ? u?.ToString() : string.Empty;
+                dgvDetailProduct.Rows.Add(item.Name, 0, unitName);
+            }
+            dgvDetailProduct.Refresh();
+        }
+
+        /// <summary>
+        /// Applies the current language translations to all labels, buttons, search placeholder and
+        /// detail grid column headers of the control.
+        /// </summary>
         public override void ApplyTranslations()
         {
             lbCategories.Text = lang.Translate("Products");
@@ -378,6 +470,10 @@ namespace UI.controlForms
             ItemAction.Text = lang.Translate("Delete");
         }
 
+        /// <summary>
+        /// Handles the Modify button click: loads the selected product into the editor (name, code
+        /// and detail items) and switches the control into editing state, or warns when none is selected.
+        /// </summary>
         private void btnModProduct_Click(object sender, EventArgs e)
         {
             try
@@ -410,6 +506,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Delete button click: after user confirmation, deletes the selected product,
+        /// reloads the product list and resets the control, or warns when none is selected.
+        /// </summary>
         private void btnDelete_Click(object sender, EventArgs e)
         {
             try

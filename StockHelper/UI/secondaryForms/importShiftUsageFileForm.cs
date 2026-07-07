@@ -23,6 +23,11 @@ namespace UI.secondaryForms
         List<Item> items;
         List<ItemsCategory> categories;
         string filePath;
+        /// <summary>
+        /// Initializes the form with the available items and categories and applies the initial control state.
+        /// </summary>
+        /// <param name="items">The items whose stock can be reduced from the imported file.</param>
+        /// <param name="categories">The categories used to filter the displayed items.</param>
         public importShiftUsageFileForm(List<Item> items, List<ItemsCategory> categories)
         {
             InitializeComponent();
@@ -32,6 +37,9 @@ namespace UI.secondaryForms
             InitialConfig();
         }
 
+        /// <summary>
+        /// Fills the category combo with an "All" option followed by each category name.
+        /// </summary>
         private void LoadCategories()
         {
             cmbCategories.Items.Clear();
@@ -43,6 +51,9 @@ namespace UI.secondaryForms
 
         }
 
+        /// <summary>
+        /// Opens a file dialog to pick a text file, stores its path and enables the process button.
+        /// </summary>
         private void btnBrowseAndLoadFile_Click(object sender, EventArgs e)
         {
             try
@@ -66,6 +77,10 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Processes the selected file, computes the resulting stock for each item, populates the grid
+        /// (highlighting rows that would become negative) and enables the save button.
+        /// </summary>
         private void btnProcessFile_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(filePath))
@@ -100,10 +115,8 @@ namespace UI.secondaryForms
                         calculatedStock
                     );
 
-                    // Store item reference for safe retrieval when saving
                     dgvItemsAndStock.Rows[idx].Tag = item;
 
-                    // Highlight rows with negative calculated stock
                     if (calculatedStock < 0)
                     {
                         dgvItemsAndStock.Rows[idx].DefaultCellStyle.BackColor = Color.MistyRose;
@@ -143,6 +156,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Sets the initial enabled state of the process, save and cancel buttons.
+        /// </summary>
         private void InitialConfig()
         {
             btnProcessFile.Enabled = false;
@@ -150,6 +166,9 @@ namespace UI.secondaryForms
             btnCancel.Enabled = true;
         }
 
+        /// <summary>
+        /// Closes the form without applying any stock changes.
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             try
@@ -168,17 +187,19 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Validates every grid row (number format, non-negative, integer unit and not exceeding current stock),
+        /// asks for confirmation and then reduces the stock of each affected item.
+        /// </summary>
         private void btnSaveNewStock_Click(object sender, EventArgs e)
         {
             try
             {
-                // Validate all rows before saving
                 List<(Item item, decimal newStock)> updatedStocks = new List<(Item item, decimal newStock)>();
                 foreach (DataGridViewRow row in dgvItemsAndStock.Rows)
                 {
                     if (row.IsNewRow) continue;
 
-                    // Use Tag to get the item reference safely (instead of searching by name)
                     if (row.Tag is not Item item) continue;
 
                     if (!decimal.TryParse(row.Cells["ItemNewStock"].Value?.ToString(), out decimal newStock))
@@ -199,11 +220,19 @@ namespace UI.secondaryForms
                         return;
                     }
 
-                    // Validate integer unit type
                     if (item.IsUnitInteger() && newStock != Math.Floor(newStock))
                     {
                         MessageBox.Show(
                             $"'{item.Name}' uses integer units. Decimal values are not allowed.",
+                            lang.Translate("ValidationError") ?? "Validation Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    if (newStock > item.Stock)
+                    {
+                        MessageBox.Show(
+                            $"New stock for '{item.Name}' cannot be greater than the current stock ({item.Stock}).",
                             lang.Translate("ValidationError") ?? "Validation Error",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -219,7 +248,6 @@ namespace UI.secondaryForms
                     return;
                 }
 
-                // Confirmation before bulk save
                 var confirmResult = MessageBox.Show(
                     string.Format(lang.Translate("ConfirmImportStockChanges") ?? "Are you sure you want to update the stock for {0} item(s)?", updatedStocks.Count),
                     lang.Translate("Confirmation") ?? "Confirmation",
@@ -250,6 +278,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Shows or hides grid rows according to the selected category, showing all when "All" is selected.
+        /// </summary>
         private void cmbCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbCategories.SelectedIndex != -1)

@@ -31,6 +31,7 @@
             label1 = new Label();
             cmbLangauge = new ComboBox();
             btnSaveConfig = new Button();
+            btnClose = new Button();
             SuspendLayout();
             // 
             // label1
@@ -61,10 +62,21 @@
             btnSaveConfig.UseVisualStyleBackColor = true;
             btnSaveConfig.Click += btnSaveConfig_Click;
             // 
+            // btnClose
+            // 
+            btnClose.Location = new Point(460, 3);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(37, 24);
+            btnClose.TabIndex = 11;
+            btnClose.Text = "X";
+            btnClose.UseVisualStyleBackColor = true;
+            btnClose.Click += btnClose_Click;
+            // 
             // ctrlConfiguration
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(btnClose);
             Controls.Add(btnSaveConfig);
             Controls.Add(cmbLangauge);
             Controls.Add(label1);
@@ -79,5 +91,6 @@
         private Label label1;
         private ComboBox cmbLangauge;
         private Button btnSaveConfig;
+        private Button btnClose;
     }
 }

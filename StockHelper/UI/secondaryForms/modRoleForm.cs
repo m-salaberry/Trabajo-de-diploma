@@ -22,6 +22,10 @@ namespace UI.secondaryForms
         List<Patent> permissions = null;
         List<Family> roles = null;
         public event EventHandler RoleModded;
+        /// <summary>
+        /// Initialize the modify-role form, center it, load the permissions checked list and the
+        /// roles combo box.
+        /// </summary>
         public modRoleForm()
         {
             InitializeComponent();
@@ -30,10 +34,24 @@ namespace UI.secondaryForms
             LoadComboBoxWithRoles();
         }
 
+        /// <summary>
+        /// Validate that a role and at least one permission are selected, build the role from the
+        /// checked permissions, persist the update, raise <see cref="RoleModded"/>, clear the form
+        /// and reload the roles combo box.
+        /// </summary>
         private void btnSaveNew_Click(object sender, EventArgs e)
         {
             try
             {
+                if (cbRoles.SelectedItem == null)
+                {
+                    MessageBox.Show(
+                        lang.Translate("No Role Selected"),
+                        lang.Translate("Validation Error"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
                 if (clbPermissions.CheckedItems.Count == 0)
                 {
                     MessageBox.Show(
@@ -60,13 +78,10 @@ namespace UI.secondaryForms
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
-                // Trigger the RoleCreated event
                 RoleModded?.Invoke(this, EventArgs.Empty);
 
-                // Clear form
                 ClearForm();
 
-                // Reload roles in combo box
                 LoadComboBoxWithRoles();
             }
             catch (MySystemException ex)
@@ -83,6 +98,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Load all patents from the permission service and populate the permissions checked list.
+        /// </summary>
         private void LoadPermissionsToCheckedList()
         {
             permissions = _permissionService.GetAllPatents();
@@ -93,6 +111,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Load all families from the permission service and populate the roles combo box with their names.
+        /// </summary>
         private void LoadComboBoxWithRoles()
         {
             cbRoles.Items.Clear();
@@ -103,6 +124,10 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Reset the permissions checked list and check the patents that belong to the given role.
+        /// </summary>
+        /// <param name="roleId">Identifier of the role whose patents should be checked.</param>
         private void LoadPermissionsForRole(Guid roleId)
         {
             for(int i = 0; i < clbPermissions.Items.Count; i++)
@@ -135,6 +160,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Load the permissions of the newly selected role into the checked list.
+        /// </summary>
         private void cbRoles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbRoles.SelectedItem != null)
@@ -147,6 +175,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Clear the selected role and uncheck all permissions in the checked list.
+        /// </summary>
         private void ClearForm()
         {
             cbRoles.SelectedIndex = -1;

@@ -22,6 +22,10 @@ namespace UI.secondaryForms
         User userToModify = null;
 
         public event EventHandler UserUpdated;
+        /// <summary>
+        /// Initialize the modify-user form, center it, load the user and role dropdowns and set the
+        /// initial enabled/disabled state of the editable controls.
+        /// </summary>
         public modUserForm()
         {
             InitializeComponent();
@@ -33,6 +37,11 @@ namespace UI.secondaryForms
 
 
 
+        /// <summary>
+        /// Validate the form, apply the edited values to the loaded user (keeping the existing
+        /// password when none is typed), persist the update, reset the form and raise
+        /// <see cref="UserUpdated"/>.
+        /// </summary>
         private void btnSaveUser_Click(object sender, EventArgs e)
         {
             try
@@ -42,7 +51,10 @@ namespace UI.secondaryForms
                     return;
                 }
                 userToModify.Name = txtUsername.Text;
-                userToModify.Password = txtPassword.Text;
+                if (!string.IsNullOrEmpty(txtPassword.Text))
+                {
+                    userToModify.Password = txtPassword.Text;
+                }
                 userToModify.Role = cbRoleSelector.Text;
                 userToModify.IsActive = ckbActiveUser.Checked;
 
@@ -77,6 +89,11 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Validate the username and role, and validate the password format only when a new password
+        /// has been entered.
+        /// </summary>
+        /// <returns><c>true</c> when all inputs are valid; otherwise <c>false</c>.</returns>
         private bool ValidateForm()
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
@@ -101,37 +118,29 @@ namespace UI.secondaryForms
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            if (!string.IsNullOrEmpty(txtPassword.Text) || !string.IsNullOrEmpty(txtRepeatedPassword.Text))
             {
-                MessageBox.Show(
-                    lang.Translate("Password is required"),
-                    lang.Translate("Validation Error"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                txtPassword.Focus();
-                return false;
-            }
+                if (txtPassword.Text != txtRepeatedPassword.Text)
+                {
+                    MessageBox.Show(
+                        lang.Translate("Passwords do not match"),
+                        lang.Translate("Validation Error"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    txtRepeatedPassword.Focus();
+                    return false;
+                }
 
-            if (txtPassword.Text != txtRepeatedPassword.Text)
-            {
-                MessageBox.Show(
-                    lang.Translate("Passwords do not match"),
-                    lang.Translate("Validation Error"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                txtRepeatedPassword.Focus();
-                return false;
-            }
-
-            if (txtPassword.Text.Length < 4)
-            {
-                MessageBox.Show(
-                    lang.Translate("Password must be at least 4 characters"),
-                    lang.Translate("Validation Error"),
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-                txtPassword.Focus();
-                return false;
+                if (txtPassword.Text.Length < 4)
+                {
+                    MessageBox.Show(
+                        lang.Translate("Password must be at least 4 characters"),
+                        lang.Translate("Validation Error"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    txtPassword.Focus();
+                    return false;
+                }
             }
 
             if (string.IsNullOrWhiteSpace(cbRoleSelector.Text))
@@ -148,6 +157,9 @@ namespace UI.secondaryForms
             return true;
         }
 
+        /// <summary>
+        /// Clear the username and password input fields.
+        /// </summary>
         private void ClearForm()
         {
             txtUsername.Text = "";
@@ -156,18 +168,27 @@ namespace UI.secondaryForms
 
         }
 
+        /// <summary>
+        /// Populate the role selector with the names of all permission families.
+        /// </summary>
         private void LoadRoleDropdown()
         {
             List<string> roles = permissionService.GetAllFamilies().Select(r => r.Name).ToList();
             cbRoleSelector.DataSource = roles;
         }
 
+        /// <summary>
+        /// Populate the user selector with the names of all existing users.
+        /// </summary>
         private void LoadUserDropdown()
         {
             List<string> users = userService.GetAll().Select(u => u.Name).ToList();
             cbUsers.DataSource = users;
         }
 
+        /// <summary>
+        /// Apply the current language translations to the form labels and buttons.
+        /// </summary>
         public override void ApplyTranslations()
         {
             lblSelectUser.Text = lang.Translate("Select user:");
@@ -179,6 +200,10 @@ namespace UI.secondaryForms
             btnSaveUser.Text = lang.Translate("Save");
         }
 
+        /// <summary>
+        /// Load the user selected by name into the editable fields (leaving the password blank so the
+        /// current one is kept) and enable the controls.
+        /// </summary>
         private void btnLoadUser_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(cbUsers.Text))
@@ -204,8 +229,8 @@ namespace UI.secondaryForms
                 }
                 ActivateOrDeactivateControls();
                 txtUsername.Text = userToModify.Name;
-                txtPassword.Text = userToModify.Password;
-                txtRepeatedPassword.Text = userToModify.Password;
+                txtPassword.Text = "";
+                txtRepeatedPassword.Text = "";
                 cbRoleSelector.Text = userToModify.Role;
                 ckbActiveUser.Checked = userToModify.IsActive;
             }
@@ -219,6 +244,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Enable the editable user controls when a user is loaded, and disable them otherwise.
+        /// </summary>
         private void ActivateOrDeactivateControls()
         {
             if (userToModify == null)

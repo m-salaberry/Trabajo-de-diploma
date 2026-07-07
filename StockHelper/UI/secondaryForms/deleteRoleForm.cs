@@ -21,6 +21,9 @@ namespace UI.secondaryForms
 
         public event EventHandler RoleDeleted;
 
+        /// <summary>
+        /// Initializes the form and loads the existing roles into the checked list.
+        /// </summary>
         public deleteRoleForm()
         {
             InitializeComponent();
@@ -28,6 +31,9 @@ namespace UI.secondaryForms
             LoadRolesToCheckedList();
         }
 
+        /// <summary>
+        /// Deletes every checked role, requiring at least one selection, then raises the RoleDeleted event and closes the form.
+        /// </summary>
         private void btnDelete_Click(object sender, EventArgs e)
         {
             try
@@ -77,6 +83,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Loads all families (roles) and lists their names in the checked list box.
+        /// </summary>
         private void LoadRolesToCheckedList()
         {
             roles = _permissionService.GetAllFamilies();

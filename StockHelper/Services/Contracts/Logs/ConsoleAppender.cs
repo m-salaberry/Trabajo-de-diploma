@@ -9,9 +9,18 @@ namespace Services.Contracts.Logs
 {
     public class ConsoleAppender : ILogAppender
     {
+        /// <summary>
+        /// Initializes a new console appender.
+        /// </summary>
         public ConsoleAppender() { }
 
 
+        /// <summary>
+        /// Writes a timestamped log line to the console, coloring the output according to the level
+        /// and restoring the original console color afterwards.
+        /// </summary>
+        /// <param name="level">The severity level of the message.</param>
+        /// <param name="message">The message to write.</param>
         public void Append(LogLevels level, string message)
         {
             ConsoleColor originalColor = Console.ForegroundColor;

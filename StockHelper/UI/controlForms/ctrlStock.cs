@@ -27,6 +27,9 @@ namespace UI.controlForms
         List<ItemsCategory> categories;
 
         List<Item> filteredItems;
+        /// <summary>
+        /// Initializes the stock control, loading items, categories and the initial edit-mode configuration.
+        /// </summary>
         public ctrlStock()
         {
             InitializeComponent();
@@ -36,6 +39,9 @@ namespace UI.controlForms
             InitialConfig();
         }
 
+        /// <summary>
+        /// Applies the current language translations to the labels, buttons, grid columns and category combo box.
+        /// </summary>
         public override void ApplyTranslations()
         {
             label1.Text = lang.Translate("Items Stock List");
@@ -66,6 +72,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Loads all items and categories from the services and resets the filtered items list.
+        /// </summary>
         private void LoadData()
         {
             items = itemService.GetAll().ToList();
@@ -73,6 +82,9 @@ namespace UI.controlForms
             filteredItems = items;
         }
 
+        /// <summary>
+        /// Fills the category combo box with an "All" entry followed by every available category name.
+        /// </summary>
         private void LoadCategories()
         {
             cmbCategories.Items.Clear();
@@ -83,6 +95,9 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Resets the filtered list to all items and reapplies the current filters.
+        /// </summary>
         private void LoadItems()
         {
             filteredItems = items;
@@ -114,6 +129,10 @@ namespace UI.controlForms
             RenderItems(filteredItems);
         }
 
+        /// <summary>
+        /// Renders the given items into the stock grid, tagging each row with its source item.
+        /// </summary>
+        /// <param name="source">The items to display in the grid.</param>
         private void RenderItems(List<Item> source)
         {
             dgvItemsAndStock.Rows.Clear();
@@ -125,6 +144,9 @@ namespace UI.controlForms
             dgvItemsAndStock.Refresh();
         }
 
+        /// <summary>
+        /// Closes the control, removing it from its parent, resetting the main panel size and disposing it.
+        /// </summary>
         private void btnClose_Click(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
@@ -132,6 +154,9 @@ namespace UI.controlForms
             this.Dispose();
         }
 
+        /// <summary>
+        /// Reapplies the filters when a category is selected in the combo box.
+        /// </summary>
         private void cmbCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbCategories.SelectedIndex != -1)
@@ -140,11 +165,17 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Reapplies the filters whenever the search text changes.
+        /// </summary>
         private void txtSearchItem_TextChanged(object sender, EventArgs e)
         {
             ApplyFilters();
         }
 
+        /// <summary>
+        /// Sets the initial read-only state, disabling the cancel and save buttons.
+        /// </summary>
         private void InitialConfig()
         {
             btnCancelEdit.Enabled = false;
@@ -152,6 +183,9 @@ namespace UI.controlForms
             dgvItemsAndStock.ReadOnly = true;
         }
 
+        /// <summary>
+        /// Enables stock editing, making only the stock column editable and toggling the relevant buttons.
+        /// </summary>
         private void EnterEditMode()
         {
             dgvItemsAndStock.ReadOnly = false;
@@ -166,6 +200,9 @@ namespace UI.controlForms
             btnImportShiftUsage.Enabled = false;
         }
 
+        /// <summary>
+        /// Leaves stock editing, restoring the read-only state and toggling the relevant buttons.
+        /// </summary>
         private void ExitEditMode()
         {
             ItemStock.ReadOnly = true;
@@ -176,11 +213,17 @@ namespace UI.controlForms
             btnImportShiftUsage.Enabled = true;
         }
 
+        /// <summary>
+        /// Enters stock edit mode when the edit button is clicked.
+        /// </summary>
         private void btnEditMode_Click(object sender, EventArgs e)
         {
             EnterEditMode();
         }
 
+        /// <summary>
+        /// Discards edits by reloading the data and exiting edit mode.
+        /// </summary>
         private void btnCancelEdit_Click(object sender, EventArgs e)
         {
             LoadData();
@@ -188,6 +231,10 @@ namespace UI.controlForms
             ExitEditMode();
         }
 
+        /// <summary>
+        /// Validates and saves the edited stock values after confirmation, updating only changed items,
+        /// then reloads the data and exits edit mode.
+        /// </summary>
         private void btnSaveEdit_Click(object sender, EventArgs e)
         {
             try
@@ -254,6 +301,9 @@ namespace UI.controlForms
         }
 
 
+        /// <summary>
+        /// Opens the shift usage import dialog and refreshes the data once it closes.
+        /// </summary>
         private void btnImportShiftUsage_Click(object sender, EventArgs e)
         {
             try

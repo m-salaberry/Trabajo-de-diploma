@@ -50,8 +50,8 @@
             // lbUsername
             // 
             lbUsername.AutoSize = true;
-            lbUsername.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lbUsername.Location = new Point(79, 31);
+            lbUsername.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lbUsername.Location = new Point(18, 34);
             lbUsername.Name = "lbUsername";
             lbUsername.Size = new Size(115, 30);
             lbUsername.TabIndex = 1;
@@ -60,8 +60,8 @@
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblPassword.Location = new Point(85, 82);
+            lblPassword.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblPassword.Location = new Point(18, 85);
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new Size(109, 30);
             lblPassword.TabIndex = 2;
@@ -78,8 +78,8 @@
             // lblRole
             // 
             lblRole.AutoSize = true;
-            lblRole.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblRole.Location = new Point(78, 184);
+            lblRole.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblRole.Location = new Point(18, 196);
             lblRole.Name = "lblRole";
             lblRole.Size = new Size(116, 30);
             lblRole.TabIndex = 4;
@@ -110,8 +110,8 @@
             // lblRePassword
             // 
             lblRePassword.AutoSize = true;
-            lblRePassword.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblRePassword.Location = new Point(18, 133);
+            lblRePassword.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblRePassword.Location = new Point(18, 136);
             lblRePassword.Name = "lblRePassword";
             lblRePassword.Size = new Size(181, 30);
             lblRePassword.TabIndex = 7;

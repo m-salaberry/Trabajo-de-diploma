@@ -21,6 +21,9 @@ namespace Services.Contracts.Logs
             }
         }
 
+        /// <summary>
+        /// Initializes the singleton logger with an empty list of appenders.
+        /// </summary>
         private Logger()
         {
             _appenders = new List<ILogAppender>();
@@ -125,9 +128,25 @@ namespace Services.Contracts.Logs
         /// </summary>
         /// <param name="message">Message to be logged.</param>
         public void Debug(string message) => Log(LogLevels.Debug, message);
+        /// <summary>
+        /// Logs a message at the Info level.
+        /// </summary>
+        /// <param name="message">Message to be logged.</param>
         public void Info(string message) => Log(LogLevels.Info, message);
+        /// <summary>
+        /// Logs a message at the Warning level.
+        /// </summary>
+        /// <param name="message">Message to be logged.</param>
         public void Warning(string message) => Log(LogLevels.Warning, message);
+        /// <summary>
+        /// Logs a message at the Error level.
+        /// </summary>
+        /// <param name="message">Message to be logged.</param>
         public void Error(string message) => Log(LogLevels.Error, message);
+        /// <summary>
+        /// Logs a message at the Fatal level.
+        /// </summary>
+        /// <param name="message">Message to be logged.</param>
         public void Fatal(string message) => Log(LogLevels.Fatal, message);
 
         /// <summary>

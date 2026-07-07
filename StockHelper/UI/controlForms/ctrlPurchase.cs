@@ -25,9 +25,15 @@ namespace UI.controlForms
         List<PurchaseOrder> purchaseOrders;
         List<PurchaseOrder> filteredOrders;
 
+        /// <summary>
+        /// Initializes the control, configures the grid for full-row single selection, sets up filters,
+        /// loads the purchase orders and wires up the button and filter event handlers.
+        /// </summary>
         public ctrlPurchase()
         {
             InitializeComponent();
+            dgvPurchaseOrders.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvPurchaseOrders.MultiSelect = false;
             InitFilters();
             LoadPurchaseOrders();
             btnCancelOrder.Click += btnCancelOrder_Click;
@@ -36,6 +42,9 @@ namespace UI.controlForms
             cmbFilterStatus.SelectedIndexChanged += cmbFilterStatus_SelectedIndexChanged;
         }
 
+        /// <summary>
+        /// Populates the status filter combo box with the available purchase order statuses and selects "All" by default.
+        /// </summary>
         private void InitFilters()
         {
             cmbFilterStatus.Items.Clear();
@@ -47,6 +56,9 @@ namespace UI.controlForms
             cmbFilterStatus.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
+        /// <summary>
+        /// Applies the current language translations to the labels, buttons and purchase order grid column headers.
+        /// </summary>
         public override void ApplyTranslations()
         {
             label1.Text = lang.Translate("Purchase Orders:");
@@ -61,12 +73,18 @@ namespace UI.controlForms
             OrderAmount.HeaderText = lang.Translate("Total Amount");
         }
 
+        /// <summary>
+        /// Loads all purchase orders from the service and applies the current filters.
+        /// </summary>
         private void LoadPurchaseOrders()
         {
             purchaseOrders = purchaseOrderService.GetAll().ToList();
             ApplyFilters();
         }
 
+        /// <summary>
+        /// Filters the purchase orders by the provider search text and the selected status, then renders the result.
+        /// </summary>
         private void ApplyFilters()
         {
             var result = purchaseOrders.AsEnumerable();
@@ -89,6 +107,9 @@ namespace UI.controlForms
             RenderPurchaseOrders();
         }
 
+        /// <summary>
+        /// Renders the filtered purchase orders into the grid, storing each order in its row's Tag.
+        /// </summary>
         private void RenderPurchaseOrders()
         {
             dgvPurchaseOrders.Rows.Clear();
@@ -105,16 +126,26 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Reapplies the filters when the provider search text changes.
+        /// </summary>
         private void txtFilterByProvider_TextChanged(object sender, EventArgs e)
         {
             ApplyFilters();
         }
 
+        /// <summary>
+        /// Reapplies the filters when the selected status changes.
+        /// </summary>
         private void cmbFilterStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
             ApplyFilters();
         }
 
+        /// <summary>
+        /// Opens the cancel order dialog for the selected purchase order and reloads the orders when it is cancelled,
+        /// warning the user if no order is selected.
+        /// </summary>
         private void btnCancelOrder_Click(object sender, EventArgs e)
         {
             if (dgvPurchaseOrders.SelectedRows.Count == 0)
@@ -136,6 +167,10 @@ namespace UI.controlForms
             cancelForm.Dispose();
         }
 
+        /// <summary>
+        /// Opens the invoice upload dialog for the selected purchase order and reloads the orders when an invoice is
+        /// uploaded, warning the user if no order is selected.
+        /// </summary>
         private void btnUploadInvoice_Click(object sender, EventArgs e)
         {
             if (dgvPurchaseOrders.SelectedRows.Count == 0)

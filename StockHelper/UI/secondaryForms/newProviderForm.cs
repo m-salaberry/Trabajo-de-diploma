@@ -24,6 +24,10 @@ namespace UI.secondaryForms
         List<ItemsCategory> categories;
         public event EventHandler ProviderCreated;
 
+        /// <summary>
+        /// Initializes the form with the selectable categories and binds them to the category combo.
+        /// </summary>
+        /// <param name="categories">The categories a provider can be assigned to.</param>
         public newProviderForm(List<ItemsCategory> categories)
         {
             InitializeComponent();
@@ -32,6 +36,9 @@ namespace UI.secondaryForms
             LoadCategories();
         }
 
+        /// <summary>
+        /// Binds the categories to the combo, using the name for display and the id as the value.
+        /// </summary>
         private void LoadCategories()
         {
             cmbCategories.DataSource = null;
@@ -40,6 +47,9 @@ namespace UI.secondaryForms
             cmbCategories.ValueMember = "Id";
         }
 
+        /// <summary>
+        /// Applies the current language translations to the form title, labels and buttons.
+        /// </summary>
         public override void ApplyTranslations()
         {
             this.Text = lang.Translate("Create Provider");
@@ -52,6 +62,9 @@ namespace UI.secondaryForms
             btnSaveProvider.Text = lang.Translate("Save");
         }
 
+        /// <summary>
+        /// Builds a new provider from the form fields, persists it, raises the ProviderCreated event and closes the form.
+        /// </summary>
         private void btnSaveProvider_Click(object sender, EventArgs e)
         {
             try

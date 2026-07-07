@@ -23,6 +23,11 @@ namespace UI.secondaryForms
         List<ItemsCategory> categories;
         List<Item> items;
         public event EventHandler ItemDeleted;
+        /// <summary>
+        /// Initializes the form with the categories and items and loads the category filter combo.
+        /// </summary>
+        /// <param name="categories">The categories used to filter the items.</param>
+        /// <param name="items">The items available for deletion.</param>
         public deleteItemForm(List<ItemsCategory> categories, List<Item> items)
         {
             InitializeComponent();
@@ -33,6 +38,10 @@ namespace UI.secondaryForms
 
         }
 
+        /// <summary>
+        /// Deletes the selected item after confirmation, removes it from the local list, refreshes the list
+        /// and raises the ItemDeleted event.
+        /// </summary>
         private void btnDeleteItem_Click(object sender, EventArgs e)
         {
             try
@@ -104,6 +113,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Fills the category filter combo with an "All Categories" option and loads the item list.
+        /// </summary>
         private void LoadCmb()
         {
             cmbFilterCategories.Items.Clear();
@@ -116,6 +128,9 @@ namespace UI.secondaryForms
             LoadItems();
         }
 
+        /// <summary>
+        /// Populates the item list box, filtering by the selected category when one other than "All" is chosen.
+        /// </summary>
         private void LoadItems()
         {
             lstbxItems.Items.Clear();
@@ -132,6 +147,9 @@ namespace UI.secondaryForms
 
         }
 
+        /// <summary>
+        /// Reloads the item list when the selected category filter changes.
+        /// </summary>
         private void cmbFilterCategories_SelectedIndexChanged(object sender, EventArgs e)
         {
             try

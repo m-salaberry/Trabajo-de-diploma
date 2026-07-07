@@ -22,6 +22,10 @@ namespace UI.secondaryForms
         List<ItemsCategory> categories = null;
         ItemService itemService = ItemService.Instance();
         public event EventHandler ItemAdded;
+        /// <summary>
+        /// Initializes the form with the selectable categories and binds them to the category combo.
+        /// </summary>
+        /// <param name="categories">The categories an item can be assigned to.</param>
         public newItemForm(List<ItemsCategory> categories)
         {
             InitializeComponent();
@@ -30,6 +34,10 @@ namespace UI.secondaryForms
             LoadCategories();
         }
 
+        /// <summary>
+        /// Builds a new item from the form fields (name, category, unit and zero stock), persists it,
+        /// raises the ItemAdded event and closes the form.
+        /// </summary>
         private void btnSaveItem_Click(object sender, EventArgs e)
         {
             try
@@ -74,6 +82,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Binds the categories to the combo, using the name for display and the id as the value.
+        /// </summary>
         private void LoadCategories()
         {
             cmbCategories.DataSource = null;

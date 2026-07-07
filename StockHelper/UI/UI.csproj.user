@@ -10,6 +10,9 @@
     <Compile Update="controlForms\ctrlItemsAndCategories.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="controlForms\ctrlLogs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="controlForms\ctrlOrders.cs">
       <SubType>UserControl</SubType>
     </Compile>

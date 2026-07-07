@@ -24,6 +24,11 @@ namespace UI.secondaryForms
         List<ItemsCategory> categories;
         List<Provider> providers;
         public event EventHandler ProviderDeleted;
+        /// <summary>
+        /// Initializes the form with the categories and providers and loads both into their controls.
+        /// </summary>
+        /// <param name="categories">The categories used to filter the providers.</param>
+        /// <param name="providers">The providers available for deletion.</param>
         public deleteProviderForm(List<ItemsCategory> categories, List<Provider> providers)
         {
             InitializeComponent();
@@ -34,6 +39,10 @@ namespace UI.secondaryForms
             LoadCategories();
         }
 
+        /// <summary>
+        /// Binds the provider list box to the given source, or to the full provider list when none is supplied.
+        /// </summary>
+        /// <param name="source">The optional provider collection to display; defaults to all providers.</param>
         private void LoadProviders(List<Provider> source = null)
         {
             var list = source ?? providers;
@@ -42,6 +51,9 @@ namespace UI.secondaryForms
             lstbxProviders.DisplayMember = "Name";
         }
 
+        /// <summary>
+        /// Binds the category combo, prepending an "All categories" option selected by default.
+        /// </summary>
         private void LoadCategories()
         {
             var filterCategories = new List<ItemsCategory>
@@ -57,6 +69,9 @@ namespace UI.secondaryForms
             cmbChooseCategory.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Filters the provider list by the selected category, showing all providers when "All categories" is chosen.
+        /// </summary>
         private void cmbChooseCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbChooseCategory.SelectedIndex == 0)
@@ -73,12 +88,18 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Applies the current language translations to the form title and controls.
+        /// </summary>
         public override void ApplyTranslations()
         {
             this.Text = lang.Translate("Delete Provider");
             btnDelete.Text = lang.Translate("Delete");
         }
 
+        /// <summary>
+        /// Deletes the selected provider after confirmation, updates the local list and raises the ProviderDeleted event.
+        /// </summary>
         private void btnDelete_Click(object sender, EventArgs e)
         {
             try

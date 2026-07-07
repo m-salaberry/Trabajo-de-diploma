@@ -32,6 +32,10 @@ namespace UI.controlForms
         ReplacementOrder newReplacementOrder;
         ReplacementOrder currentReplacementOrder;
 
+        /// <summary>
+        /// Initializes the orders control, wires up the list formatting and provider filter events,
+        /// loads the existing orders and providers, and applies the initial read-only configuration.
+        /// </summary>
         public ctrlOrders()
         {
             InitializeComponent();
@@ -45,6 +49,10 @@ namespace UI.controlForms
             InitialConfig();
         }
 
+        /// <summary>
+        /// Applies the current language translations to all labels, buttons, group boxes and grid
+        /// column headers of the control, then refreshes the orders grid.
+        /// </summary>
         public override void ApplyTranslations()
         {
             label1.Text = lang.Translate("Replacement Orders:");
@@ -66,16 +74,23 @@ namespace UI.controlForms
             dgvOrders.Refresh();
         }
 
+        /// <summary>
+        /// Handles the orders list box formatting: displays each replacement order as its order
+        /// number padded into a column alongside the provider name (or "N/A" when none).
+        /// </summary>
         private void LstbxOrders_Format(object sender, ListControlConvertEventArgs e)
         {
             if (e.ListItem is ReplacementOrder order)
             {
                 string providerName = order.Provider != null ? order.Provider.Name : "N/A";
-                // Alinea el número de orden a la izquierda usando padding simulando columnas
                 e.Value = $"{order.ReplacementOrderNumber,-20} | {providerName}";
             }
         }
 
+        /// <summary>
+        /// Loads all replacement orders that have not yet been turned into a purchase order and
+        /// applies the current filters to refresh the displayed list.
+        /// </summary>
         private void LoadOrders()
         {
             var allPurchaseOrderReplacementIds = purchaseOrderService.GetAll()
@@ -89,11 +104,18 @@ namespace UI.controlForms
             filteredOrders = orders;
             ApplyFilters();
         }
+        /// <summary>
+        /// Loads all providers from the provider service into the local providers list.
+        /// </summary>
         private void LoadProviders()
         {
             providers = providerService.GetAll().ToList();
         }
 
+        /// <summary>
+        /// Filters the orders by the provider filter text (matching provider name or order number)
+        /// and renders the resulting list.
+        /// </summary>
         private void ApplyFilters()
         {
             var result = orders.AsEnumerable();
@@ -110,6 +132,10 @@ namespace UI.controlForms
             RenderOrders(filteredOrders);
         }
 
+        /// <summary>
+        /// Clears the orders list box and repopulates it with the given orders.
+        /// </summary>
+        /// <param name="source">The orders to display in the list box.</param>
         private void RenderOrders(List<ReplacementOrder> source)
         {
             lstbxOrders.Items.Clear();
@@ -119,11 +145,18 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the provider filter text change: re-applies the filters to the orders list.
+        /// </summary>
         private void txtFilterByProvider_TextChanged(object sender, EventArgs e)
         {
             ApplyFilters();
         }
 
+        /// <summary>
+        /// Handles selection changes in the orders list: shows the selected order's number and
+        /// renders its details, or clears the details when nothing is selected.
+        /// </summary>
         private void lstbxOrders_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstbxOrders.SelectedItem is ReplacementOrder selectedOrder)
@@ -138,6 +171,11 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Populates the details grid with the given order's rows, showing each item's name, unit
+        /// and quantity, and tags each grid row with its source order row.
+        /// </summary>
+        /// <param name="order">The order whose rows are displayed in the grid.</param>
         private void RenderOrderDetails(ReplacementOrder order)
         {
             dgvOrders.Rows.Clear();
@@ -150,12 +188,19 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Applies the initial control state: makes the grid read-only and disables the save button.
+        /// </summary>
         private void InitialConfig()
         {
             dgvOrders.ReadOnly = true;
             btnSave.Enabled = false;
         }
 
+        /// <summary>
+        /// Switches the control into edit mode: makes quantities editable, enables saving and locks
+        /// the order list and create button so switching orders cannot discard the current one.
+        /// </summary>
         private void EnterEditMode()
         {
             dgvOrders.ReadOnly = false;
@@ -163,15 +208,27 @@ namespace UI.controlForms
             ItemQuantity.ReadOnly = false;
             btnModifyReplacementOrder.Enabled = false;
             btnSave.Enabled = true;
+            lstbxOrders.Enabled = false;
+            btnCreateNewReplacementOrder.Enabled = false;
         }
 
+        /// <summary>
+        /// Leaves edit mode: makes the grid read-only again and re-enables the modify button, order
+        /// list and create button.
+        /// </summary>
         private void ExitEditMode()
         {
             dgvOrders.ReadOnly = true;
             btnModifyReplacementOrder.Enabled = true;
             btnSave.Enabled = false;
+            lstbxOrders.Enabled = true;
+            btnCreateNewReplacementOrder.Enabled = true;
         }
 
+        /// <summary>
+        /// Handles the Modify button click: sets the selected order as the current one and enters
+        /// edit mode, or warns the user when no order is selected.
+        /// </summary>
         private void btnModifyReplacementOrder_Click(object sender, EventArgs e)
         {
             if (lstbxOrders.SelectedItem is ReplacementOrder selectedOrder)
@@ -186,12 +243,17 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Save button click: validates the grid quantities and either inserts the new
+        /// order or updates the current one, then reloads the orders and exits edit mode.
+        /// </summary>
         private void btnSave_Click_1(object sender, EventArgs e)
         {
             try
             {
                 if (newReplacementOrder != null)
                 {
+                    var rows = new List<OrderRow>();
                     foreach (DataGridViewRow row in dgvOrders.Rows)
                     {
                         if (row.Tag is not Item item) continue;
@@ -204,15 +266,17 @@ namespace UI.controlForms
                         }
                         if (quantity > 0)
                         {
-                            newReplacementOrder.OrderRows.Add(new OrderRow { Item = item, Quantity = quantity });
+                            rows.Add(new OrderRow { Item = item, Quantity = quantity });
                         }
                     }
+                    newReplacementOrder.OrderRows.Clear();
+                    newReplacementOrder.OrderRows.AddRange(rows);
                     replacementOrderService.Insert(newReplacementOrder);
                     newReplacementOrder = null;
                 }
                 else if (currentReplacementOrder != null)
                 {
-                    currentReplacementOrder.OrderRows.Clear();
+                    var pending = new List<(OrderRow row, decimal quantity)>();
                     foreach (DataGridViewRow row in dgvOrders.Rows)
                     {
                         if (row.Tag is not OrderRow orderRow) continue;
@@ -223,7 +287,12 @@ namespace UI.controlForms
                                 lang.Translate("Validation Error"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             return;
                         }
-                        orderRow.Quantity = newQuantity;
+                        pending.Add((orderRow, newQuantity));
+                    }
+                    currentReplacementOrder.OrderRows.Clear();
+                    foreach (var (orderRow, quantity) in pending)
+                    {
+                        orderRow.Quantity = quantity;
                         currentReplacementOrder.OrderRows.Add(orderRow);
                     }
                     replacementOrderService.Update(currentReplacementOrder);
@@ -246,6 +315,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Create button click: opens the provider chooser dialog and, once a provider
+        /// is selected, starts a new replacement order, loads the provider's items and enters edit mode.
+        /// </summary>
         private void btnCreateNewReplacementOrder_Click(object sender, EventArgs e)
         {
             try
@@ -274,6 +347,11 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Fills the details grid with all items belonging to the provider's category, each starting
+        /// at quantity zero and tagged with its source item.
+        /// </summary>
+        /// <param name="provider">The provider whose category determines which items are shown.</param>
         private void LoadItemsByProviderCategory(Provider provider)
         {
             var items = itemService.GetAll()
@@ -290,13 +368,16 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Cancel button click: discards any new or in-progress order, exits edit mode
+        /// and restores the details of the previously selected order (or clears them).
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             newReplacementOrder = null;
             currentReplacementOrder = null;
             ExitEditMode();
 
-            // Restore previous selection or clear
             if (lstbxOrders.SelectedItem is ReplacementOrder selectedOrder)
             {
                 RenderOrderDetails(selectedOrder);
@@ -308,6 +389,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Delete button click: after user confirmation, deletes the selected order and
+        /// reloads the list, or warns the user when no order is selected.
+        /// </summary>
         private void btnDeleteOrder_Click(object sender, EventArgs e)
         {
             try
@@ -345,6 +430,10 @@ namespace UI.controlForms
             }
         }
 
+        /// <summary>
+        /// Handles the Send button click: after user confirmation, creates a purchase order from the
+        /// selected replacement order, sends a WhatsApp message to the provider and reloads the list.
+        /// </summary>
         private void btnSendOrder_Click(object sender, EventArgs e)
         {
             try
@@ -362,7 +451,6 @@ namespace UI.controlForms
                         newPurchaseOrder.TotalAmount = 0;
                         purchaseOrderService.Insert(newPurchaseOrder);
 
-                        // Send WhatsApp message to provider
                         string message = WhatsAppMessageTemplates.BuildOrderMessage(currentReplacementOrder, lang);
                         string phone = currentReplacementOrder.Provider.ContactTel;
                         var whatsApp = new WhatsAppMessengerService(phone, message);

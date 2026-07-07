@@ -41,6 +41,7 @@
             cmbFilterCategories.Name = "cmbFilterCategories";
             cmbFilterCategories.Size = new Size(186, 23);
             cmbFilterCategories.TabIndex = 5;
+            cmbFilterCategories.SelectedIndexChanged += cmbFilterCategories_SelectedIndexChanged;
             // 
             // btnAdd
             // 

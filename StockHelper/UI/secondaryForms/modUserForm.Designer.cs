@@ -63,8 +63,8 @@
             // lblRePassword
             // 
             lblRePassword.AutoSize = true;
-            lblRePassword.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblRePassword.Location = new Point(20, 174);
+            lblRePassword.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblRePassword.Location = new Point(18, 186);
             lblRePassword.Name = "lblRePassword";
             lblRePassword.Size = new Size(181, 30);
             lblRePassword.TabIndex = 18;
@@ -94,8 +94,8 @@
             // lblRole
             // 
             lblRole.AutoSize = true;
-            lblRole.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblRole.Location = new Point(80, 225);
+            lblRole.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblRole.Location = new Point(18, 237);
             lblRole.Name = "lblRole";
             lblRole.Size = new Size(116, 30);
             lblRole.TabIndex = 16;
@@ -111,8 +111,8 @@
             // lblPassword
             // 
             lblPassword.AutoSize = true;
-            lblPassword.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lblPassword.Location = new Point(87, 123);
+            lblPassword.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblPassword.Location = new Point(18, 135);
             lblPassword.Name = "lblPassword";
             lblPassword.Size = new Size(109, 30);
             lblPassword.TabIndex = 14;
@@ -121,8 +121,8 @@
             // lbUsername
             // 
             lbUsername.AutoSize = true;
-            lbUsername.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            lbUsername.Location = new Point(81, 72);
+            lbUsername.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lbUsername.Location = new Point(18, 84);
             lbUsername.Name = "lbUsername";
             lbUsername.Size = new Size(115, 30);
             lbUsername.TabIndex = 13;
@@ -146,8 +146,8 @@
             // lblSelectUser
             // 
             lblSelectUser.AutoSize = true;
-            lblSelectUser.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblSelectUser.Location = new Point(87, 21);
+            lblSelectUser.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSelectUser.Location = new Point(18, 26);
             lblSelectUser.Name = "lblSelectUser";
             lblSelectUser.Size = new Size(110, 25);
             lblSelectUser.TabIndex = 23;

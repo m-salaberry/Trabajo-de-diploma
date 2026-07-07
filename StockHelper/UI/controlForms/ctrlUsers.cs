@@ -18,12 +18,18 @@ namespace UI.secondaryForms
     {
         LanguageService lang = LanguageService.GetInstance;
 
+        /// <summary>
+        /// Initializes the control and loads the active and disabled users into their grids.
+        /// </summary>
         public ctrlUsers()
         {
             InitializeComponent();
             LoadUsers();
         }
 
+        /// <summary>
+        /// Loads all users from the service, placing active users and disabled users into their respective grids.
+        /// </summary>
         private void LoadUsers()
         {
             dgvActiveUsers.Rows.Clear();
@@ -47,11 +53,17 @@ namespace UI.secondaryForms
             dgvDisabledUsers.Refresh();
         }
 
+        /// <summary>
+        /// Reloads the active and disabled user grids.
+        /// </summary>
         public void RefreshUserList()
         {
             LoadUsers();
         }
 
+        /// <summary>
+        /// Removes this control from its parent, resets the main panel size and disposes the control.
+        /// </summary>
         private void btnClose_Click(object sender, EventArgs e)
         {
             Parent.Controls.Remove(this);
@@ -59,6 +71,9 @@ namespace UI.secondaryForms
             this.Dispose();
         }
 
+        /// <summary>
+        /// Opens the new user dialog and refreshes the user list when a user is created.
+        /// </summary>
         private void btnAddNewUser_Click(object sender, EventArgs e)
         {
             try
@@ -88,6 +103,9 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Opens the modify user dialog and refreshes the user list when a user is updated.
+        /// </summary>
         private void btnModUser_Click(object sender, EventArgs e)
         {
             try
@@ -117,11 +135,17 @@ namespace UI.secondaryForms
             }
         }
 
+        /// <summary>
+        /// Handles the control's Load event; currently performs no additional initialization.
+        /// </summary>
         private void ctrlUsers_Load(object sender, EventArgs e)
         {
 
         }
 
+        /// <summary>
+        /// Applies the current language translations to the buttons, labels and the active and disabled user grid columns.
+        /// </summary>
         public override void ApplyTranslations()
         {
             // Translate buttons

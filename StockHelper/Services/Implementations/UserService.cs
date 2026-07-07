@@ -124,9 +124,37 @@ namespace Services.Implementations
         /// </summary>
         public void Update(User entity)
         {
+            User existing = _userRepository.GetById(entity.Id);
 
-            entity.Password = CryptographyService.HashMd5(entity.Password);
+            if (existing == null || entity.Password != existing.Password)
+            {
+                entity.Password = CryptographyService.HashMd5(entity.Password);
+            }
+
             _userRepository.Update(entity);
+
+            if (existing != null && !string.Equals(existing.Role, entity.Role, StringComparison.Ordinal))
+            {
+                PermissionService permissionService = PermissionService.Instance();
+
+                if (!string.IsNullOrWhiteSpace(existing.Role))
+                {
+                    Family oldFamily = permissionService.GetFamilyByName(existing.Role);
+                    if (oldFamily != null)
+                    {
+                        _userRepository.DeleteRelationBetweenUserAndFamily(entity, oldFamily);
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(entity.Role))
+                {
+                    Family newFamily = permissionService.GetFamilyByName(entity.Role);
+                    if (newFamily != null)
+                    {
+                        _userRepository.SaveRelatedFamilyOfUser(entity, newFamily);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -137,7 +165,7 @@ namespace Services.Implementations
         private Guid GenerateUniqueGuid()
         {
             Guid newGuid;
-            int maxAttempts = 10; // Límite de intentos por seguridad
+            int maxAttempts = 10;
             int attempts = 0;
 
             do

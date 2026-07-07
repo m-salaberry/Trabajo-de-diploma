@@ -27,7 +27,11 @@ namespace Services.Implementations
             try
             {
                 User dbUser = _userService.GetByName(username);
-                if (dbUser.Name != username || dbUser.Password != CryptographyService.HashMd5(password))
+                if (dbUser == null || dbUser.Password != CryptographyService.HashMd5(password))
+                {
+                    throw new InvalidCredentialsException();
+                }
+                if (!dbUser.IsActive)
                 {
                     throw new InvalidCredentialsException();
                 }
