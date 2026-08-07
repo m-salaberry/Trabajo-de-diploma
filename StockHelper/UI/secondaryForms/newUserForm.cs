@@ -203,6 +203,7 @@ namespace UI.secondaryForms
         /// </summary>
         public override void ApplyTranslations()
         {
+            this.Text = lang.Translate("New User");
             lbUsername.Text = lang.Translate("Username:");
             lblPassword.Text = lang.Translate("Password:");
             lblRePassword.Text = lang.Translate("Repeat Password:");

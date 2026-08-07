@@ -42,6 +42,19 @@ namespace UI.secondaryForms
         }
 
         /// <summary>
+        /// Applies the current language translations to the window title and the form controls.
+        /// </summary>
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("Modify Item");
+            label1.Text = lang.Translate("Name");
+            label2.Text = lang.Translate("Category");
+            label3.Text = lang.Translate("Unit of measurement");
+            ckIntegerUnit.Text = lang.Translate("Integer Unit");
+            btnSaveChangesItem.Text = lang.Translate("Save changes");
+        }
+
+        /// <summary>
         /// Validate that an item is selected, apply the edited name, category and unit values to it,
         /// persist the update through the item service and raise <see cref="ItemModified"/>.
         /// </summary>

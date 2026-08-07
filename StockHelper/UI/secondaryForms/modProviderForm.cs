@@ -224,7 +224,7 @@ namespace UI.secondaryForms
         /// </summary>
         public override void ApplyTranslations()
         {
-            this.Text = lang.Translate("Modify Provider");
+            this.Text = lang.Translate("Edit Provider");
             label1.Text = lang.Translate("Name");
             label2.Text = lang.Translate("CUIT");
             label3.Text = lang.Translate("Company name");

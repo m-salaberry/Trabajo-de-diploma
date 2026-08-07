@@ -150,6 +150,7 @@
             Controls.Add(lbUsername);
             Controls.Add(txtUsername);
             Name = "newUserForm";
+            Text = "New User";
             ResumeLayout(false);
             PerformLayout();
         }

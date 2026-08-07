@@ -31,6 +31,13 @@ namespace Services.Implementations
         }
         #endregion
 
+        #region Constants
+        /// <summary>
+        /// Name of the key that holds the culture inside the per-user settings file.
+        /// </summary>
+        private const string CultureSettingKey = "Culture";
+        #endregion
+
         #region Events
         /// <summary>
         /// Event raised when the application language/culture changes.
@@ -103,7 +110,7 @@ namespace Services.Implementations
 
                 SetCultureInternal(cultureName);
 
-                SaveCultureToConfig(cultureName);
+                SaveCultureToUserSettings(cultureName);
 
                 OnLanguageChanged();
 
@@ -217,22 +224,32 @@ namespace Services.Implementations
 
         #region Private Methods
         /// <summary>
-        /// Loads the culture from the application configuration, falling back to "en-US" when missing or on error.
+        /// Loads the culture to apply on start-up. The culture saved by the user takes precedence over the
+        /// one configured in the application configuration file, which acts as the factory default.
+        /// Falls back to "en-US" when both are missing or on error.
         /// </summary>
         private void LoadCultureFromConfig()
         {
             try
             {
-                string cultureName = ConfigurationManager.AppSettings["Culture"];
+                string? cultureName = ReadCultureFromUserSettings();
+                string origin = "user settings";
+
+                if (string.IsNullOrWhiteSpace(cultureName))
+                {
+                    cultureName = ConfigurationManager.AppSettings["Culture"];
+                    origin = "config";
+                }
 
                 if (string.IsNullOrWhiteSpace(cultureName))
                 {
                     cultureName = "en-US";
+                    origin = "default";
                     Logger.Current.Info($"No culture configured, using default: {cultureName}");
                 }
 
                 SetCultureInternal(cultureName);
-                Logger.Current.Info($"Culture loaded from config: {cultureName}");
+                Logger.Current.Info($"Culture loaded from {origin}: {cultureName}");
             }
             catch (Exception ex)
             {
@@ -257,33 +274,136 @@ namespace Services.Implementations
         }
 
         /// <summary>
-        /// Persists the specified culture to the application configuration file.
+        /// Gets the per-user settings folder (%APPDATA%\StockHelper). It is used instead of the application
+        /// folder because the latter is read-only once the application is installed under Program Files.
         /// </summary>
-        /// <param name="cultureName">Culture code to save (e.g., "es-ES", "en-US").</param>
-        private void SaveCultureToConfig(string cultureName)
+        /// <returns>Absolute path of the settings folder.</returns>
+        private static string GetUserSettingsFolderPath()
+        {
+            return Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "StockHelper");
+        }
+
+        /// <summary>
+        /// Gets the full path of the per-user settings file (%APPDATA%\StockHelper\settings.ini).
+        /// </summary>
+        /// <returns>Absolute path of the settings file.</returns>
+        private static string GetUserSettingsFilePath()
+        {
+            return Path.Combine(GetUserSettingsFolderPath(), "settings.ini");
+        }
+
+        /// <summary>
+        /// Reads the culture previously saved by the user.
+        /// </summary>
+        /// <returns>The saved culture code, or null when there is no saved preference.</returns>
+        private string? ReadCultureFromUserSettings()
         {
             try
             {
-                Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                string filePath = GetUserSettingsFilePath();
 
-                if (config.AppSettings.Settings["Culture"] == null)
+                if (!File.Exists(filePath))
                 {
-                    config.AppSettings.Settings.Add("Culture", cultureName);
-                }
-                else
-                {
-                    config.AppSettings.Settings["Culture"].Value = cultureName;
+                    return null;
                 }
 
-                config.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection("appSettings");
+                foreach (string line in File.ReadAllLines(filePath))
+                {
+                    string trimmedLine = line.Trim();
 
-                Logger.Current.Debug($"Culture '{cultureName}' saved to config file");
+                    if (trimmedLine.Length == 0 || trimmedLine.StartsWith("#"))
+                    {
+                        continue;
+                    }
+
+                    int separatorIndex = trimmedLine.IndexOf('=');
+
+                    if (separatorIndex <= 0)
+                    {
+                        continue;
+                    }
+
+                    string key = trimmedLine.Substring(0, separatorIndex).Trim();
+
+                    if (!key.Equals(CultureSettingKey, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    string value = trimmedLine.Substring(separatorIndex + 1).Trim();
+
+                    return string.IsNullOrWhiteSpace(value) ? null : value;
+                }
             }
             catch (Exception ex)
             {
-                Logger.Current.LogException(LogLevels.Warning, 
-                    $"Error saving culture '{cultureName}' to config file", ex);
+                Logger.Current.LogException(LogLevels.Warning,
+                    "Error reading the user settings file, falling back to the configured culture", ex);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Persists the specified culture to the per-user settings file. The application configuration file
+        /// is not used because, once installed, it lives in a read-only folder (Program Files) and saving
+        /// there fails for non-elevated users.
+        /// </summary>
+        /// <param name="cultureName">Culture code to save (e.g., "es-ES", "en-US").</param>
+        private void SaveCultureToUserSettings(string cultureName)
+        {
+            try
+            {
+                string filePath = GetUserSettingsFilePath();
+                string folderPath = GetUserSettingsFolderPath();
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                List<string> lines = File.Exists(filePath)
+                    ? File.ReadAllLines(filePath).ToList()
+                    : new List<string>();
+
+                string settingLine = $"{CultureSettingKey}={cultureName}";
+                bool replaced = false;
+
+                for (int i = 0; i < lines.Count; i++)
+                {
+                    string trimmedLine = lines[i].Trim();
+                    int separatorIndex = trimmedLine.IndexOf('=');
+
+                    if (trimmedLine.StartsWith("#") || separatorIndex <= 0)
+                    {
+                        continue;
+                    }
+
+                    string key = trimmedLine.Substring(0, separatorIndex).Trim();
+
+                    if (key.Equals(CultureSettingKey, StringComparison.OrdinalIgnoreCase))
+                    {
+                        lines[i] = settingLine;
+                        replaced = true;
+                        break;
+                    }
+                }
+
+                if (!replaced)
+                {
+                    lines.Add(settingLine);
+                }
+
+                File.WriteAllLines(filePath, lines);
+
+                Logger.Current.Debug($"Culture '{cultureName}' saved to user settings file: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Current.LogException(LogLevels.Warning,
+                    $"Error saving culture '{cultureName}' to the user settings file", ex);
             }
         }
 

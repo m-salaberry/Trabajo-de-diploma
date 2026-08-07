@@ -70,7 +70,7 @@
             Controls.Add(btnDelete);
             Controls.Add(lstbxProviders);
             Name = "deleteProviderForm";
-            Text = "Delete Provider";
+            Text = "Delete a Provider";
             ResumeLayout(false);
         }
 

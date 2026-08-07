@@ -197,7 +197,7 @@
             Controls.Add(label1);
             Controls.Add(txtName);
             Name = "modProviderForm";
-            Text = "Modify Provider";
+            Text = "Edit Provider";
             ResumeLayout(false);
             PerformLayout();
         }

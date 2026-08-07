@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# Visual Studio / MSBuild
+# ---------------------------------------------------------------------------
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ---------------------------------------------------------------------------
+# Salidas de build y empaquetado (se regeneran)
+# ---------------------------------------------------------------------------
+# Publicacion que consume Advanced Installer: la regenera build-installer-input.ps1
+installer-input/
+
+# Documentacion de API generada por Sandcastle (SHFB): la regenera build-api-docs.ps1
+StockHelper/docs/sandcastle/Help/
+StockHelper/docs/sandcastle/HelpDocx/
+StockHelper/docs/sandcastle/asm/
+StockHelper/docs/Manual_del_Programador_API_StockHelper.pdf
+
+# ---------------------------------------------------------------------------
+# Secretos: NO subir. El repositorio es publico.
+# Estos archivos existen solo para fijar la clave de cifrado de la aplicacion
+# y quedan unicamente en la maquina de desarrollo.
+# ---------------------------------------------------------------------------
+set-secret-key.ps1
+setup.ps1
+STOCK_HELPER_SECRET_KEY.backup.txt
+
+# ---------------------------------------------------------------------------
+# Material de trabajo (capturas de pantalla de los manuales).
+# Vive fuera del repositorio, en D:\Facultad\Pantallas y D:\Facultad\PantallasInstalador.
+# ---------------------------------------------------------------------------
+Pantallas/
+PantallasInstalador/
+
+# ---------------------------------------------------------------------------
+# Configuracion local de herramientas (especifica de cada maquina)
+# ---------------------------------------------------------------------------
+.claude/settings.local.json
+
+# ---------------------------------------------------------------------------
+# Varios
+# ---------------------------------------------------------------------------
+Thumbs.db
+Desktop.ini
+*~
+# archivos temporales que crea Word mientras un .docx esta abierto
+~$*

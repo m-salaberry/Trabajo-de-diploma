@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Services.Domain;
 using Services.Contracts.Logs;
+using Services.Implementations;
 
 namespace UI.Helpers
 {
@@ -176,11 +177,13 @@ namespace UI.Helpers
         /// <returns>True if user has permission, false otherwise</returns>
         public static bool CanAccessForm(User user, string requiredPermission, string formName = "this form")
         {
+            LanguageService lang = LanguageService.GetInstance;
+
             if (user == null)
             {
                 MessageBox.Show(
-                    "User session is invalid. Please log in again.",
-                    "Access Denied",
+                    lang.Translate("User session is invalid. Please log in again."),
+                    lang.Translate("Access Denied"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return false;
@@ -189,14 +192,16 @@ namespace UI.Helpers
             if (!user.HasPermission(requiredPermission))
             {
                 Logger.Current.Warning($"User '{user.Name}' attempted to access '{formName}' without permission '{requiredPermission}'");
-                
+
+                // The permission name is a technical identifier, so it is shown untranslated.
                 MessageBox.Show(
-                    $"You do not have permission to access {formName}.\n\n" +
-                    $"Required permission: {requiredPermission}",
-                    "Access Denied",
+                    string.Format(lang.Translate("You do not have permission to access {0}."), lang.Translate(formName)) +
+                    "\n\n" +
+                    string.Format(lang.Translate("Required permission: {0}"), requiredPermission),
+                    lang.Translate("Access Denied"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-                
+
                 return false;
             }
 
@@ -213,11 +218,13 @@ namespace UI.Helpers
         /// <returns>True if user has permission, false otherwise</returns>
         public static bool CanPerformAction(User user, string requiredPermission, string actionName = "this action")
         {
+            LanguageService lang = LanguageService.GetInstance;
+
             if (user == null)
             {
                 MessageBox.Show(
-                    "User session is invalid. Please log in again.",
-                    "Access Denied",
+                    lang.Translate("User session is invalid. Please log in again."),
+                    lang.Translate("Access Denied"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return false;
@@ -226,14 +233,16 @@ namespace UI.Helpers
             if (!user.HasPermission(requiredPermission))
             {
                 Logger.Current.Warning($"User '{user.Name}' attempted to perform '{actionName}' without permission '{requiredPermission}'");
-                
+
+                // The permission name is a technical identifier, so it is shown untranslated.
                 MessageBox.Show(
-                    $"You do not have permission to perform {actionName}.\n\n" +
-                    $"Required permission: {requiredPermission}",
-                    "Access Denied",
+                    string.Format(lang.Translate("You do not have permission to perform {0}."), lang.Translate(actionName)) +
+                    "\n\n" +
+                    string.Format(lang.Translate("Required permission: {0}"), requiredPermission),
+                    lang.Translate("Access Denied"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
-                
+
                 return false;
             }
 

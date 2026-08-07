@@ -69,7 +69,7 @@
             Controls.Add(btnSaveNew);
             Controls.Add(clbPermissions);
             Name = "newRoleForm";
-            Text = "newRoleForm";
+            Text = "New Role";
             ResumeLayout(false);
             PerformLayout();
         }

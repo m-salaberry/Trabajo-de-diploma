@@ -93,7 +93,7 @@ namespace UI.secondaryForms
         /// </summary>
         public override void ApplyTranslations()
         {
-            this.Text = lang.Translate("Delete Provider");
+            this.Text = lang.Translate("Delete a Provider");
             btnDelete.Text = lang.Translate("Delete");
         }
 

@@ -140,6 +140,10 @@ namespace Services.DAL.Implementations.Repositories
                 return;
             }
 
+            // KeyExistsInFile compares against trimmed keys, so appending an untrimmed key would
+            // defeat the duplicate check and re-append the same entry on every miss.
+            word = word.Trim();
+
             try
             {
                 string culture = Thread.CurrentThread.CurrentCulture.Name;

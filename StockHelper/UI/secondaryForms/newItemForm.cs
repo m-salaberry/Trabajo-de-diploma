@@ -35,6 +35,19 @@ namespace UI.secondaryForms
         }
 
         /// <summary>
+        /// Applies the current language translations to the window title and the form controls.
+        /// </summary>
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("New Item");
+            label1.Text = lang.Translate("Name");
+            label2.Text = lang.Translate("Category");
+            label3.Text = lang.Translate("Unit of measurement");
+            ckIntegerUnit.Text = lang.Translate("Integer Unit");
+            btnSaveItem.Text = lang.Translate("Save");
+        }
+
+        /// <summary>
         /// Builds a new item from the form fields (name, category, unit and zero stock), persists it,
         /// raises the ItemAdded event and closes the form.
         /// </summary>

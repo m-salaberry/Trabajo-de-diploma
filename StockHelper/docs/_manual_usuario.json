@@ -1,0 +1,433 @@
+{
+  "title": "StockHelper — Manual de Usuario",
+  "subtitle": "Guía visual de la aplicación, pantalla por pantalla",
+  "version": "Versión del documento: 1.0 — Aplicación StockHelper 1.0",
+  "imageBaseDir": "D:\\Facultad\\Pantallas",
+  "sections": [
+    {
+      "heading": "1. Introducción",
+      "level": 1,
+      "intro": "StockHelper es una aplicación de escritorio para gestionar el inventario y las compras de un negocio: permite administrar insumos (ítems) y sus categorías, construir productos a partir de esos insumos, controlar el stock, gestionar proveedores, generar órdenes de reposición y de compra, ver reportes y administrar usuarios y permisos. Este manual describe cada pantalla del sistema con su captura y el detalle de qué hace cada control (botones, campos, listas y grillas).",
+      "notes": [
+        "El acceso a cada módulo depende de los permisos del usuario, definidos por su rol. Un usuario solo ve en el menú las secciones para las que tiene permiso.",
+        "La interfaz puede mostrarse en español o inglés (ver el módulo Configuración). Las capturas de este manual están tomadas con la interfaz en inglés; entre paréntesis se indica el texto visible de cada control."
+      ]
+    },
+    {
+      "heading": "2. Inicio de sesión",
+      "level": 1,
+      "image": "Login.png",
+      "intro": "Al abrir la aplicación aparece la ventana de inicio de sesión. Es una ventana de tamaño fijo, centrada en la pantalla, donde el usuario ingresa sus credenciales para acceder al sistema.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "StockHelper (título)", "desc": "Rótulo con el nombre de la aplicación en la parte superior. Es decorativo, no tiene acción." },
+        { "name": "Campo Usuario (Username)", "desc": "Campo donde se escribe el nombre de usuario. El valor se recorta de espacios antes de validar. Es el primer campo del recuadro." },
+        { "name": "Campo Contraseña (Password)", "desc": "Campo de contraseña; por defecto oculta el texto con asteriscos." },
+        { "name": "Casilla Mostrar (Show)", "desc": "Al marcarla, la contraseña se ve en texto legible; al desmarcarla, se vuelve a ocultar. Sirve para verificar lo que se escribió." },
+        { "name": "Botón Iniciar sesión (Log In)", "desc": "Valida las credenciales y, si son correctas, abre la ventana principal. Al ingresar por primera vez del día dispara además el respaldo automático de la base de datos. Si las credenciales son inválidas o el usuario está inactivo, muestra un mensaje de error y no permite el acceso." }
+      ],
+      "notes": [
+        "Credenciales iniciales en una instalación nueva: usuario admin y contraseña admin. Se recomienda cambiar la contraseña de admin apenas se ingresa.",
+        "Validaciones del ingreso: el usuario no puede estar vacío ni tener menos de 3 caracteres (ni más de 50); la contraseña no puede estar vacía ni tener menos de 4 caracteres (ni más de 100); el usuario solo admite letras, números, puntos, guiones bajos y guiones. Cada error se muestra en un aviso de validación."
+      ]
+    },
+    {
+      "heading": "3. Ventana principal",
+      "level": 1,
+      "image": "MainMenu.png",
+      "intro": "Tras iniciar sesión se abre la ventana principal. El título de la ventana muestra el usuario conectado (StockHelper - Logged in as: {usuario}). Está compuesta por una barra de menú superior, organizada en grupos, y un área de contenido central donde se carga el módulo seleccionado. Solo se muestra un módulo a la vez.",
+      "controlsTitle": "Grupos del menú",
+      "controls": [
+        { "name": "System (Sistema)", "desc": "Configuración del idioma, visor de registros (Logs) y opción de cerrar sesión." },
+        { "name": "Users and Permissions (Usuarios y Permisos)", "desc": "Gestión de usuarios y gestión de roles/permisos." },
+        { "name": "Catalog Managment (Gestión de Catálogo)", "desc": "Ítems y categorías, proveedores y constructor de productos." },
+        { "name": "Inventory and Purchasing (Inventario y Compras)", "desc": "Gestión de stock, órdenes de reposición, órdenes de compra y analíticas." }
+      ],
+      "notes": [
+        "Los grupos y las opciones que no correspondan a los permisos del usuario no aparecen en el menú; un grupo completo se oculta si el usuario no tiene acceso a ninguna de sus opciones.",
+        "Aunque una opción esté visible, al abrirla el sistema vuelve a verificar el permiso: si no lo tiene, no abre el módulo e informa el acceso denegado.",
+        "Las opciones Configuración y Cerrar sesión están siempre disponibles para todos los usuarios."
+      ]
+    },
+    {
+      "heading": "3.1 Menú Sistema (System)",
+      "level": 2,
+      "image": "SystemOptions.png",
+      "controlsTitle": "Opciones",
+      "controls": [
+        { "name": "Configuration (Configuración)", "desc": "Abre el módulo de configuración del idioma. Disponible para todos los usuarios." },
+        { "name": "Logs (Registros)", "desc": "Abre el visor de registros del sistema. Visible solo si el usuario tiene el permiso SystemLogs." },
+        { "name": "Log Out (Cerrar sesión)", "desc": "Cierra la sesión actual y vuelve a la pantalla de inicio de sesión, sin cerrar el programa." }
+      ]
+    },
+    {
+      "heading": "3.2 Menú Usuarios y Permisos (Users and Permissions)",
+      "level": 2,
+      "image": "UserAndPermissionOptions.png",
+      "controlsTitle": "Opciones",
+      "controls": [
+        { "name": "Users Managment (Gestión de Usuarios)", "desc": "Abre el módulo de administración de cuentas de usuario. Requiere el permiso UserManagement." },
+        { "name": "Permissions Managment (Gestión de Permisos)", "desc": "Abre el módulo de administración de roles y sus permisos. Requiere el permiso PermissionManagement." }
+      ]
+    },
+    {
+      "heading": "3.3 Menú Gestión de Catálogo (Catalog Managment)",
+      "level": 2,
+      "image": "CatalogMangmentOptions.png",
+      "controlsTitle": "Opciones",
+      "controls": [
+        { "name": "Items and Categories (Ítems y Categorías)", "desc": "Administración de insumos y sus categorías. Requiere el permiso ItemCategoryManagment." },
+        { "name": "Providers (Proveedores)", "desc": "Administración de proveedores. Requiere el permiso SupplierManagment." },
+        { "name": "Product Builder (Constructor de Productos)", "desc": "Definición de productos compuestos por ítems (recetas). Requiere el permiso ProductBuilder." }
+      ]
+    },
+    {
+      "heading": "3.4 Menú Inventario y Compras (Inventory and Purchasing)",
+      "level": 2,
+      "image": "InventoryAndPurchasingOptions.png",
+      "controlsTitle": "Opciones",
+      "controls": [
+        { "name": "Stock Managment (Gestión de Stock)", "desc": "Consulta y ajuste del stock de los ítems. Requiere el permiso StockManagment." },
+        { "name": "Replacement Orders (Órdenes de Reposición)", "desc": "Creación y envío de pedidos de reposición a proveedores. Requiere el permiso PurchaseManagement." },
+        { "name": "Purchase Orders (Órdenes de Compra)", "desc": "Seguimiento de las órdenes de compra generadas. Requiere el permiso PurchaseManagement." },
+        { "name": "Analytics (Analíticas)", "desc": "Reportes de compras por categoría y por proveedor. Requiere el permiso Analytics." }
+      ]
+    },
+    {
+      "heading": "4. Módulo Usuarios y Permisos",
+      "level": 1,
+      "intro": "Este módulo permite administrar las cuentas que pueden ingresar a la aplicación y los roles que definen qué puede hacer cada una. Los roles agrupan permisos, y cada usuario tiene un rol del cual hereda sus permisos."
+    },
+    {
+      "heading": "4.1 Gestión de usuarios",
+      "level": 2,
+      "image": "UsersManagment.png",
+      "intro": "Muestra las cuentas del sistema separadas en dos listas: usuarios activos (pueden iniciar sesión) y usuarios deshabilitados (no pueden). Las grillas son de solo lectura; toda alta o modificación se hace con los botones inferiores.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Active Users (Usuarios Activos)", "desc": "Grilla con los usuarios habilitados. Columnas: Name (nombre de usuario), Password (contraseña cifrada, se muestra el hash, no el texto) y Role (rol asignado)." },
+        { "name": "Disabled Users (Usuarios Deshabilitados)", "desc": "Grilla con los usuarios inactivos, con las mismas columnas. Un usuario deshabilitado no puede iniciar sesión." },
+        { "name": "Botón New User (Nuevo Usuario)", "desc": "Abre el formulario de alta de usuario. Al crear un usuario, ambas listas se refrescan automáticamente." },
+        { "name": "Botón Modify User (Modificar Usuario)", "desc": "Abre el formulario de modificación de usuario. Al guardar cambios, las listas se actualizan." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo y libera el área de contenido." }
+      ],
+      "notes": [
+        "La contraseña nunca se guarda ni se muestra en texto plano: se cifra (hash MD5) al crearla o cambiarla; por eso la columna Password muestra un valor ilegible."
+      ]
+    },
+    {
+      "heading": "4.2 Alta y modificación de usuario",
+      "level": 2,
+      "image": "UserForm.png",
+      "intro": "Formulario para crear un usuario nuevo (New User) o modificar uno existente (Modify User). La captura corresponde al alta. En la modificación, primero se elige el usuario de una lista y se presiona Cargar (Load) para traer sus datos; los campos permanecen deshabilitados hasta cargar un usuario.",
+      "controlsTitle": "Controles del formulario",
+      "controls": [
+        { "name": "Campo Username (Nombre de usuario)", "desc": "Nombre de la cuenta. Obligatorio, mínimo 3 caracteres." },
+        { "name": "Campo Password (Contraseña)", "desc": "Contraseña de la cuenta. Obligatoria en el alta, mínimo 4 caracteres. En la modificación, si se deja en blanco se conserva la contraseña actual." },
+        { "name": "Campo Repeat Password (Repetir contraseña)", "desc": "Repetición de la contraseña; debe coincidir exactamente con la anterior." },
+        { "name": "Lista Select role (Seleccionar rol)", "desc": "Rol que se asigna al usuario. Obligatorio. El usuario hereda los permisos de ese rol." },
+        { "name": "Casilla Active User (Usuario Activo)", "desc": "Define si la cuenta queda habilitada para iniciar sesión. En el alta viene marcada por defecto." },
+        { "name": "Botón Save (Guardar)", "desc": "Valida los datos y crea o actualiza el usuario. Si el nombre ya existe, la operación se rechaza con un aviso." }
+      ],
+      "notes": [
+        "Validaciones: nombre obligatorio (mín. 3 caracteres); contraseña obligatoria en el alta (mín. 4 caracteres); las dos contraseñas deben ser idénticas; el rol es obligatorio."
+      ]
+    },
+    {
+      "heading": "4.3 Gestión de roles",
+      "level": 2,
+      "image": "RolesManagment.png",
+      "intro": "Administra los roles del sistema (conjuntos de permisos). La grilla lista los roles existentes por su nombre; es de solo lectura.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Roles (grilla)", "desc": "Lista de roles existentes. Columna Role Name (nombre del rol)." },
+        { "name": "Botón New Role (Nuevo Rol)", "desc": "Abre el formulario de alta de rol." },
+        { "name": "Botón Modify Role (Modificar Rol)", "desc": "Abre el formulario de modificación de rol, donde se cambian los permisos asignados." },
+        { "name": "Botón Delete Role (Eliminar Rol)", "desc": "Abre el diálogo para eliminar uno o varios roles." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ],
+      "notes": [
+        "Un rol no se puede eliminar si está asignado a uno o más usuarios: el sistema informa cuáles usuarios lo tienen y cancela la baja. Primero hay que reasignar esos usuarios a otro rol."
+      ]
+    },
+    {
+      "heading": "4.4 Alta y modificación de rol",
+      "level": 2,
+      "image": "RoleForm.png",
+      "intro": "Formulario para crear un rol (New Role) o modificar uno existente (Modify Role). La captura corresponde al alta. En la modificación se elige primero el rol de una lista desplegable y el sistema marca automáticamente los permisos que ya tiene, para poder agregarlos o quitarlos.",
+      "controlsTitle": "Controles del formulario",
+      "controls": [
+        { "name": "Campo Role name (Nombre del rol)", "desc": "Nombre del rol. Obligatorio (en el alta)." },
+        { "name": "Lista de permisos (casillas)", "desc": "Lista de todos los permisos disponibles, cada uno con una casilla. Se marcan los permisos que tendrá el rol. Debe marcarse al menos uno." },
+        { "name": "Botón Save (Guardar)", "desc": "Crea o actualiza el rol con los permisos marcados. En la modificación, el sistema agrega los permisos nuevos y quita los desmarcados." }
+      ],
+      "notes": [
+        "Permisos disponibles y a qué dan acceso: Analytics (reportes), ItemCategoryManagment (ítems y categorías), PermissionManagement (roles y permisos), ProductBuilder (constructor de productos), PurchaseManagement (órdenes de reposición y de compra), StockManagment (gestión de stock), SupplierManagment (proveedores), SystemLogs (registros), UserManagement (usuarios)."
+      ]
+    },
+    {
+      "heading": "5. Módulo Gestión de Catálogo",
+      "level": 1,
+      "intro": "Este módulo administra el catálogo del negocio: los insumos (ítems) y sus categorías, los proveedores, y los productos que se arman a partir de los ítems."
+    },
+    {
+      "heading": "5.1 Ítems y categorías",
+      "level": 2,
+      "image": "ItemsAndCategories.png",
+      "intro": "Pantalla dividida en dos: a la izquierda las categorías (con filtro), a la derecha la grilla de ítems. Las categorías agrupan los ítems (por ejemplo Bebida, Carne, Panificado).",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Categories (lista con casillas)", "desc": "Categorías existentes. Se tildan una o varias para filtrar los ítems mostrados a la derecha." },
+        { "name": "Botón Filter (Filtrar)", "desc": "Muestra en la grilla solo los ítems de las categorías tildadas. Si no hay ninguna tildada, avisa que se debe seleccionar al menos una." },
+        { "name": "Botón Clear Filter (Limpiar filtro)", "desc": "Destilda todas las categorías y vuelve a mostrar todos los ítems." },
+        { "name": "Botón New Category (Nueva categoría)", "desc": "Abre el formulario para crear una categoría." },
+        { "name": "Botón Delete Category (Eliminar categoría)", "desc": "Abre el diálogo para eliminar una categoría." },
+        { "name": "Items (grilla)", "desc": "Grilla de solo lectura con los ítems. Columnas: Name (nombre), Category (categoría), Unit (unidad de medida) e Integer Unit (indica si la unidad es entera —True— o admite decimales —False)." },
+        { "name": "Botón Create new Item (Crear nuevo ítem)", "desc": "Abre el formulario de alta de ítem." },
+        { "name": "Botón Modify Item (Modificar ítem)", "desc": "Abre el formulario de modificación de ítem." },
+        { "name": "Botón Delete Item (Eliminar ítem)", "desc": "Abre el diálogo para eliminar un ítem." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ]
+    },
+    {
+      "heading": "5.2 Alta y modificación de ítem",
+      "level": 2,
+      "image": "ItemForm.png",
+      "intro": "Formulario para crear un ítem (New Item) o modificarlo (Modify Item). La captura corresponde al alta. En la modificación se elige primero el ítem (con un filtro por categoría) y sus datos se cargan para editarlos.",
+      "controlsTitle": "Controles del formulario",
+      "controls": [
+        { "name": "Campo Name (Nombre)", "desc": "Nombre del ítem. Obligatorio, entre 3 y 100 caracteres. No puede repetirse dentro de la misma categoría." },
+        { "name": "Lista Category (Categoría)", "desc": "Categoría a la que pertenece el ítem. Obligatoria." },
+        { "name": "Campo Unit of measurement (Unidad de medida)", "desc": "Nombre de la unidad (por ejemplo KG, Lata, unidades). Obligatorio." },
+        { "name": "Casilla Integer Unit (Unidad entera)", "desc": "Si se marca, el stock del ítem se maneja con números enteros; si no, admite decimales." },
+        { "name": "Botón Save (Guardar)", "desc": "Crea o actualiza el ítem. En el alta, el stock inicial se fija en 0." }
+      ],
+      "notes": [
+        "El stock del ítem no se define en este formulario: se ajusta desde el módulo Gestión de Stock o se modifica automáticamente con las importaciones de consumo y la recepción de compras."
+      ]
+    },
+    {
+      "heading": "5.3 Nueva categoría",
+      "level": 2,
+      "image": "NewCategoryForm.png",
+      "intro": "Diálogo simple para crear una categoría de ítems/proveedores.",
+      "controlsTitle": "Controles del formulario",
+      "controls": [
+        { "name": "Campo Category name (Nombre de la categoría)", "desc": "Nombre de la nueva categoría. Obligatorio, entre 3 y 50 caracteres. No puede repetirse (sin distinguir mayúsculas)." },
+        { "name": "Botón Save (Guardar)", "desc": "Crea la categoría y cierra el diálogo." }
+      ]
+    },
+    {
+      "heading": "5.4 Proveedores",
+      "level": 2,
+      "image": "Providers.png",
+      "intro": "Administra los proveedores. A la izquierda hay filtros por categoría y un buscador por nombre; a la derecha, la grilla de proveedores. Los datos sensibles (CUIT, teléfono y email) se almacenan cifrados, aunque se muestran normalmente en la aplicación.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Categories (lista con casillas)", "desc": "Categorías para filtrar los proveedores." },
+        { "name": "Campo Search by name (Buscar por nombre)", "desc": "Filtra la grilla por el nombre del proveedor a medida que se escribe." },
+        { "name": "Botón Filter (Filtrar)", "desc": "Filtra los proveedores por las categorías tildadas." },
+        { "name": "Botón Clear Filter (Limpiar filtro)", "desc": "Quita los filtros y muestra todos los proveedores." },
+        { "name": "Providers (grilla)", "desc": "Grilla de solo lectura. Columnas: Name (nombre), Company Name (razón social), Category (categoría que provee), Telephone Number (teléfono de contacto) y Email (correo)." },
+        { "name": "Botón Create new Provider (Crear nuevo proveedor)", "desc": "Abre el formulario de alta de proveedor." },
+        { "name": "Botón Modify Provider (Modificar proveedor)", "desc": "Abre el formulario de modificación de proveedor." },
+        { "name": "Botón Delete Provider (Eliminar proveedor)", "desc": "Abre el diálogo para eliminar un proveedor." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ],
+      "notes": [
+        "Un proveedor no se puede eliminar si tiene órdenes de compra activas: primero hay que completarlas o cancelarlas."
+      ]
+    },
+    {
+      "heading": "5.5 Alta y modificación de proveedor",
+      "level": 2,
+      "image": "ProviderForm.png",
+      "intro": "Formulario para crear un proveedor (Create Provider) o modificarlo (Modify Provider). La captura corresponde al alta. En la modificación se elige primero el proveedor (con filtro por categoría) y sus datos se cargan para editarlos.",
+      "controlsTitle": "Controles del formulario",
+      "controls": [
+        { "name": "Campo Name (Nombre)", "desc": "Nombre del proveedor o contacto. Obligatorio, entre 3 y 100 caracteres." },
+        { "name": "Lista Category (Categoría)", "desc": "Categoría de ítems que provee. Obligatoria." },
+        { "name": "Campo CUIT", "desc": "Identificación fiscal con formato XX-XXXXXXXX-X. Debe tener exactamente 11 dígitos numéricos; se guarda sin guiones." },
+        { "name": "Campo Company Name (Razón social)", "desc": "Nombre de la empresa. Obligatorio." },
+        { "name": "Campo Cell Phone Number (Número de celular)", "desc": "Teléfono de contacto. Obligatorio (se usa para enviar las órdenes por WhatsApp)." },
+        { "name": "Campo Email (Correo)", "desc": "Correo electrónico del proveedor." },
+        { "name": "Botón Save (Guardar)", "desc": "Valida y crea o actualiza el proveedor." }
+      ]
+    },
+    {
+      "heading": "5.6 Constructor de productos",
+      "level": 2,
+      "image": "ProductBuilder.png",
+      "intro": "Permite definir productos compuestos por varios ítems (una receta o lista de materiales). A la izquierda se listan y buscan los productos; a la derecha se edita la receta del producto seleccionado. La edición está deshabilitada (en gris) hasta presionar New Product o Modify.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Products (lista y buscador)", "desc": "Lista de productos existentes, con un buscador Search por nombre." },
+        { "name": "Botón New Product (Nuevo producto)", "desc": "Inicia un producto nuevo vacío y habilita el editor de la receta." },
+        { "name": "Botón Modify (Modificar)", "desc": "Carga el producto seleccionado en el editor para cambiar su nombre, código y receta." },
+        { "name": "Botón Delete (Eliminar)", "desc": "Elimina el producto seleccionado, previa confirmación." },
+        { "name": "Product Code (Código de producto)", "desc": "Código numérico del producto (0 a 9999). Debe ser único entre productos." },
+        { "name": "Product Name (Nombre de producto)", "desc": "Nombre del producto. Obligatorio, entre 3 y 100 caracteres." },
+        { "name": "Grilla de la receta", "desc": "Ítems que componen el producto. Columnas: Item Name (nombre del ítem), Quantity to Consume (cantidad a consumir, editable, debe ser mayor que cero), Unit (unidad) y Action (botón Delete para quitar el ítem de la receta)." },
+        { "name": "Botón Add Item to Recipe (Agregar ítem a la receta)", "desc": "Abre un diálogo para elegir ítems (con filtro por categoría y buscador) y agregarlos a la receta, sin duplicar." },
+        { "name": "Botón Save Recipe (Guardar receta)", "desc": "Guarda el producto y su receta. Requiere nombre y al menos un ítem con cantidad mayor que cero." },
+        { "name": "Botón Cancel (Cancelar)", "desc": "Descarta los cambios no guardados, previa confirmación." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ],
+      "notes": [
+        "La receta se usa para descontar stock automáticamente cuando se importa el consumo de un cierre de turno (ver módulo Gestión de Stock).",
+        "Un ítem no puede aparecer más de una vez en la misma receta."
+      ]
+    },
+    {
+      "heading": "6. Módulo Inventario y Compras",
+      "level": 1,
+      "intro": "Este módulo controla el stock de los ítems y todo el ciclo de compras: desde la orden de reposición al proveedor, pasando por la orden de compra, hasta la recepción de la factura. Incluye además los reportes de compras."
+    },
+    {
+      "heading": "6.1 Gestión de stock",
+      "level": 2,
+      "image": "StockManagment.png",
+      "intro": "Muestra el stock actual de todos los ítems y permite ajustarlo manualmente o importar el consumo de un cierre de turno. La grilla es de solo lectura salvo cuando se activa el modo de edición.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Campo Search Item (Buscar artículo)", "desc": "Filtra la grilla por nombre de ítem mientras se escribe." },
+        { "name": "Lista de categorías (All / ...)", "desc": "Filtra la grilla por categoría; con All se muestran todas. Se combina con el buscador." },
+        { "name": "Botón Enable Edition (Habilitar edición)", "desc": "Entra en modo edición: hace editable la columna de stock y habilita Guardar y Cancelar." },
+        { "name": "Botón Cancel Edition (Cancelar edición)", "desc": "Descarta los cambios y recarga los valores originales." },
+        { "name": "Botón Save (Guardar)", "desc": "Guarda los cambios de stock, previa confirmación. Solo actualiza los ítems cuyo valor cambió." },
+        { "name": "Grilla Items Stock List", "desc": "Columnas: Name (nombre), Category (categoría), Unit (unidad), Current Stock (stock actual, editable en modo edición) y Last Updated (fecha de última actualización)." },
+        { "name": "Botón Import Shift Usage (Importar uso de turno)", "desc": "Abre el formulario para importar un archivo de cierre de turno y descontar el consumo del stock." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ],
+      "notes": [
+        "Validaciones al guardar: el stock debe ser un número no negativo; si el ítem usa unidades enteras, no se admiten decimales."
+      ]
+    },
+    {
+      "heading": "6.2 Importar cierre de turno",
+      "level": 2,
+      "image": "ImportShiftUsageForm.png",
+      "intro": "Importa un archivo de reporte de ventas del cierre de turno y calcula, a partir de las recetas de los productos vendidos, cuánto stock consumir de cada ítem. Este flujo solo reduce stock, nunca lo aumenta.",
+      "controlsTitle": "Controles del formulario",
+      "controls": [
+        { "name": "Botón Load Close Shift File (Cargar archivo de cierre de turno)", "desc": "Abre un diálogo para elegir el archivo de reporte (texto). La ruta elegida se muestra en el campo de al lado." },
+        { "name": "Botón Process File (Procesar archivo)", "desc": "Procesa el archivo, calcula el nuevo stock por ítem y llena la grilla. Las filas que quedarían con stock negativo se resaltan en rojo." },
+        { "name": "Lista de categorías", "desc": "Filtra las filas mostradas por categoría (todas con All)." },
+        { "name": "Grilla de consumo", "desc": "Columnas: Name, Category, Unit, Current Stock (stock actual), Quantity to Subtract (cantidad a descontar según el archivo) y Calculated New Stock (nuevo stock resultante, editable antes de guardar)." },
+        { "name": "Botón Save Stock (Guardar stock)", "desc": "Aplica la reducción de stock, previa confirmación." },
+        { "name": "Botón Cancel (Cancelar)", "desc": "Cierra el formulario sin aplicar cambios." }
+      ],
+      "notes": [
+        "Validaciones: el nuevo stock debe ser numérico y no negativo; no puede ser mayor al stock actual (este formulario solo descuenta); si el ítem usa unidades enteras, no se admiten decimales.",
+        "La operación queda registrada en los logs con la marca [IMPORT]."
+      ]
+    },
+    {
+      "heading": "6.3 Órdenes de reposición",
+      "level": 2,
+      "image": "ReplacementOrders.png",
+      "intro": "Permite crear pedidos de reposición dirigidos a un proveedor. A la izquierda se listan y buscan las órdenes que todavía no se enviaron; a la derecha se ve o edita el detalle de la orden seleccionada. Al enviar una orden, esta se convierte en orden de compra y desaparece de esta lista.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Campo Search by Provider (Buscar por proveedor)", "desc": "Filtra la lista por nombre de proveedor o por número de orden." },
+        { "name": "Lista de órdenes", "desc": "Órdenes de reposición pendientes (aún sin orden de compra). Cada línea muestra el número de orden y el proveedor." },
+        { "name": "Botón Create new Replacement Order (Crear nueva orden de reposición)", "desc": "Pide elegir un proveedor y precarga la grilla con los ítems de la categoría de ese proveedor (cantidad inicial 0) para completar el pedido." },
+        { "name": "Botón Modify Replacement Order (Modificar orden de reposición)", "desc": "Permite editar las cantidades de la orden seleccionada." },
+        { "name": "Botón Delete Replacement Order (Eliminar orden de reposición)", "desc": "Elimina la orden seleccionada, previa confirmación." },
+        { "name": "Botón Send Order to Provider (Enviar orden al proveedor)", "desc": "Convierte la orden de reposición en orden de compra (estado Enviada al proveedor) y envía el pedido al proveedor por WhatsApp." },
+        { "name": "Order Details (grilla)", "desc": "Detalle de la orden. Columnas: Item Name (ítem), Unit (unidad) y Quantity (cantidad pedida, editable en modo edición)." },
+        { "name": "Botón Save Order (Guardar orden)", "desc": "Guarda la orden nueva o los cambios. Solo se guardan los renglones con cantidad mayor que cero." },
+        { "name": "Botón Cancel (Cancelar)", "desc": "Descarta la orden en curso y vuelve al detalle de la orden seleccionada." }
+      ],
+      "notes": [
+        "El número de orden se genera automáticamente con el formato REP-añoMes-CUIT-secuencial (por ejemplo REP-202607-12345678-001)."
+      ]
+    },
+    {
+      "heading": "6.4 Elegir proveedor",
+      "level": 2,
+      "image": "ChooseProviderForm.png",
+      "intro": "Pequeño diálogo que aparece al crear una orden de reposición, para seleccionar el proveedor destinatario.",
+      "controlsTitle": "Controles del formulario",
+      "controls": [
+        { "name": "Lista de proveedores", "desc": "Muestra los proveedores disponibles por nombre." },
+        { "name": "Botón Select (Seleccionar)", "desc": "Confirma el proveedor elegido y continúa con la creación de la orden. Si no hay ninguno seleccionado, avisa que se debe elegir uno." }
+      ]
+    },
+    {
+      "heading": "6.5 Órdenes de compra",
+      "level": 2,
+      "intro": "Lista las órdenes de compra generadas al enviar las órdenes de reposición, con su estado e importe. (Esta pantalla no tiene captura en esta versión del manual.) Se accede desde Inventory and Purchasing → Purchase Orders.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Campo Search by Provider (Buscar por proveedor)", "desc": "Filtra la lista por nombre de proveedor." },
+        { "name": "Lista Status (Estado)", "desc": "Filtra por estado: All (todas), Sent to provider (Enviada al proveedor), Bill received (Factura recibida) u Order cancelled (Cancelada)." },
+        { "name": "Grilla de órdenes de compra", "desc": "Columnas: Order Name (número de la reposición asociada), Provider (proveedor), Category (categoría), Status (estado) y Total Amount (importe total con dos decimales)." },
+        { "name": "Botón Cancel Order (Cancelar orden)", "desc": "Abre el diálogo para cancelar la orden seleccionada. Solo aplica a órdenes en estado Enviada al proveedor." },
+        { "name": "Botón Upload Invoice (Cargar factura)", "desc": "Abre el diálogo para adjuntar la factura y cerrar la orden. Solo aplica a órdenes en estado Enviada al proveedor." }
+      ],
+      "notes": [
+        "Ciclo de vida: al enviar la reposición se crea la orden en estado Enviada al proveedor; desde ahí puede Cancelarse o pasar a Factura recibida al cargar la factura.",
+        "Cancelar orden: pide confirmación y, si la orden está en estado Enviada al proveedor, la marca como Cancelada.",
+        "Cargar factura: se selecciona el archivo de la factura (PDF/PNG/JPG) y se ingresa el importe total; al confirmar, la orden pasa a Factura recibida y el stock de los ítems se incrementa automáticamente con las cantidades recibidas."
+      ]
+    },
+    {
+      "heading": "6.6 Analíticas",
+      "level": 2,
+      "image": "Analytics.png",
+      "intro": "Muestra estadísticas de compras en un rango de fechas, agrupadas por categoría y por proveedor. Permite enviar el reporte por correo.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Campos From / To (Desde / Hasta)", "desc": "Definen el rango de fechas a analizar." },
+        { "name": "Botón Generate (Generar)", "desc": "Calcula y muestra las estadísticas en ambas grillas. Requiere que la fecha Desde sea anterior o igual a la fecha Hasta." },
+        { "name": "Grilla por categoría", "desc": "Columnas: Category of Purchase (categoría), Total Orders (cantidad de órdenes), Total Spent (total gastado) y % of Total Spending (porcentaje del gasto total)." },
+        { "name": "Grilla por proveedor", "desc": "Columnas: Provider (proveedor), Total Orders, Total Spent y % of Total Spending." },
+        { "name": "Botón Send to Email (Enviar por email)", "desc": "Arma el reporte y abre el cliente de correo para enviarlo. Requiere haber generado las estadísticas primero." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ],
+      "notes": [
+        "Las órdenes canceladas no se incluyen en los totales de los reportes."
+      ]
+    },
+    {
+      "heading": "7. Módulo Sistema",
+      "level": 1,
+      "intro": "Agrupa la configuración del idioma y el visor de registros del sistema."
+    },
+    {
+      "heading": "7.1 Configuración",
+      "level": 2,
+      "image": "Configuration.png",
+      "intro": "Permite cambiar el idioma de toda la aplicación. Está disponible para todos los usuarios.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Lista System Language (Idioma del sistema)", "desc": "Idiomas disponibles (por ejemplo es-ES e en-EN). Muestra preseleccionado el idioma activo." },
+        { "name": "Botón Save (Guardar)", "desc": "Aplica el idioma elegido de inmediato en toda la aplicación y lo recuerda para la próxima vez." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ]
+    },
+    {
+      "heading": "7.2 Registros (Logs)",
+      "level": 2,
+      "image": "Logs.png",
+      "intro": "Visor del registro de actividad del sistema (auditoría y eventos). Útil para revisar qué operaciones se hicieron y diagnosticar problemas. Visible solo para usuarios con el permiso SystemLogs.",
+      "controlsTitle": "Controles de la pantalla",
+      "controls": [
+        { "name": "Campos From / To (Desde / Hasta)", "desc": "Rango de fechas a consultar. Por defecto, los últimos 7 días." },
+        { "name": "Niveles (casillas Info / Warning / Error / Fatal)", "desc": "Selección de los niveles de mensaje a mostrar. Por defecto están todos marcados." },
+        { "name": "Botón Filter (Filtrar)", "desc": "Recarga los registros aplicando el rango de fechas y los niveles marcados." },
+        { "name": "Grilla de registros", "desc": "Columnas: Timestamp (fecha y hora), Level (nivel) y Message (mensaje). Los niveles se distinguen por color: Warning en dorado, Error y Fatal en rojo." },
+        { "name": "Botón X (cerrar)", "desc": "Cierra el módulo." }
+      ],
+      "notes": [
+        "Las operaciones de negocio importantes dejan entradas de auditoría con la marca [AUDIT] (por ejemplo creación, cancelación o recepción de órdenes de compra), y las importaciones con la marca [IMPORT]."
+      ]
+    },
+    {
+      "heading": "8. Respaldos automáticos",
+      "level": 1,
+      "intro": "La aplicación realiza un respaldo automático diario de la base de datos. El respaldo se dispara al iniciar sesión, como máximo una vez por día, y se guarda en la carpeta de respaldos configurada. Los respaldos antiguos se eliminan según los días de retención configurados (por defecto, 14 días). Este proceso es automático y no requiere acción del usuario."
+    }
+  ]
+}

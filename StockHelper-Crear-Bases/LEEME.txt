@@ -1,0 +1,62 @@
+====================================================================
+ StockHelper - Alta de bases de datos
+====================================================================
+
+Ejecuta este paso UNA SOLA VEZ, DESPUES de que el instalador de
+StockHelper haya terminado (el instalador deja el motor SQL Server y
+la aplicacion, pero NO crea las bases de datos).
+
+--------------------------------------------------------------------
+ PASOS
+--------------------------------------------------------------------
+
+ 1. Asegurate de que el instalador de StockHelper ya termino por
+    completo (incluida la instalacion de SQL Server Express).
+
+ 2. Hace doble clic en:
+
+        Crear-Bases-StockHelper.bat
+
+    Windows va a pedir permisos de administrador: acepta (es
+    necesario para crear las bases).
+
+ 3. Espera a que aparezca el mensaje:
+
+        "LISTO. Las bases de datos se crearon correctamente."
+
+ 4. Abri StockHelper e inicia sesion con:
+
+        Usuario:     admin
+        Contrasena:  admin
+
+    (Cambia la contrasena de admin tras el primer inicio de sesion.)
+
+--------------------------------------------------------------------
+ QUE HACE
+--------------------------------------------------------------------
+
+ Ejecuta, en orden, estos 4 scripts sobre la instancia .\STOCKHELPER:
+
+   01_login_and_databases.sql  -> login de la app + bases iam_db/core_db
+   02_iam_db_schema.sql        -> esquema de iam_db
+   03_iam_db_seed.sql          -> permisos, rol Administrator, usuario admin
+   04_core_db_schema.sql       -> esquema de core_db (negocio, vacio)
+
+ Es idempotente: si algo ya existe, no lo duplica; se puede volver a
+ ejecutar sin romper nada.
+
+--------------------------------------------------------------------
+ SI ALGO FALLA
+--------------------------------------------------------------------
+
+ - "no se pudo conectar a '.\STOCKHELPER'":
+     Verifica que el servicio "SQL Server (STOCKHELPER)" este
+     iniciado (services.msc) y que el instalador haya terminado bien.
+
+ - Instancia con otro nombre:
+     Ejecuta desde una consola de administrador:
+       powershell -ExecutionPolicy Bypass -File Crear-Bases-StockHelper.ps1 -Server ".\NOMBRE_INSTANCIA"
+
+ - Los 4 archivos .sql deben quedar SIEMPRE en la misma carpeta que
+   los scripts .bat / .ps1.
+====================================================================

@@ -33,6 +33,15 @@ namespace UI.secondaryForms
         }
 
         /// <summary>
+        /// Applies the current language translations to the window title and the form controls.
+        /// </summary>
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("New Role");
+            btnSaveNew.Text = lang.Translate("Save");
+        }
+
+        /// <summary>
         /// Validates the form, builds a new role with the checked permissions, persists it,
         /// raises the RoleCreated event and clears the form.
         /// </summary>

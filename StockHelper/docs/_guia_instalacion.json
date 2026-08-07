@@ -1,0 +1,257 @@
+{
+  "title": "StockHelper — Guía de Instalación",
+  "subtitle": "Instalación paso a paso, con capturas de pantalla",
+  "version": "Versión 1.0 — Aplicación StockHelper 1.0.0 — Universidad Abierta Interamericana",
+  "imageBaseDir": "D:\\Facultad\\PantallasInstalador",
+  "sections": [
+
+    {
+      "heading": "1. Antes de empezar",
+      "level": 1,
+      "intro": "Esta guía explica cómo instalar StockHelper en una computadora con Windows, desde cero y hasta el primer inicio de sesión. Está pensada para seguirse en orden: cada pantalla que va apareciendo tiene su captura y la explicación de qué hacer en ella."
+    },
+    {
+      "heading": "1.1 La instalación tiene dos pasos",
+      "level": 2,
+      "intro": "Es importante entenderlo antes de empezar, porque si se hace solo el primer paso la aplicación no va a funcionar:",
+      "controls": [
+        { "name": "Paso 1 — Ejecutar el instalador", "desc": "StockHelper.exe instala el motor de base de datos, la aplicación y su configuración. No crea las bases de datos." },
+        { "name": "Paso 2 — Crear las bases de datos", "desc": "Se ejecuta una sola vez el archivo Crear-Bases-StockHelper.bat, que da de alta las bases de datos y el usuario administrador inicial." }
+      ],
+      "notes": [
+        "Si abrís StockHelper después del Paso 1 pero antes del Paso 2, la aplicación no va a poder conectarse a la base de datos."
+      ]
+    },
+    {
+      "heading": "1.2 Qué necesita el equipo",
+      "level": 2,
+      "controls": [
+        { "name": "Sistema operativo", "desc": "Windows 10 u 11 de 64 bits (o Windows Server equivalente)." },
+        { "name": "Memoria RAM", "desc": "4 GB como mínimo (SQL Server Express usa alrededor de 2 GB)." },
+        { "name": "Espacio en disco", "desc": "6 GB libres. El instalador por sí solo ocupa cerca de 1 GB porque trae todo embebido." },
+        { "name": "Pantalla", "desc": "Resolución de 1366×768 o superior." },
+        { "name": "Permisos", "desc": "Hay que iniciar sesión con una cuenta de administrador. Los dos pasos piden elevación." },
+        { "name": "Conexión a Internet", "desc": "No hace falta. El instalador es offline: trae adentro el runtime de .NET y SQL Server Express." }
+      ]
+    },
+    {
+      "heading": "1.3 Qué se entrega",
+      "level": 2,
+      "intro": "La entrega son dos elementos, y los dos tienen que estar disponibles en el equipo antes de empezar:",
+      "controls": [
+        { "name": "StockHelper.exe", "desc": "El instalador. Un único archivo de aproximadamente 1 GB." },
+        { "name": "Carpeta StockHelper-Crear-Bases", "desc": "Contiene Crear-Bases-StockHelper.bat y los scripts de base de datos. Viaja al lado del instalador, no adentro. Es lo que se usa en el Paso 2." }
+      ],
+      "notes": [
+        "Conviene copiar los dos elementos al disco local del equipo (por ejemplo al Escritorio) antes de empezar, en lugar de ejecutarlos desde un pendrive o una carpeta de red."
+      ]
+    },
+
+    {
+      "heading": "2. Paso 1 — Ejecutar el instalador",
+      "level": 1,
+      "intro": "El instalador se encarga de todo lo pesado: el runtime de .NET, el motor de SQL Server, los archivos de la aplicación, la clave de cifrado y el acceso directo."
+    },
+    {
+      "heading": "2.1 Iniciar la instalación",
+      "level": 2,
+      "intro": "Hacer clic derecho sobre StockHelper.exe y elegir «Ejecutar como administrador». Windows va a mostrar el aviso de Control de cuentas de usuario: hay que aceptarlo. Sin permisos de administrador el instalador no puede instalar SQL Server ni definir la variable de entorno.",
+      "placeholder": "Aviso de Control de cuentas de usuario (UAC) al abrir StockHelper.exe"
+    },
+    {
+      "heading": "2.2 Asistente de prerrequisitos",
+      "level": 2,
+      "image": "InicioInstalador.png",
+      "intro": "Esta es la primera pantalla. El instalador ya revisó el equipo y detectó que faltan componentes necesarios para que StockHelper funcione. Todavía no se instaló nada.",
+      "controlsTitle": "Elementos de la pantalla",
+      "controls": [
+        { "name": "Texto informativo", "desc": "Avisa que faltan prerrequisitos y que este asistente se va a encargar de instalarlos." },
+        { "name": "Next", "desc": "Continúa al detalle de qué se va a instalar. Es el botón que hay que presionar." },
+        { "name": "Cancel", "desc": "Cancela toda la instalación." },
+        { "name": "Back", "desc": "Aparece deshabilitado por ser la primera pantalla." }
+      ],
+      "notes": [
+        "Si el equipo ya tuviera todos los prerrequisitos instalados, esta pantalla y la siguiente no aparecen: el asistente arranca directamente en la bienvenida de StockHelper (punto 2.5)."
+      ]
+    },
+    {
+      "heading": "2.3 Lista de prerrequisitos",
+      "level": 2,
+      "image": "PrerrequisitosInstalador.png",
+      "intro": "Acá se ve exactamente qué se va a instalar antes de la aplicación. Las dos casillas vienen tildadas y hay que dejarlas así: los dos componentes son obligatorios.",
+      "controlsTitle": "Columnas de la tabla",
+      "controls": [
+        { "name": "Name", "desc": "El componente. Se listan «Microsoft .NET SDK 8.0.422 (x64)», necesario para ejecutar la aplicación, y «Microsoft SQL Server 2025 Express», el motor de base de datos." },
+        { "name": "Required", "desc": "Versión mínima exigida." },
+        { "name": "Found", "desc": "Qué versión se encontró en el equipo. Vacío significa que el componente no está instalado." },
+        { "name": "Action", "desc": "Qué va a hacer el instalador. «Install» indica que lo va a instalar." },
+        { "name": "Next", "desc": "Comienza la instalación de los prerrequisitos." }
+      ],
+      "notes": [
+        "SQL Server se instala en una instancia propia y exclusiva llamada STOCKHELPER. Esto es a propósito: si el equipo ya tiene otro SQL Server instalado, no se toca ni se pisa.",
+        "Nota técnica: el paquete incluye el SDK de .NET en lugar del Desktop Runtime. Es una decisión aceptada; el SDK contiene el runtime, así que la aplicación funciona igual, solo ocupa más espacio."
+      ]
+    },
+    {
+      "heading": "2.4 Instalación de SQL Server Express",
+      "level": 2,
+      "image": "InstalacionSql.jpeg",
+      "intro": "Se abre el instalador propio de SQL Server, que corre de forma automática y desatendida. No hay que tocar nada en esta ventana; solo esperar a que termine sola.",
+      "controlsTitle": "Qué muestra la pantalla",
+      "controls": [
+        { "name": "Barra de progreso", "desc": "Avance de la etapa actual." },
+        { "name": "Tabla Task / Status", "desc": "Las tareas de preparación. Es normal que varias figuren como «Skipped»: el paquete es offline, así que no necesita descargar ni extraer nada de Internet." },
+        { "name": "Panel izquierdo", "desc": "Las etapas del proceso. «Install Setup Files» prepara el instalador y «Installation Progress» instala el motor en sí." }
+      ],
+      "notes": [
+        "Esta es la etapa más larga de todo el proceso: puede tardar varios minutos. Es normal que la ventana parezca detenida un buen rato. No hay que cerrarla ni cancelarla.",
+        "Si en lugar de esta pantalla apareciera el «SQL Server Installation Center» (una ventana con menú y opciones para elegir), significa que la instalación no está corriendo en modo desatendido: hay que cancelar y revisar la configuración del instalador."
+      ]
+    },
+    {
+      "heading": "2.5 Bienvenida de StockHelper",
+      "level": 2,
+      "intro": "Terminados los prerrequisitos, arranca el asistente de la aplicación propiamente dicha. Es una pantalla de bienvenida: alcanza con presionar «Next».",
+      "placeholder": "Pantalla «Welcome to the StockHelper Setup Wizard»"
+    },
+    {
+      "heading": "2.6 Carpeta de instalación",
+      "level": 2,
+      "image": "RutaDeInstalacion.jpeg",
+      "intro": "Acá se elige dónde se va a instalar la aplicación. La ruta que viene por defecto es la recomendada y no hace falta cambiarla.",
+      "controlsTitle": "Elementos de la pantalla",
+      "controls": [
+        { "name": "Folder", "desc": "La ruta de instalación. Por defecto es C:\\Program Files (x86)\\UAI\\StockHelper\\. Se puede escribir otra directamente en el cuadro." },
+        { "name": "Browse...", "desc": "Abre un explorador para elegir otra carpeta." },
+        { "name": "Next", "desc": "Acepta la ruta y continúa." },
+        { "name": "Back", "desc": "Vuelve a la pantalla anterior." }
+      ],
+      "notes": [
+        "Si se cambia la ruta, conviene elegir una carpeta local del equipo. No usar unidades de red ni discos extraíbles: la aplicación necesita esa carpeta disponible cada vez que se abre."
+      ]
+    },
+    {
+      "heading": "2.7 Confirmar e instalar",
+      "level": 2,
+      "image": "Instalar.jpeg",
+      "intro": "Última pantalla antes de que se copien los archivos. Es el punto para revisar: si algo quedó mal configurado, todavía se puede volver atrás.",
+      "controlsTitle": "Elementos de la pantalla",
+      "controls": [
+        { "name": "Install", "desc": "Inicia la instalación. El escudo azul indica que la acción requiere permisos de administrador." },
+        { "name": "Back", "desc": "Vuelve a revisar o cambiar la carpeta de instalación." },
+        { "name": "Cancel", "desc": "Cancela sin instalar la aplicación." }
+      ]
+    },
+    {
+      "heading": "2.8 Progreso de la instalación",
+      "level": 2,
+      "intro": "Se copian los archivos de la aplicación, se crea el acceso directo y se define la variable de entorno con la clave de cifrado. Esta etapa es rápida comparada con la de SQL Server.",
+      "placeholder": "Pantalla de progreso «Installing StockHelper» con la barra de avance"
+    },
+    {
+      "heading": "2.9 Fin del asistente",
+      "level": 2,
+      "image": "FinInstalacion.jpeg",
+      "intro": "El instalador terminó. Presionar «Finish» para cerrar el asistente.",
+      "controlsTitle": "Elementos de la pantalla",
+      "controls": [
+        { "name": "Finish", "desc": "Cierra el asistente." },
+        { "name": "Back y Cancel", "desc": "Aparecen deshabilitados: la instalación ya se completó." }
+      ],
+      "notes": [
+        "IMPORTANTE: la instalación todavía no está terminada. Falta el Paso 2, sin el cual la aplicación no puede funcionar. No abrir StockHelper todavía."
+      ]
+    },
+
+    {
+      "heading": "3. Paso 2 — Crear las bases de datos",
+      "level": 1,
+      "intro": "El instalador dejó el motor de base de datos instalado, pero vacío: las bases de datos de StockHelper todavía no existen. Este paso las crea. Se hace una sola vez."
+    },
+    {
+      "heading": "3.1 Por qué es un paso aparte",
+      "level": 2,
+      "intro": "Separar la creación de las bases de la instalación del motor es una decisión de diseño. Instalar SQL Server es un proceso largo y silencioso; crear las bases es rápido y conviene que informe con claridad si algo falla. Al separarlos, cualquier problema con las bases se ve de inmediato y se puede reintentar sin volver a instalar todo.",
+      "notes": [
+        "El script se puede volver a ejecutar sin riesgo: está diseñado para no romper nada si las bases ya existen."
+      ]
+    },
+    {
+      "heading": "3.2 Ejecutar el script",
+      "level": 2,
+      "intro": "Abrir la carpeta StockHelper-Crear-Bases y hacer doble clic en Crear-Bases-StockHelper.bat. El archivo se eleva solo a administrador, así que Windows va a mostrar otra vez el aviso de Control de cuentas de usuario: hay que aceptarlo. Se abre una ventana de consola que va informando el avance.",
+      "placeholder": "Ventana de consola de Crear-Bases-StockHelper.bat ejecutándose",
+      "controlsTitle": "Qué hace el script",
+      "controls": [
+        { "name": "Se conecta", "desc": "Abre una conexión a la instancia .\\STOCKHELPER usando la cuenta de Windows con la que se ejecutó." },
+        { "name": "Crea el acceso de la aplicación", "desc": "Da de alta el usuario de base de datos con el que se conecta StockHelper." },
+        { "name": "Crea las dos bases", "desc": "iam_db, que guarda usuarios, roles y permisos, y core_db, que guarda los datos del negocio: inventario, productos, órdenes y proveedores." },
+        { "name": "Carga los datos iniciales", "desc": "Los permisos del sistema, el rol de administrador y el usuario admin con el que se entra la primera vez." }
+      ]
+    },
+    {
+      "heading": "3.3 Resultado esperado",
+      "level": 2,
+      "intro": "Al terminar, la consola muestra el mensaje «LISTO. Las bases de datos se crearon correctamente.». Recién ahí la instalación está completa y se puede abrir la aplicación.",
+      "placeholder": "Consola mostrando el mensaje final «LISTO. Las bases de datos se crearon correctamente.»",
+      "notes": [
+        "Si en lugar de ese mensaje aparece un error de conexión, lo más probable es que el servicio de SQL Server todavía no haya terminado de iniciar. Esperar un minuto y volver a ejecutar el archivo."
+      ]
+    },
+
+    {
+      "heading": "4. Primer inicio de sesión",
+      "level": 1,
+      "intro": "Abrir StockHelper desde el acceso directo del Escritorio o del menú Inicio. En la pantalla de inicio de sesión, ingresar con el usuario administrador que creó el script.",
+      "placeholder": "Pantalla de inicio de sesión de StockHelper con el usuario admin",
+      "controls": [
+        { "name": "Usuario", "desc": "admin" },
+        { "name": "Contraseña", "desc": "admin" }
+      ],
+      "notes": [
+        "Por seguridad, cambiar esta contraseña apenas se entra por primera vez, desde el módulo de gestión de usuarios.",
+        "El detalle de cada pantalla de la aplicación está en el Manual de Usuario, que se entrega por separado."
+      ]
+    },
+    {
+      "heading": "4.1 Cambiar el idioma",
+      "level": 2,
+      "intro": "La aplicación arranca en inglés. Para pasarla a español: menú Sistema, opción Configuración, elegir «es-ES» en la lista de idiomas y presionar Guardar."
+    },
+
+    {
+      "heading": "5. Verificar que todo quedó bien",
+      "level": 1,
+      "intro": "Si la aplicación abre y permite iniciar sesión, la instalación fue correcta. Estas comprobaciones sirven para confirmarlo con más detalle o para diagnosticar si algo falló:",
+      "controls": [
+        { "name": "El servicio de base de datos está corriendo", "desc": "Abrir services.msc y verificar que el servicio «SQL Server (STOCKHELPER)» figure como iniciado." },
+        { "name": "La clave de cifrado quedó definida", "desc": "En PowerShell: [Environment]::GetEnvironmentVariable(\"STOCK_HELPER_SECRET_KEY\",\"Machine\"). Tiene que devolver un valor, no quedar vacío." },
+        { "name": "Las bases existen", "desc": "Se verifica desde la propia aplicación: si el inicio de sesión funciona, las bases están creadas y accesibles." },
+        { "name": "Los módulos abren", "desc": "Con el usuario admin se debería poder navegar por todos los módulos del menú." }
+      ]
+    },
+
+    {
+      "heading": "6. Problemas frecuentes",
+      "level": 1,
+      "controls": [
+        { "name": "La aplicación dice que no existe la base de datos", "desc": "No se ejecutó el Paso 2. Correr Crear-Bases-StockHelper.bat como administrador y esperar el mensaje de éxito." },
+        { "name": "El script no se puede conectar a .\\STOCKHELPER", "desc": "El servicio de SQL Server no está iniciado o el instalador no llegó a terminar. Verificar el servicio en services.msc, esperar un minuto y reintentar." },
+        { "name": "La aplicación se cierra apenas se abre, sin llegar al inicio de sesión", "desc": "Falta la variable de entorno con la clave de cifrado. Suele resolverse cerrando la sesión de Windows y volviendo a entrar, para que el sistema tome la variable." },
+        { "name": "Error de inicio de sesión contra la base de datos", "desc": "El motor no quedó en modo mixto o el acceso de la aplicación no se creó. Volver a ejecutar el script del Paso 2." },
+        { "name": "Se abrió el SQL Server Installation Center", "desc": "La instalación de SQL no arrancó en modo desatendido. Cancelar, desinstalar lo que haya quedado a medias y volver a ejecutar el instalador como administrador." },
+        { "name": "La aplicación no abre y menciona que falta el runtime", "desc": "El prerrequisito de .NET no se instaló. Volver a ejecutar el instalador; debería detectarlo como faltante e instalarlo." }
+      ]
+    },
+
+    {
+      "heading": "7. Desinstalación",
+      "level": 1,
+      "controls": [
+        { "name": "La aplicación", "desc": "Panel de control, Programas y características, seleccionar StockHelper y desinstalar." },
+        { "name": "Las bases de datos", "desc": "No se borran solas, a propósito, para no perder los datos. Hay que eliminarlas a mano desde SQL Server si ya no se necesitan." },
+        { "name": "SQL Server Express", "desc": "Se desinstala por separado desde Programas y características. Al ser una instancia dedicada, quitarla no afecta a ninguna otra instalación de SQL Server del equipo." }
+      ]
+    }
+  ]
+}

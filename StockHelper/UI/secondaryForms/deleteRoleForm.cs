@@ -10,10 +10,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.Implementations;
 
 namespace UI.secondaryForms
 {
-    public partial class deleteRoleForm : Form
+    public partial class deleteRoleForm : TranslatableForm
     {
         PermissionService _permissionService = PermissionService.Instance();
         LanguageService lang = LanguageService.GetInstance;
@@ -29,6 +30,15 @@ namespace UI.secondaryForms
             InitializeComponent();
             this.CenterToScreen();
             LoadRolesToCheckedList();
+        }
+
+        /// <summary>
+        /// Applies the current language translations to the window title and the form controls.
+        /// </summary>
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("Delete Roles");
+            btnDelete.Text = lang.Translate("Delete");
         }
 
         /// <summary>

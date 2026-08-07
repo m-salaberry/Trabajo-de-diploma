@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Genera el archivo XML de documentacion para SHFB/Sandcastle -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <!-- Icono embebido en UI.exe: lo usan el Explorador, la barra de tareas y los
+         accesos directos del instalador (que apuntan al exe sin icono propio). -->
+    <ApplicationIcon>Resources\stockhelper.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -50,7 +56,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="I18n\" />
+    <!-- Ademas de ir en el exe, el icono se embebe como recurso para que
+         TranslatableForm lo aplique a la barra de titulo de cada ventana. -->
+    <EmbeddedResource Include="Resources\stockhelper.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Los archivos de traduccion deben viajar junto al ejecutable: la app los busca
+         en la carpeta I18n relativa a AppDomain.CurrentDomain.BaseDirectory. -->
+    <Content Include="I18n\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

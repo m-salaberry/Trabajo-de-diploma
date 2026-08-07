@@ -119,7 +119,7 @@
             Controls.Add(label1);
             Controls.Add(txtOrderNumber);
             Name = "uploadBillToPurchaseOrderForm";
-            Text = "Invoice Recepcion";
+            Text = "Invoice Reception";
             ResumeLayout(false);
             PerformLayout();
         }

@@ -164,7 +164,7 @@
             btnCreateItem.Name = "btnCreateItem";
             btnCreateItem.Size = new Size(112, 42);
             btnCreateItem.TabIndex = 7;
-            btnCreateItem.Text = "Create new Item";
+            btnCreateItem.Text = "New Item";
             btnCreateItem.UseVisualStyleBackColor = true;
             btnCreateItem.Click += btnCreateItem_Click;
             // 

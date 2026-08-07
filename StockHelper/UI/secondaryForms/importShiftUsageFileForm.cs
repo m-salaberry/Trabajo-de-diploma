@@ -38,6 +38,18 @@ namespace UI.secondaryForms
         }
 
         /// <summary>
+        /// Applies the current language translations to the window title and the form controls.
+        /// </summary>
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("Import Shift Usage File");
+            btnBrowseAndLoadFile.Text = lang.Translate("Load Close Shift File");
+            btnProcessFile.Text = lang.Translate("Process File");
+            btnSaveNewStock.Text = lang.Translate("Save Stock");
+            btnCancel.Text = lang.Translate("Cancel");
+        }
+
+        /// <summary>
         /// Fills the category combo with an "All" option followed by each category name.
         /// </summary>
         private void LoadCategories()

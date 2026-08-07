@@ -182,6 +182,7 @@
             Controls.Add(lbUsername);
             Controls.Add(txtUsername);
             Name = "modUserForm";
+            Text = "Modify User";
             ResumeLayout(false);
             PerformLayout();
         }

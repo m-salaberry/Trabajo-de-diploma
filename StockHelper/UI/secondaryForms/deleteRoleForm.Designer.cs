@@ -59,7 +59,7 @@
             Controls.Add(btnDelete);
             Controls.Add(clbRoles);
             Name = "deleteRoleForm";
-            Text = "Delete Role(s)";
+            Text = "Delete Roles";
             ResumeLayout(false);
         }
 

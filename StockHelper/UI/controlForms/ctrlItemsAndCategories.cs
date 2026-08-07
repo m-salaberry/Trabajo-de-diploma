@@ -131,7 +131,9 @@ namespace UI.controlForms
             // Translate buttons
             btnAddCategory.Text = lang.Translate("New Category");
             deleteCategory.Text = lang.Translate("Delete Category");
-            // btnClose keeps its "X" text — must never be translated
+            btnCreateItem.Text = lang.Translate("New Item");
+            btnModItem.Text = lang.Translate("Modify Item");
+            btnDeteleItem.Text = lang.Translate("Delete Item");
 
             // Translate labels
             lbCategories.Text = lang.Translate("Categories");
@@ -146,6 +148,7 @@ namespace UI.controlForms
                 dgvItems.Columns["UnitColumn"].HeaderText = lang.Translate("Unit");
             if (dgvItems.Columns["IntegerUnitColumn"] != null)
                 dgvItems.Columns["IntegerUnitColumn"].HeaderText = lang.Translate("Integer Unit");
+
 
             // Refresh controls
             dgvItems.Refresh();

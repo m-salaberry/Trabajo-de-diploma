@@ -191,6 +191,7 @@ namespace UI.secondaryForms
         /// </summary>
         public override void ApplyTranslations()
         {
+            this.Text = lang.Translate("Modify User");
             lblSelectUser.Text = lang.Translate("Select user:");
             lbUsername.Text = lang.Translate("Username:");
             lblPassword.Text = lang.Translate("Password:");
@@ -198,6 +199,7 @@ namespace UI.secondaryForms
             lblRole.Text = lang.Translate("Select role:");
             ckbActiveUser.Text = lang.Translate("Active User");
             btnSaveUser.Text = lang.Translate("Save");
+            btnLoadUser.Text = lang.Translate("Load User");
         }
 
         /// <summary>

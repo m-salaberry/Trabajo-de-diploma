@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8D5F3C2B-AE40-4D71-9B32-2C3D4E5F6071}</ProjectGuid>
+    <SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
+    <AssemblyName>DocumentationDocx</AssemblyName>
+    <RootNamespace>DocumentationDocx</RootNamespace>
+    <Name>DocumentationDocx</Name>
+    <OutputPath>HelpDocx\</OutputPath>
+    <HtmlHelpName>StockHelper-API</HtmlHelpName>
+    <Language>es-ES</Language>
+    <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
+    <HelpFileFormat>OpenXml</HelpFileFormat>
+    <PresentationStyle>OpenXml</PresentationStyle>
+    <SyntaxFilters>C#</SyntaxFilters>
+    <NamingMethod>MemberName</NamingMethod>
+    <CleanIntermediates>True</CleanIntermediates>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <IndentHtml>False</IndentHtml>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
+    <HelpTitle>StockHelper — Referencia de API (Manual del Programador)</HelpTitle>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <CopyrightText>StockHelper — Documentaci%c3%b3n t%c3%a9cnica generada con Sandcastle Help File Builder</CopyrightText>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <RootNamespaceTitle>StockHelper — Espacios de nombres</RootNamespaceTitle>
+    <NamespaceGrouping>False</NamespaceGrouping>
+    <Preliminary>False</Preliminary>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, NonBrowsable</VisibleItems>
+    <MissingTags>Summary, Parameter, Returns, Value, AutoDocumentCtors, Namespace, TypeParameter, AutoDocumentDispose</MissingTags>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="asm\Domain.dll" />
+      <DocumentationSource sourceFile="asm\Domain.xml" />
+      <DocumentationSource sourceFile="asm\Services.dll" />
+      <DocumentationSource sourceFile="asm\Services.xml" />
+      <DocumentationSource sourceFile="asm\DAL.dll" />
+      <DocumentationSource sourceFile="asm\DAL.xml" />
+      <DocumentationSource sourceFile="asm\BLL.dll" />
+      <DocumentationSource sourceFile="asm\BLL.xml" />
+      <DocumentationSource sourceFile="asm\UI.dll" />
+      <DocumentationSource sourceFile="asm\UI.xml" />
+    </DocumentationSources>
+    <ProjectSummary>StockHelper es una aplicaci%c3%b3n de escritorio (.NET 8 / WinForms) para la gesti%c3%b3n de inventario, productos, proveedores y compras, organizada en capas: Domain (entidades), DAL (acceso a datos), BLL (l%c3%b3gica de negocio), Services (servicios transversales) y UI (interfaz WinForms). Esta referencia de API documenta los tipos y miembros p%c3%bablicos de cada capa.</ProjectSummary>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Content" />
+  </ItemGroup>
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>

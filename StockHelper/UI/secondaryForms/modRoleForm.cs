@@ -35,6 +35,15 @@ namespace UI.secondaryForms
         }
 
         /// <summary>
+        /// Applies the current language translations to the window title and the form controls.
+        /// </summary>
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("Modify Role");
+            btnSaveNew.Text = lang.Translate("Save");
+        }
+
+        /// <summary>
         /// Validate that a role and at least one permission are selected, build the role from the
         /// checked permissions, persist the update, raise <see cref="RoleModded"/>, clear the form
         /// and reload the roles combo box.

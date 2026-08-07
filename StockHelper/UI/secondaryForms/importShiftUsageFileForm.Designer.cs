@@ -68,7 +68,7 @@
             btnProcessFile.Name = "btnProcessFile";
             btnProcessFile.Size = new Size(167, 33);
             btnProcessFile.TabIndex = 2;
-            btnProcessFile.Text = "Process Fle";
+            btnProcessFile.Text = "Process File";
             btnProcessFile.UseVisualStyleBackColor = true;
             btnProcessFile.Click += btnProcessFile_Click;
             // 
@@ -163,7 +163,7 @@
             Controls.Add(txtDirectory);
             Controls.Add(btnBrowseAndLoadFile);
             Name = "importShiftUsageFileForm";
-            Text = "Import Shift Usage";
+            Text = "Import Shift Usage File";
             ((System.ComponentModel.ISupportInitialize)dgvItemsAndStock).EndInit();
             ResumeLayout(false);
             PerformLayout();

@@ -51,7 +51,6 @@ Operation completed successfully=Operación completada exitosamente
 An error occurred=Ocurrió un error
 Please try again=Por favor, intente nuevamente
 Invalid credentials=Credenciales inválidas
-Access denied=Acceso denegado
 Session expired=Sesión expirada
 
 # Form Validation
@@ -195,7 +194,6 @@ Inventory Report=Reporte de Inventario
 Financial Report=Reporte Financiero
 Summary=Resumen
 Statistics=Estadísticas
-Analytics=Analítica
 
 # Actions
 Actions=Acciones
@@ -277,6 +275,7 @@ Repeat Password:=Repetir Contraseña:
 Select role:=Seleccionar rol:
 Active User=Usuario Activo
 Select user:=Seleccionar usuario:
+Load User=Cargar
 User modified successfully=Usuario modificado exitosamente
 User not found.=Usuario no encontrado.
 The user '{0}' was created successfully=El usuario '{0}' fue creado exitosamente
@@ -312,12 +311,10 @@ Cannot delete family TestingRole assigned to user/s:TestingUser=No se puede elim
 
 # System Messages
 unexpected_error=Error inesperado
-error=Error
 
 # Business Logic Exceptions (from UserService)
 User not found=Usuario no encontrado
 User already exists=El usuario ya existe
-Password must be at least 4 characters long=La contraseña debe tener al menos 4 caracteres
 Unable to generate unique GUID after multiple attempts=No se pudo generar un GUID único después de múltiples intentos
 
 # Authentication & Authorization
@@ -326,10 +323,13 @@ User session is invalid. Please log in again.=La sesión de usuario no es válid
 Access Denied=Acceso Denegado
 You do not have permission to access this form.=No tiene permiso para acceder a este formulario.
 You do not have permission to access {0}.=No tiene permiso para acceder a {0}.
+You do not have permission to perform {0}.=No tiene permiso para realizar {0}.
 Required permission: {0}=Permiso requerido: {0}
 this form=este formulario
+this action=esta acción
 User Management=Gestión de Usuarios
 Permission Management=Gestión de Permisos
+Stock Management=Gestión de Stock
 
 # Login Process Errors
 An error has ocurred during the login process.=Ha ocurrido un error durante el proceso de inicio de sesión.
@@ -351,8 +351,6 @@ Providers=Proveedores
 Product Builder=Constructor de Productos
 Inventory and Purchasing=Inventario y Compras
 Stock Managment=Gestión de Stock
-Orders=Pedidos
-Analytics=Análisis
 Items and Categories Module=Módulo de Artículos y Categorías
 
 # Module Coming Soon Messages
@@ -456,17 +454,7 @@ Integer Unit=Unidad Entera
 # frmMain translations
 StockHelper - Logged in as:=StockHelper - Sesión iniciada como:
 System=Sistema
-Configuration=Configuración
 Logs=Registros
-Users and Permissions=Usuarios y Permisos
-Users Managment=Gestión de Usuarios
-Permissions Managment=Gestión de Permisos
-Catalog Managment=Gestión de Catálogo
-Items and Categories=Artículos y Categorías
-Providers=Proveedores
-Product Builder=Constructor de Productos
-Inventory and Purchasing=Inventario y Compras
-Stock Managment=Gestión de Stock
 Replacement Orders=Órdenes de Reposición
 Purchase Orders=Órdenes de Compra
 Analytics=Análisis
@@ -549,9 +537,23 @@ Product name cannot be empty.=El nombre del producto no puede estar vacío.
 Product updated successfully!=¡Producto actualizado exitosamente!
 Provider deleted successfully.=Proveedor eliminado exitosamente.
 Provider modded successfully!=¡Proveedor modificado exitosamente!
-Recipe Details:=Detalles de la Receta:
+Recipe Details:=Detalles:
 Select a Provider=Seleccione un Proveedor
 StockUpdatedSuccessfully=Stock actualizado exitosamente.
 ValidationError=Error de Validación
+
+# Titulos de ventanas y controles de formularios secundarios
+Delete Roles=Eliminar Roles
+New Item=Nuevo Artículo
+Modify Item=Modificar Artículo
+Delete Item=Eliminar Artículo
+Import Shift Usage File=Importar Archivo de Consumo
+Delete a Provider=Eliminar Proveedor
+Edit Provider=Editar Proveedor
+Save changes=Guardar Cambios
+Unit of measurement=Unidad de Medida
+Load Close Shift File=Cargar Archivo de Cierre
+Process File=Procesar Archivo
+Save Stock=Guardar Stock
 
 

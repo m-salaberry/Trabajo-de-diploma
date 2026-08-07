@@ -39,6 +39,15 @@ namespace UI.secondaryForms
         }
 
         /// <summary>
+        /// Applies the current language translations to the window title and the form controls.
+        /// </summary>
+        public override void ApplyTranslations()
+        {
+            this.Text = lang.Translate("Delete Item");
+            btnDeleteItem.Text = lang.Translate("Delete");
+        }
+
+        /// <summary>
         /// Deletes the selected item after confirmation, removes it from the local list, refreshes the list
         /// and raises the ItemDeleted event.
         /// </summary>
