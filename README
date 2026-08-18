@@ -1,0 +1,12 @@
+🚀 ¡Les comparto StockHelper! Un sistema de gestión de stock y compras enfocado en el sector gastronómico.
+
+El proyecto busca resolver la digitalización del control de inventario y el circuito de reposición de mercadería para el restaurante "La Bahía" (Club Náutico de San Isidro), integrándose operacionalmente con MaxiRest.
+
+💡 Aspectos destacados del desarrollo:
+• Arquitectura modular en capas (UI, BLL, DAL, Dominio) desarrollada en C# / .NET.
+• Base de datos relacional sobre SQL Server.
+• Automatización del circuito comercial: desde el pedido de reposición hasta la emisión automática de la orden de compra y vinculación de facturas/pagos.
+• Servicios enterprise integrados: cifrado de datos, arquitectura multiidioma (ES/EN), auditoría/bitácora y backups programados.
+• Control de accesos granular mediante roles (Admin, Encargado, Empleado).
+
+¡Cualquier feedback o sugerencia es más que bienvenida! 👇
